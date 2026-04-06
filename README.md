@@ -57,7 +57,7 @@ ORDER BY total_vendido DESC;
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/turepo.git
+git clone https://github.com/maximilianowaigand/pos-comercial.git
 ```
 
 ### 2. Backend
@@ -88,11 +88,7 @@ npm start
 
 ---
 
-## 📸 Demo
 
-(Acá podés agregar capturas de pantalla o link a demo online)
-
----
 
 ## 🎯 Futuras mejoras
 
@@ -105,6 +101,6 @@ npm start
 
 ## 👨‍💻 Autor
 
-Tu nombre
+maximiliano waigand
 
  # pos-comercial
