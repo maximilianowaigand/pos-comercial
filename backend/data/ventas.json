@@ -1,0 +1,3189 @@
+[
+  {
+    "fecha": "2/12/2025, 07:17:07",
+    "total": 1200
+  },
+  {
+    "fecha": "2/12/2025, 07:17:32",
+    "total": 7500
+  },
+  {
+    "fecha": "2/12/2025, 07:17:35",
+    "total": 4000
+  },
+  {
+    "fecha": "2/12/2025, 07:18:10",
+    "total": 6000
+  },
+  {
+    "fecha": "2/12/2025, 07:18:31",
+    "total": 1500
+  },
+  {
+    "fecha": "2/12/2025, 07:18:39",
+    "total": 1200
+  },
+  {
+    "fecha": "2/12/2025, 07:18:45",
+    "total": 2100
+  },
+  {
+    "fecha": "2/12/2025, 07:18:56",
+    "total": 6000
+  },
+  {
+    "fecha": "2/12/2025, 07:19:31",
+    "total": 8500
+  },
+  {
+    "fecha": "2/12/2025, 07:26:53",
+    "total": 900
+  },
+  {
+    "fecha": "3/12/2025, 10:23:42",
+    "total": 7000
+  },
+  {
+    "fecha": "3/12/2025, 11:10:06",
+    "total": 3000
+  },
+  {
+    "fecha": "3/12/2025, 11:10:15",
+    "total": 1200
+  },
+  {
+    "fecha": "4/12/2025, 06:17:21",
+    "total": 1000
+  },
+  {
+    "fecha": "4/12/2025, 06:17:49",
+    "total": 7500
+  },
+  {
+    "fecha": "4/12/2025, 06:23:55",
+    "total": 3000
+  },
+  {
+    "fecha": "4/12/2025, 06:25:17",
+    "total": 1000
+  },
+  {
+    "fecha": "5/12/2025, 10:45:23",
+    "total": 1000
+  },
+  {
+    "fecha": "5/12/2025, 10:47:24",
+    "total": 16600
+  },
+  {
+    "fecha": "5/12/2025, 10:57:34",
+    "total": 1000
+  },
+  {
+    "fecha": "5/12/2025, 10:57:38",
+    "total": 2000
+  },
+  {
+    "fecha": "5/12/2025, 10:57:49",
+    "total": 6400
+  },
+  {
+    "id": 23,
+    "fecha": "2025-12-05T14:25:31.558Z",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 4
+      }
+    ],
+    "total": 10000
+  },
+  {
+    "fecha": "5/12/2025, 11:25:40",
+    "total": 14000
+  },
+  {
+    "id": 25,
+    "fecha": "2025-12-05T14:25:43.506Z",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 4
+      }
+    ],
+    "total": 4000
+  },
+  {
+    "id": 26,
+    "fecha": "2025-12-05T14:28:21.477Z",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 6
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 1
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      }
+    ],
+    "total": 12800
+  },
+  {
+    "id": 27,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  },
+  {
+    "id": 28,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  },
+  {
+    "id": 29,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  },
+  {
+    "id": 30,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  },
+  {
+    "id": 31,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 2
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 4800
+  },
+  {
+    "id": 32,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  },
+  {
+    "id": 33,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      }
+    ],
+    "total": 2200
+  },
+  {
+    "id": 34,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      }
+    ],
+    "total": 2200
+  },
+  {
+    "id": 35,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 2
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 3000
+  },
+  {
+    "id": 36,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 4
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 7000
+  },
+  {
+    "id": 37,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta"
+  },
+  {
+    "id": 38,
+    "fecha": "2025-12-05",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "fecha": "9/12/2025, 09:21:31",
+    "total": 3000
+  },
+  {
+    "fecha": "9/12/2025, 12:19:16",
+    "total": 1800
+  },
+  {
+    "fecha": "9/12/2025, 12:19:19",
+    "total": 900
+  },
+  {
+    "id": 42,
+    "fecha": "2025-12-09",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 3000,
+    "metodoPago": "mercadopago",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "id": 43,
+    "fecha": "2025-12-09",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 3000,
+    "metodoPago": "mercadopago",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "id": 44,
+    "fecha": "2025-12-09",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 3000,
+    "metodoPago": "mercadopago",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "id": 45,
+    "fecha": "2025-12-09",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 3000,
+    "metodoPago": "mercadopago",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "id": 46,
+    "fecha": "2025-12-09",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 3000,
+    "metodoPago": "mercadopago",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "fecha": "9/12/2025, 01:18:31",
+    "total": 1000
+  },
+  {
+    "fecha": "9/12/2025, 01:18:39",
+    "total": 1000
+  },
+  {
+    "id": 49,
+    "fecha": "2025-12-09",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "mercadopago",
+    "factura": "ERROR_AL_FACTURAR"
+  },
+  {
+    "fecha": "9/12/2025, 05:11:21",
+    "total": 2400
+  },
+  {
+    "fecha": "9/12/2025, 05:12:08",
+    "total": 4300
+  },
+  {
+    "fecha": "9/12/2025, 05:15:41",
+    "total": 1200
+  },
+  {
+    "fecha": "9/12/2025, 06:20:52",
+    "total": 4500
+  },
+  {
+    "fecha": "10/12/2025, 09:58:10",
+    "total": 2000
+  },
+  {
+    "fecha": "10/12/2025, 10:02:21",
+    "total": 3000
+  },
+  {
+    "fecha": "10/12/2025, 10:02:25",
+    "total": 4800
+  },
+  {
+    "fecha": "10/12/2025, 10:03:28",
+    "total": 2500
+  },
+  {
+    "fecha": "10/12/2025, 10:42:04",
+    "total": 1000
+  },
+  {
+    "fecha": "10/12/2025, 10:42:14",
+    "total": 1800
+  },
+  {
+    "fecha": "10/12/2025, 10:43:14",
+    "total": 2800
+  },
+  {
+    "fecha": "10/12/2025, 10:44:54",
+    "total": 1000
+  },
+  {
+    "fecha": "10/12/2025, 10:53:20",
+    "total": 3000
+  },
+  {
+    "fecha": "10/12/2025, 11:03:02",
+    "total": 300
+  },
+  {
+    "fecha": "10/12/2025, 11:03:10",
+    "total": 1800
+  },
+  {
+    "id": 65,
+    "fecha": "2025-12-10",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      }
+    ],
+    "total": 4300,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Las credencials API son invalidas. Sugerimos revisar: el formato del JSON enviado, la URL de destino y que tengas un plan API vigente. "
+      ]
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "10/12/2025, 11:13:44",
+    "total": 3000
+  },
+  {
+    "id": 67,
+    "fecha": "2025-12-10",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 4300,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": true,
+      "detalle": "<!DOCTYPE html>\n<!--[if lt IE 10]> <html  lang=\"en\" class=\"iex\"> <![endif]-->\n<!--[if (gt IE 10)|!(IE)]><!-->\n<html lang=\"es-AR\">\n<!--<![endif]-->\n<head>\n \n        <meta charset=\"utf-8\" />\n            <!-- ====================================\n              \n              THERE IS NOTHING TO DO HERE.\n              Looking for a job?\n              Want to send us your comments ?\n              Contact us at: vousys.com\n\n              ==================================== !-->\n\n\n        <!-- basicos !-->\n        <title> </title>\n        \n        <meta name=\"abstract\"         content='404 en TusFacturasAPP. somos una plataforma web + app móvil + API. Emití factura electrónica AFIP/ARCA fácil, rápido y sin vueltas. '/>\n        <meta name='description'     content='404 en TusFacturasAPP. somos una plataforma web + app móvil + API. Emití factura electrónica AFIP/ARCA fácil, rápido y sin vueltas. '/>\n        <meta name='keywords'         content='tusfacturas.app,tusfacturasapp,software de facturacion, sistema de facturacion, sistema de gestion, software de gestion, software para monotributistas, software facturacion pymes, 404,, software de facturación en la nube, factura electronica afip, api factura electronica, sistema de gestion afip electronica, sistema de gestion online, factura electrónica, factura electrónica AFIP/ARCA, gestión electrónica,facturacion, sistema de facturacion, sistema para facturar, Facturacion Electronica Software facturación para PyMEs ,Facturas Electronicas AFIP/ARCA acturación Electrónica On line ,software erp, software contable, clientes cuentas corrientes, factura electronica afip rg 2485 ,factura electronica afip instructivo, factura electronica afip monotributo , tus facturas, software de factura electrónica, software de gestión electrónica, software de facturación electrónica, software de facturación '/>\n        <meta name='robots'         content='follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large'/>\n        <meta name='revisit-after'     content='1 Days'/>\n        \n        <meta property=\"article:published_time\" content=\"2015-03-21T02:17:05-03:00\" />\n        <meta property=\"article:modified_time\" content=\"2025-12-10T11:14:08-03:00\" />\n        <meta property=\"og:updated_time\" content=\"2025-12-10T11:14:08-03:00\" />\n\n        <meta name='author'         content='VOUSYS.com'/>\n        <meta name=\"apple-itunes-app\" content=\"app-id=1062694464\">\n\n        <meta name=\"facebook-domain-verification\" content=\"21nkz908efivp0j8g7jq7qeyud815u\" />\n        <meta name=\"google-site-verification\" content=\"Hdj_EHFcLNeXXSmORYkbxAnyPm51lDtpKXz1xHlGIQU\" />\n\n        <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n        <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n        \n        <link rel=\"preconnect\" href=\"https://www.google.com\">\n        <link rel=\"preconnect\" href=\"https://www.gstatic.com\" crossorigin>\n\n\n\n      <link href=\"https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,700;0,900;1,100&display=swap\" rel=\"stylesheet\">\n                      <link rel=\"canonical\" href=\"https://www.tusfacturas.app/api/v2/facturacion\">\n              \n        <meta http-equiv=\"X-UA-Compatible\"     content=\"IE=edge,chrome=1\"/>\n        <meta name=\"viewport\"                  content=\"width=device-width, initial-scale=1\">\n        <!-- Mobile !-->\n\n\n          <link rel=\"alternate\" href=\"https://www.tusfacturas.app/api/v2/facturacion\" hreflang=\"es-ar\"/>\n                        <link rel=\"alternate\" href=\"https://www.tusfacturas.app/api/v2/facturacion\" hreflang=\"x-default\" /> \n\n\n        <meta name=\"twitter:card\" content=\"summary\" />\n        <meta name=\"twitter:site\" content=\"@tusfacturasapp\" />\n        <meta name=\"twitter:creator\" content=\"@tusfacturasapp\" />\n        <meta name=\"twitter:description\" content=\"404 en TusFacturasAPP. somos una plataforma web + app móvil + API. Emití factura electrónica AFIP/ARCA fácil, rápido y sin vueltas. \" />\n        <meta name=\"twitter:title\" content=\"\" />\n        <meta name=\"twitter:image\" content=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.png\" />\n        <meta property=\"og:type\"         content=\"website\" />\n        <meta property=\"og:url\" content=\"https://www.tusfacturas.app/api/v2/facturacion\" />\n        <meta property=\"og:title\" content=\"\" />\n        <meta property=\"og:description\" content=\"404 en TusFacturasAPP. somos una plataforma web + app móvil + API. Emití factura electrónica AFIP/ARCA fácil, rápido y sin vueltas. \" />\n        <meta property=\"og:image\" content=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.png\" />\n\n\n        <!-- Identification !-->\n        <link rel=\"alternate\"         type=\"application/rss+xml\" href=\"rss.xml\"  title=\"TusFacturasAPP\" />\n        <link rel=\"image_src\"         href=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.png\" />\n\n \n        <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/apple-touch-icon.png\">\n        <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon-32x32.png\">\n        <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/favicon-16x16.png\">\n        <link rel=\"manifest\" href=\"/site.webmanifest\">\n        <link rel=\"mask-icon\" href=\"/safari-pinned-tab.svg\" color=\"#625BF6\">\n\n        <meta name=\"msapplication-TileImage\" content=\"favicon/ms-icon-144x144.png\">\n\n\n\n        <!-- status bar !-->\n        <meta name=\"theme-color\" content=\"#625BF6\">\n        <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n        <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\"> \n        <!-- Windows Phone -->\n        <meta name=\"msapplication-navbutton-color\" content=\"#625BF6\">\n        <!-- iOS Safari -->\n        <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"#625BF6\">\n\n\n        <!-- Identification !-->\n\n\n\n\n        <!-- THEME !-->\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/jquery.min.js\"></script>\n        <link rel=\"stylesheet\" href=\"https://cdn.tusfacturas.app/web/HTWF/scripts/bootstrap/css/bootstrap.min.css\">\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/script.min.js\"></script>\n        <link rel=\"stylesheet\" href=\"https://cdn.tusfacturas.app/web/HTWF/style.min.css\">\n        <link rel=\"stylesheet\" href=\"https://cdn.tusfacturas.app/web/HTWF/css/fullpackage.min.css\">\n         <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" >\n        <link rel=\"stylesheet\" href=\"https://cdn.tusfacturas.app/web/HTWF/scripts/sweetalert2/dist/sweetalert2.min.css\">\n\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n        \n        <link rel=\"stylesheet\" href=\"https://cdn.tusfacturas.app/web/css/skin.css?v=20250102005\">\n        <link rel=\"stylesheet\" href=\"https://cdn.tusfacturas.app/web/css/2024/tfc.css?v=20250102005\">\n\n\n        <!-- THEME !-->\n\n\n\n\n\n\n        <script type=\"application/ld+json\">\n        {\n          \"@context\": \"https://schema.org\",\n          \"@type\": \"Organization\",\n          \"url\": \"https://www.tusfacturas.app\",\n          \"contactPoint\": [{\n            \"@type\": \"ContactPoint\",\n            \"telephone\": \"+5401153687925\",\n            \"contactType\": \"customer service\",\n            \"email\": \"hola@tusfacturas.app\",\n            \"url\": \"https://www.tusfacturas.app\",\n            \"availableLanguage\": \"es\"\n          }],\n          \"address\": \"Buenos Aires, Argentina\",\n          \"telephone\": \"+5401153687925\",\n          \"name\":\"TusFacturasAPP\",\n          \"email\": \"hola@tusfacturas.app\",\n          \"legalName\": \"VYAR SRL\",\n          \"slogan\": \"El software de gestión y facturación AFIP/ARCA, amigable y fácil para tu negocio\",\n          \"brand\": {\n                    \"@type\": \"Organization\",\n                    \"name\": \"TusFacturasAPP\"\n                },\n          \n           \"logo\": \"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.png\",\n          \"image\": [\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.png\",  \"https://cdn.tusfacturas.app/web/mkt/tusfacturasapp-sistema-de-gestion-y-facturacion-argentina_m.webp\", \"https://cdn.tusfacturas.app/web/images/ig/tusfacturasapp-softtware-de-facturacion-y-software-gestion-argentina.webp\" ]\n        }\n        </script>\n \n        \n\n\n        <!-- cookie consent policy !-->\n        <link  rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.tusfacturas.app/web/HTWF/css/cookieconsent.min.css\" />\n        \n         \n        <script src=\"HTWF/scripts/cookieconsent.min.js\"></script>\n        <script>\n        window.addEventListener(\"load\", function(){\n          window.cookieconsent.initialise({\n            \"palette\": {\n              \"popup\": {\n                \"background\": \"#eaf7f7\",\n                \"text\": \"#5c7291\"\n              },\n              \"button\": {\n                \"background\": \"#56cbdb\",\n                \"text\": \"#ffffff\"\n              }\n            },\n            \"theme\": \"edgeless\",\n            \"position\": \"bottom-left\",\n            \"content\": {\n              \"message\": \"Utilizamos cookies propias y de terceros para mejorar nuestros servicios  mediante el análisis de tus hábitos de navegación y la generación de los correspondientes perfiles. Si seguís navegando en nuestro sitio, consideramos que aceptás su uso.\",\n              \"dismiss\": \"ACEPTO\",\n              \"link\": \"Ver más\",\n              \"href\": \"https://www.tusfacturas.app/politicas-privacidad.html\"\n            }\n          })\n        });\n \n        </script> \n        <!-- cookie consent policy !-->   \n\n \n\n        <!-- Global site tag (gtag.js) - Google Analytics -->\n        <script defer async src=\"https://www.googletagmanager.com/gtag/js?id=G-638SMWPMZL\"></script>\n        <script>\n\n                      window.dataLayer = window.dataLayer || [];\n                      function gtag(){dataLayer.push(arguments);}\n\n                      (function() {\n                       try {\n                         window.setTimeout(\n                          function(){\n\n                                  gtag('js', new Date());\n                                  gtag('config', 'G-638SMWPMZL');\n\n                          }, 1500);\n                        } catch (err) {}\n                      })();\n\n         </script>\n\n\n\n        <!-- Hotjar Tracking Code for https://www.tusfacturas.app -->\n        \n\n</head>\n\n\n<body >\n    <div id=\"preloader\"></div>\n    <header class=\"fixed-top scroll-change\" data-menu-anima=\"fade-bottom\">\n        <div class=\"navbar navbar-default mega-menu-fullwidth navbar-fixed-top\" role=\"navigation\">\n            <div class=\"llamanos text-center\">\n                                   <a href=\"contacto.html\" title=\"Contactate con TusFacturasAPP\" alt=\"Contactate con TusFacturasAPP\"  class=\"text-white hidden-xs\"><a href=\"tel:+5401153687925\" class=\"text-white\"> Llama a nuestro equipo de ventas <span class=\"material-icons\"  style=\"vertical-align: text-bottom;\">local_phone</span> al +54 011 5368 7925</a> <small>los d&iacute;as h&aacute;biles de 09.30hs a 15hs (UTC-3)</small>\n                     \n                            </div>\n            <div class=\"navbar navbar-main\">\n                <div class=\"navbar__container\">\n                    <div class=\"navbar-header\">\n                        <button type=\"button\" class=\"navbar-toggle\">\n                            <i class=\"fa fa-bars\"></i>\n                        </button>\n\n                        <a class=\"navbar-brand\" href=\"https://www.tusfacturas.app/\" title=\"TusFacturasAPP: Software de gestion y facturacion electronica AFIP/ARCA.\" alt=\"TusFacturasAPP: Software de gestion y facturacion electronica AFIP/ARCA.\">\n                            <img   loading=\"lazy\"  class=\"logo-default\" src=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.svg\"  title=\"TusFacturasAPP: El software de gestion y facturacion para Argentina\" alt=\"TusFacturasAPP: El software de gestion y facturacion para Argentina\" />\n                            <img   loading=\"lazy\"  class=\"logo-retina\" src=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/TusFacturasAPP-logo.svg\" alt=\"TusFacturasAPP\"  title=\"TusFacturasAPP: El software de gestion y facturacion para Argentina\" />\n                            <img   loading=\"lazy\"  class=\"isologo-default\" src=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/tusfacturasapp-isologo.svg\" alt=\"TusFacturasAPP: El software de gestion y facturacion para Argentina\"  title=\"TusFacturasAPP: El software de gestion y facturacion para Argentina\" />\n                        </a>\n                        <a href=\"registrarme-factura-electronica.html\" class=\" circle-button btn btn-s hidden-lg hidden-md btn-crear-cuenta\"  title=\"Crear Mi Cuenta en TusFacturasAPP\"   alt=\"Crear Mi Cuenta en TusFacturasAPP\">PROBA GRATIS</a>\n\n                    </div>\n                    <div class=\"collapse navbar-collapse\">\n \n                        <div class=\"nav navbar-nav navbar-right  \">\n                            <ul class=\"nav navbar-nav\">\n                                 <li class=\"dropdown active\">\n                                    <a href=\"https://www.tusfacturas.app/\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\"  alt=\"TusFacturasAPP: Software de gestion y facturacion electronica AFIP/ARCA.\" title=\"TusFacturasAPP: Software de gestion y facturacion electronica AFIP/ARCA.\" >INICIO </a>\n                                </li>\n \n                                \n                                <li class=\"dropdown \">\n                                    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" title=\"&iquest;Como empiezo a realizar factura electronica afip?\"  alt=\"&iquest;Como empiezo?\" role=\"button\">Caracteristicas <span class=\"caret\"></span></a>\n                                    <ul class=\"dropdown-menu multi-level\">\n                                        <li><a href=\"caracteristicas-de-tus-facturas-electronica.html\"  alt=\"TusFacturasAPP, software de gestión y facturación electronica AFIP/ARCA fácil. Facturación SaaS Argentina.\" title=\"TusFacturasAPP, software de gestión y facturación electronica AFIP/ARCA fácil. Facturación SaaS Argentina.\" >Conoc&eacute; TusFacturasAPP</a></li>\n                                        <li><a href=\"caracteristicas-de-tus-facturas-electronica-facturacion.html\" title=\"TusFacturasAPP: Software de Facturaci&oacute;n\" alt=\"TusFacturasAPP: Software de Facturaci&oacute;n\">Software de facturaci&oacute;n para Argentina</a></li>\n                                        <li><a href=\"factura-electronica-afip.html\"  title=\"Factura electronica AFIP\"  alt=\"Factura electronica AFIP\" role=\"button\">Factura electr&oacute;nica AFIP</a></li>\n                                        <li><a href=\"bot-whatsapp-facturador-factura-electronica-afip-arca.html\" title=\"TusFacturasAPP: Bot para facturar desde WhatsApp\"  alt=\"TusFacturasAPP: Bot para facturar desde WhatsApp\">Facturar desde WhatsApp</a></li>\n                                        <li><a href=\"facturar-desde-excel.html\"  title=\"TusFacturasAPP: Facturar desde Excel en AFIP/ARCA\"  alt=\"TusFacturasAPP: Facturar desde Excel en AFIP/ARCA\" role=\"button\">Facturar desde excel</a></li>\n                                        <li><a href=\"software-de-gestion-para-pymes.html\" title=\"TusFacturasAPP: software de gestion, sistema de gestion y facturacion electronica Argentina\"  alt=\"TusFacturasAPP: software de gestion, sistema de gestion y facturacion electronica Argentina\">Software de gesti&oacute;n para PYMES</a></li>\n                                        <li><a href=\"software-de-facturacion-para-monotributistas.html\" title=\"TusFacturasAPP: Software de facturacion facil y amigable para monotributistas\"  alt=\"TusFacturasAPP: Software de facturacion facil y amigable para monotributistas\">Software de facturaci&oacute;n para monotributistas</a></li>\n                                        <li><a href=\"bot-de-facturacion-para-monotributistas.html\" title=\"TusFacturasAPP: BOT de facturación para Monotributistas desde excel\"  alt=\"TusFacturasAPP: BOT de facturación para Monotributistas desde excel\">Bot de facturaci&oacute;n para monotributistas</a></li>\n                                        <li><a href=\"factura-electronica-afip-arca.html\"  title=\"Factura electronica AFIP/ARCA\"  alt=\"Factura electronica AFIP/ARCA\" role=\"button\">Factura electr&oacute;nica AFIP/ARCA </a></li>\n                                                                                <li><a href=\"experiencias-de-clientes-con-tusfacturas.html\" title=\"Experiencias de nuestros clientes\" alt=\"Experiencias de nuestros clientes\">Experiencias de nuestros clientes</a></li>\n                                        <li><a href=\"quienes-hacemos-tusfacturas.html\" title=\"Quienes hacemos TusFacturasAPP\" alt=\"Quienes hacemos TusFacturasAPP\">Quienes hacemos TusFacturasAPP</a></li>\n \n                                    </ul>\n                                </li>\n\n                                <li   class=\"dropdown \">\n                                    <a href=\"api-factura-electronica-afip.html\" class=\"dropdown-toggle\" title=\"API factura electrónica AFIP/ARCA. SDK AFIP/ARCA.\" alt=\"API factura electrónica AFIP/ARCA. SDK AFIP/ARCA.\" data-toggle=\"dropdown\" role=\"button\">API e Integraciones <span class=\"caret\"></span></a>\n                                \n                                    <ul class=\"dropdown-menu multi-level\">\n                                        <li><a   href=\"api-factura-electronica-afip.html\" title=\"API factura electrónica AFIP/ARCA. SDK AFIP/ARCA.\" alt=\"API factura electrónica AFIP/ARCA. SDK AFIP/ARCA.\" >API AFIP/ARCA para factura electr&oacute;nica</a></li>\n                                                                                <li><a   href=\"integracion-mercadopago-pago-online.html\" title=\"Integracion con MercadoPago para cobrar online las facturas que emitas\"  alt=\"Integracion con MercadoPago para cobrar online las facturas que emitas\" >Cobr&aacute; tus facturas con MercadoPago</a></li>\n                                        <li><a   href=\"integracion-tiendacrypto-pago-facturas-en-criptomonedas.html\" title=\"Integraci&oacute;n con TiendaCRypto para cobrar en criptomonedas las facturas que emitas.\"  alt=\"Integraci&oacute;n con TiendaCrypto, para cobrar en criptomonedas las facturas que emitas.\" >Cobr&aacute; tus facturas con TiendaCrypto</a></li>\n                                        <li><a   href=\"integracion-api-agip-regimen-general-factura-electronica-afip-argentina.html\" title=\"Integraci&oacute;n con AGIP para la emisi&oacute;n de factura electr&oacute;nica AFIP/ARCA Argentina.\"  alt=\"Integraci&oacute;n con AGIP para la emisi&oacute;n de factura electr&oacute;nica AFIP/ARCA Argentina.\" >Integraci&oacute;n con AGIP</a></li>\n                                        \n                                    </ul>\n                                </li>\n\n                                 <li  class=\"dropdown \">\n                                    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" title=\"Tarifas de TusFacturasAPP\"  alt=\"Tarifas de TusFacturasAPP\" role=\"button\">Precios <span class=\"caret\"></span></a>\n                                    <ul class=\"dropdown-menu multi-level\">\n                                        <li><a href=\"tarifas-tusfacturas-todos-los-planes.html\"  title=\"Todos los planes de TusFacturasAPP\"  alt=\"Todos los planes de TusFacturasAPP\"  >Todos los planes  </a></li>\n                                        <li><a href=\"tarifas-factura-electronica.html\"  title=\"Planes más buscados de TusFacturasAPP\"  alt=\"Planes más buscados de TusFacturasAPP\"  >Los planes m&aacute;s buscados </a></li>\n                                        <li><a href=\"calcula-tu-plan-ideal.html\"  title=\"Calcula tu plan ideal en TusFacturasAPP\"  alt=\"Calcula tu plan ideal en TusFacturasAPP\">Calcul&aacute; tu plan ideal</a></li>\n                                        <li><a href=\"tarifas-tusfacturas-planes-para-profesionales-y-emprendedores.html\"   title=\"Planes para profesionales y emprendedores \"  alt=\"Planes para profesionales y emprendedores \"  >Planes para profesionales y emprendedores</a></li>\n                                        <li><a href=\"tarifas-tusfacturas-planes-para-empresas-y-pymes.html\"   title=\"Planes para empresasy PYMES \"  alt=\"Planes para empresasy pymes\"  >Planes para empresas y pymes</a></li>\n                                        <li><a href=\"tarifas-tusfacturas-planes-api-factura-electronica.html\"    title=\"Planes con integración API de TusFacturasAPP\"  alt=\"Planes con integración API de TusFacturas\"  >Planes para programadores (API) </a></li>\n                                        <li><a href=\"tarifas-tusfacturas-planes-para-contadores.html\" title=\"Planes para contadores de TusFacturas\"  alt=\"Planes para contadores de TusFacturas\"  >Planes para contadores  </a></li>\n                                        <li><a href=\"medios-pago.html\"  title=\"Medios de pago\"  alt=\"Medios de pago\"  >Medios de Pago</a></li>\n\n                                    </ul>\n                \n                                </li>\n\n\n                                 <li class=\"dropdown \">\n                                    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" title=\"Necesitas ayudar con TusFacturas\"  alt=\"Necesitas ayudar con TusFacturas\" role=\"button\">Ayuda <span class=\"caret\"></span></a>\n                                    <ul class=\"dropdown-menu multi-level\">\n                                        <li><a   href=\"https://ayuda.tusfacturas.app\" role=\"button\"  title=\"Centro de ayuda\">Centro de ayuda</a> </li>\n                                        <li> <a href=\"como-empezamos-a-hacer-facturas-electronicas.html\" role=\"button\" title=\"Como empezamos a hacer factura electronica afip\" alt=\"Como empezamos a hacer factura electronica afip\" >&iquest;Como empiezo a facturar?  </a></li>\n                                        <li> <a href=\"como-hacer-una-factura-electronica-afip.html\" role=\"button\" title=\"Como hacer una factura electronica afip\" alt=\"Como hacer una factura electronica afip\">&iquest;C&oacute;mo hacer una factura electr&oacute;nica AFIP/ARCA?  </a></li>\n                                        <li> <a href=\"como-emitir-notas-de-credito-electronica-afip.html\" role=\"button\" title='Como emitir notas de credito electronica AFIP/ARCA'  alt='Como emitir notas de credito electronica AFIP/ARCA' >&iquest;C&oacute;mo hacer una nota de cr&eacute;dito AFIP/ARCA?  </a></li>\n                                        <li> <a href=\"que-tipo-de-comprobante-debo-emitir-segun-mi-condicion-frente-al-iva.html\"role=\"button\" title='¿Qué tipos de comprobante puedo emitir?'  alt='¿Qué tipos de comprobante puedo emitir?' >&iquest;Qu&eacute; tipo de comprobantes debo emitir?  </a></li>\n                                        <li> <a href=\"enlace-arca.html\" role=\"button\" title=\"Como enlazamos TusFacturasAPP con ARCA\" alt=\"Como enlazamos TusFacturasAPP con ARCA\" >Enlace con ARCA</a></li>\n                                        <li> <a href=\"cual-es-el-limite-facturacion-afip-a-consumidor-final-sin-especificar-datos.html\" role=\"button\" title='¿Cuánto puedo facturar a un consumidor final sin especificar datos?'  alt='¿Cuánto puedo facturar a un consumidor final sin especificar datos?' >¿Cuánto puedo facturar a un consumidor final sin especificar datos? </a></li>\n                                        <li> <a role=\"button\" href=\"normativa-afip-factura-electronica.html\" alt=\"Normativa AFIP/ARCA para Factura Electronica\" title=\"Normativa AFIP/ARCA para Factura Electronica\">Normativa AFIP/ARCA para Factura Electr&oacute;nica</a></li>\n                                        \n                                        <li><a href=\"faqs.html\"  title=\"Preguntas frecuentes\"  alt=\"Preguntas frecuentes\" role=\"button\">Preguntas frecuentes </a></li>\n                                        <li><a href=\"videos-tutoriales.html\"  title=\"Videos tutoriales\"  alt=\"Videos tutoriales\" role=\"button\">Videos tutoriales </a></li>\n                                        <li><a href=\"medios-pago.html\"  title=\"Medios de pago\"  alt=\"Medios de pago\" role=\"button\">Medios de Pago</a></li>\n                                    </ul>\n                                </li>\n \n                                  \n                                 <li class=\"dropdown contacto\">\n                                    <a href=\"contacto.html\"  title=\"Contactate con TusFacturasAPP\" alt=\"Contactate con TusFacturasAPP\"  >Contact&aacute;nos</a>\n                                    \n                                </li>\n                                  \n                                <li class=\"dropdown\"><a href=\"registrarme-factura-electronica.html\" class=\"circle-button btn btn-s btn-crear-cuenta\"  title=\"Crear Mi Cuenta en TusFacturasAPP\"   alt=\"Crear Mi Cuenta en TusFacturasAPP\">PROBA GRATIS</a></li>\n                                 \n                                <li class=\"dropdown\"><a href=\"https://www.tusfacturas.app/app/login.html\" class=\"circle-button btn btn-lg btn-border btn-ingresar-a-mi-cuenta\" title=\"Ingresar a mi cuenta en TusFacturasAPP\" alt=\"Ingresar a mi cuenta en TusFacturasAPP\"  >Ingresar a mi cuenta</a></li>\n\n                                 \n                            </ul>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </header>\n    <main>  <div id=\"features\" class=\"features\">\n\t <div class=\"container\">\n\t <div class=\"col-md-5 brief-grids wow fadeInRight animated logo-con-facturas animated\">\n\t\t<img src=\"https://www.tusfacturas.app/images/tito-buscador.png\" align=\"center\">\n\t </div>\n\t <div class=\"col-md-7 brief-grids wow fadeInLeft animated intro animated\">\n\t\t <div class=\"contact-text text-center\">\n\t\t\t<h3>Ooooops!</h3> <br />\n\t\t </div>\n\t\t <div class=\"brief-grid-text\">\n\t\t\t <p>No encontramos la página que busca, pero tal vez quiera saber acerca de:</p>\n\t\t </div>\n\t\t <div class=\"st-accordion\">\n\t\t\t <ul>\n\t\t\t\t<li><a href=\"https://www.tusfacturas.app/caracteristicas-de-tus-facturas-electronica.html\">CARACTERÍSTICAS</a></li>\n\t\t\t\t<li><a href=\"https://www.tusfacturas.app/tarifas-factura-electronica.html\">PRECIOS</a></li>\n\t\t\t\t<li><a href=\"https://www.tusfacturas.app/faqs.html\">PREGUNTAS FRECUENTES</a></li>\n\t\t\t\t<li><a href=\"https://www.tusfacturas.app/como-empezamos-a-hacer-facturas-electronicas.html\">CÓMO EMPEZAR CON FACTURA ELECTRÓNICA</a></li>\n\t\t\t\t<li><a href=\"https://www.tusfacturas.app/registrarme-factura-electronica.html\">REGISTRARSE</a></li>\n\t\t\t\t<li><a href=\"https://www.tusfacturas.app/app/\">INGRESAR AL SISTEMA</a></li>\n\t\t\t </ul>\n\t\t </div>\n\t </div>\n\t </div>\n    </div> \n</div> \n\n\n\n     \n\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n\n    <div class=\"section-bg-color bg-color  bg-top registro-step1\" id=\"registro\">\n        <div class=\"container content\">\n            <div class=\"row\">\n                <div class=\"col-md-9 col-center boxed-inverse shadow-1 text-center\">\n                    <h2>Sumate a las empresas que utilizan TusFacturasAPP.</h2>\n                    <h4></h4>\n                    <p class=\"mt-3\">\n                        ¡No pierdas m&aacute;s tiempo! <b>Prob&aacute; sin cargo, TusFacturasAPP </b>. <br />\n                        Configur&aacute; tu cuenta online y comenz&aacute; a usar la plataforma de inmediato. \n                    </p>\n                    <hr class=\"space m\">\n                    <form action=\"completar-mi-registro.html\" class=\"form-box _form-ajax_ form-inline width-80\" method=\"post\" >\n                        <input id=\"txt_email\" name=\"txt_email\" placeholder=\"Ingresá tu email\" type=\"email\" class=\"form-control form-value\" required=\"\">\n                        <hr class=\"space m\">\n                        <button class=\"btn btn-sm\" type=\"submit\">PROBAR GRATIS AHORA</button>\n                    </form>\n                    <hr class=\"space s\"> \n                    <div class=\"icon-list text-center\">\n                         \n\n                        <div class=\"list-item\">\n                            <i class=\"fa fa-check-square-o text-s\"></i>\n                            <label class=\"text-s\">Cancelas en cualquier momento</label>\n                        </div>\n\n                        <div class=\"list-item\">\n                            <i class=\"fa fa-check-square-o text-s\"></i>\n                            <label class=\"text-s\">No te enviaremos spam</label>\n                        </div>\n                    </div>\n                  \n                    <hr class=\"space s\">\n                    <div class=\"tag-row icon-row icon-row-circle text-s\">\n                        <span><a href=\"terminos-y-condiciones.html\" target=\"_blank\"  rel=\"nofollow\" title=\"Terminos y Condiciones de TusFacturasAPP\" alt=\"Terminos y Condiciones de TusFacturasAPP\">T&eacute;rminos y Condiciones</a></span>\n                        <span><a href=\"politicas-privacidad.html\"  target=\"_blank\"   rel=\"nofollow\" title=\"Pol&iacute;ticas de Privacidad de TusFacturasAPP\" alt=\"Pol&iacute;ticas de Privacidad de TusFacturasAPP\">Pol&iacute;ticas de Privacidad</a></span>\n                        <span><a href=\"tarifas-factura-electronica.html\"  title=\"Tarifas de TusFacturasAPP\"  alt=\"Tarifas de TusFacturasAPP\" >Conoc&eacute; nuestros planes para suscripciones</a></span>\n                    </div>\n\n                    <hr class=\"space s\">\n                    \n                </div>\n            </div>\n        </div>\n    </div>\n    \n\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n\n\n    <!-- ===== DESCARGA APP MOVIL ====== !-->\n    <!-- ===== DESCARGA APP MOVIL ====== !-->\n\n        \n    <!-- ===== DESCARGA APP MOVIL ====== !-->\n    <!-- ===== DESCARGA APP MOVIL ====== !-->\n\n\n\n\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n\n    \n    <!-- ===== REGISTRO STEP 1 ====== !-->\n    <!-- ===== REGISTRO STEP 1 ====== !-->\n\n\n\n\n\n    <!-- ===== BANNER MEDIOS DE PAGO ====== !-->\n    <!-- ===== BANNER MEDIOS DE PAGO ====== !-->\n\n    \n    <!-- ===== BANNER MEDIOS DE PAGO ====== !-->\n    <!-- ===== BANNER MEDIOS DE PAGO ====== !-->\n\n\n\n\n    <!-- =====   ====== !-->\n    <!-- ===== MODAL   ====== !-->\n    <div class=\"box-lightbox modal\"  id=\"modal-test\"  >\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n            <h5 class=\"modal-title\" id=\"modal-test-lbl\"> </h5>\n            \n          </div>\n          <div class=\"modal-body\">\n              \n          </div>\n        \n        </div>\n      </div>\n    </div>\n    <!-- ===== MODAL  ====== !-->\n    <!-- ===== MODAL  ====== !-->\n\n\n\n\n\n    </main>\n \n    <i class=\"scroll-top scroll-top-mobile show fa fa-sort-asc\"></i>\n    <footer class=\"footer-base\">\n \n\n\n        <div class=\"row pt-2\">\n            <div class=\"col-md-12 text-center\">\n\n                     \n                      <p>  \n\n                      \tTusFacturasAPP, desde 2015, es el software de facturaci&oacute;n para Pymes de Argentina, f&aacute;cil y amigable.\n                      \t<br />\n\n                      \t<small>\n                        Si cumpl&iacute;s con las <a href=\"terminos-y-condiciones.html\" class=\"text-color\" rel=\"nofollow\">\n                        pol&iacute;ticas</a> \n                        y te arrepentiste de contratar una suscripci&oacute;n o queres dar la baja de tu cuenta, us&aacute; &eacute;stos botones:\n                                                <br />\n                        <a class=\"btn circle-button btn-border\" href=\"boton-arrepentimiento-baja.html\"  rel=\"nofollow\">Bot&oacute;n de arrepentimiento</a>\n                         -     \n                        <a class=\"btn circle-button btn-border\" href=\"boton-arrepentimiento-baja.html\"  rel=\"nofollow\">Bot&oacute;n de baja de servicio</a>\n                        <br /><br />\n                       </small> \n                                          </p>\n                    \n\n\n            </div>\n        </div>\n        <div class=\"content\">\n            <div class=\"container\">\n\n\n\n                <div class=\"row\">\n                    <div class=\"col-md-3 footer-center text-left\">\n                                <a href=\"https://www.tusfacturas.app\" alt=\"TusFacturasAPP\" title=\"TusFacturasAPP\"><img   loading=\"lazy\"  width=\"80\" src=\"https://cdn.tusfacturas.app/web/images/logo-tf/2024/tusfacturasapp-isologo.png\" title=\"TusFacturasAPP: El software de gestion y facturacion online que optimiza tus tareas\" alt=\"TusFacturasAPP - Facturas electronicas AFIP/ARCA\" alt=\"TusFacturasAPP - Facturas electronicas AFIP/ARCA\" /></a>\n\n                                <br /><br />\n                                <p>TusFacturasAPP es un producto de VYAR SRL<br />CUIT 30716252430</p>\n                                <p><small>Servicios en la nube concebidos bajo el modelo SaaS.</small></p>\n                                <p>Buenos Aires, Argentina</p>\n\n                                <div class=\"tag-row\">\n                                    <span><a href=\"contacto.html\"   class=\"text-color chat-open\"   rel=\"nofollow\" title=\"Contactate con TusFacturasAPP\" alt=\"Contactate con TusFacturasAPP\">Contacto</a></span> \n                                </div>\n\n\n                    </div>\n\n                    <!-- col central !-->\n                    <div class=\"col-md-6 footer-left text-left\">\n\n                                    <!-- <ul class=\"list-unstyled cols2\"> \n                                    </ul> !-->\n\n                                    <div class=\"clearfix\"></div>\n\n                                     <div class=\"tag-row \" >\n                                        <div class=\"col-md-6 col-xs-12 pl-13\">\n                                             <ul class=\"list-unstyled\">   \n                                                <li><a href=\"faqs.html\"  title=\"Preguntas frecuentes TusFacturasAPP\"  alt=\"Preguntas frecuentes TusFacturasAPP\" >Preguntas frecuentes </a></li>\n                                                <li><a href=\"videos-tutoriales.html\"  title=\"Videos tutoriales\"  alt=\"Videos tutoriales\" >Videos tutoriales </a></li>\n                                                <li><a href=\"medios-pago.html\"  title=\"Medios de pago\"  alt=\"Medios de pago\" >Medios de Pago</a></li>\n                                                <li><a href=\"tusfacturasapp-en-los-medios.html\"  title=\"TusFacturasAPP: En los medios, descubre por qué es el software de facturación elegido\"  alt=\"TusFacturasAPP: En los medios, descubre por qué es el software de facturación elegido\" >Noticias y Novedades</a></li>\n                                             </ul>\n                                        </div>\n                                        <div class=\"col-md-6 col-xs-12\">\n                                            <ul class=\"list-unstyled\">\n                                                <li><a href=\"calcula-tu-plan-ideal.html\"  title=\"Calculá tu plan ideal en TusFacturasAPP\"  alt=\"Calcula tu plan ideal en TusFacturasAPP\">Calcul&aacute; tu plan ideal</a></li>\n                                                                                                <li><a   href=\"https://ayuda.tusfacturas.app\"  title=\"Centro de ayuda\">Centro de ayuda</a> </li>\n                                                <li><a   href=\"terminos-y-condiciones.html\" rel=\"nofollow\" title=\"T&eacute;rminos y Condiciones\">T&eacute;rminos y Condiciones</a> </li>\n                                                <li><a   href=\"politicas-privacidad.html\" rel=\"nofollow\" title=\"Pol&iacute;ticas de Privacidad\">Pol&iacute;ticas de Privacidad</a>  </li>\n                                            </ul>\n                                        </div>\n                                    </div>\n                                      \n                                    <div class=\"clearfix\"></div>\n                                    \n\n\n                    </div>\n                    <div class=\"col-md-3 footer-left text-right text-left-sm\">\n                        <div class=\"btn-group social-group btn-group-icons\">\n                            <a target=\"_blank\" href=\"https://www.facebook.com/tusFacturasApp/\" alt=\"TusFacturasAPP en Facebook\" title=\"TusFacturasAPP en Facebook\" _data-social=\"share-facebook\">\n                                <i class=\"fa fa-facebook text-xs circle\"></i>\n                            </a>\n                            <a target=\"_blank\" href=\"https://twitter.com/tusfacturasapp\" title=\"TusFacturasAPP en twitter\"  alt=\"TusFacturasAPP en twitter\" _data-social=\"share-twitter\">\n                                <i class=\"fa fa-twitter text-xs circle\"></i>\n                            </a> \n\n                            <a target=\"_blank\" href=\"https://www.instagram.com/tusFacturas.App/\" title=\"TusFacturasAPP en Instagram\"  alt=\"TusFacturasAPP en Instagram\" _data-social=\"share-instagram\">\n                                <i class=\"fa fa-instagram text-xs circle\"></i>\n                            </a> \n\n\n                            <a target=\"_blank\" href=\"https://www.youtube.com/@tusfacturasapp\" title=\"TusFacturasAPP en Youtube\"  alt=\"TusFacturasAPP en Youtube\" _data-social=\"share-youtube\">\n                                <i class=\"fa fa-youtube text-xs circle\"></i>\n                            </a> \n\n                        </div>\n\n\n                        <br />\n                        <br />\n                        <div class=\"btn-group social-group btn-group-icons\">\n                            \n                            <a href=\"https://www.argentina.gob.ar/aaip/datospersonales/reclama/30716252430--RL-2020-14671662-APN-DNPDP#AAIP\" rel=\"nofollow\" title=\"AAIP\" alt=\"AAIP\"><img src=\"https://cdn.tusfacturas.app/web/images/aaip-isologo.png\" alt=\"AAIP \" title=\"AAIP\" loading=\"lazy\" style=\"border:0;width:72px;height:100px;\"> </a>                            &nbsp;&nbsp;\n                            <a href=\"https://serviciosweb.afip.gob.ar/clavefiscal/qr/response.aspx?qr=F6xHHatv4pPAbYomgQBU2g,,\" target=\"_F960AFIPInfo\" title=\"AFIP QR\" alt=\"AFIP QR\" rel=\"nofollow\"><img src=\"https://cdn.tusfacturas.app/web/images/DATAWEB.jpg\" border=\"0\" loading=\"lazy\" title=\"AFIP QR\" alt=\"AFIP QR\"  width=\"72\" height=\"100\" > </a>                            <hr class=\"space\">\n                            <a href=\"https://www.mercadopago.com.ar/developers/panel/developer-program/certification/cert_bd81901695a711ec84d40242ac130004\" rel=\"nofollow\" title=\"Desarrollador certificado en Mercado Pago\"><img src=\"https://cdn.tusfacturas.app/web/images/mercadopago-developers/Insignia.svg\" title=\"TusFacturasAPP - Desarrollador certificado MercadoPago\"></a>\n                        </div>\n                        \n                        \n\n                    </div>\n                </div>\n\n \n            </div>\n            <div class=\"row copy-row\">\n                <div class=\"col-md-8 text-align-center copy-text\">\n                    <a href=\"https://www.vousys.com/es\" title=\"VOUSYS\" alt=\"VOUSYS\"><img src=\"https://www.vousys.com/assets/images/logo/iso-tr.svg\" alt=\"VOUSYS\" height=\"50\"/></a> Desarrollado con <i class=\"fa fa-heart\"></i> por <a href=\"https://www.vousys.com/es\" title=\"VOUSYS\" alt=\"VOUSYS\">VOUSYS</a> en Argentina\n                    <span> &nbsp;</span>\n \n                      <p>\n                         \t<small>&copy;2025 TusFacturasAPP. Todos los derechos reservados.\n                         \t\t<br />\n                        \t\tWhatsApp es una marca registrada de Meta Platforms, Inc., y su uso est&aacute; sujeto a los t&eacute;rminos y condiciones de la compa&ntilde;&iacute;a. \n                         \t\t<br />\n                        \t\tExcel es una marca registrada de Microsoft, Inc., y su uso est&aacute; sujeto a los t&eacute;rminos y condiciones de la compa&ntilde;&iacute;a. \n                \t\t\t\t</small>\n                \t\t\t</p>\n\n                </div>\n            </div>\n\n\n        </div>\n       <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/sweetalert2/dist/sweetalert2.min.js\"></script>\n\n\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/bootstrap/js/bootstrap.min.js\"></script>\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/parallax.min.js\"></script>\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/flexslider/jquery.flexslider-min.js\"></script>\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/isotope.min.js\"></script>\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/contacto/contact-form.min.js\"></script>\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/jquery.progress-counter.js\"></script>\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/jquery.tab-accordion.js\"></script>\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/bootstrap/js/bootstrap.popover.min.js\"></script>\n        <script async src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/jquery.magnific-popup.min.js\"></script>\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/social.stream.min.js\"></script>\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/jquery.slimscroll.min.js\"></script>\n        <script src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/smooth.scroll.min.js\"></script>\n        <script type=\"text/javascript\" src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/parsley/parsley.min.js\"></script>\n        <script type=\"text/javascript\" src=\"https://cdn.tusfacturas.app/web/HTWF/scripts/parsley/parsley-i18n-es.js\"></script>\n        <script type=\"text/javascript\" src=\"js/tusfacturas.js?v=20250102005\"></script>\n          \n\n                  \n          \n                        \n\n\n\n        \n\n    </footer>\n\n\n\n    <div class=\"p-2 breve-detalle text-center\">\n        <small>\n            <a class=\"text-muted\" href=\"sistema-de-facturacion-en-linea-argentina.html\" title=\"TusFacturasAPP: Sistema de facturacion en linea Argentina\"  alt=\"TusFacturasAPP: Sistema de facturacion en linea Argentina\">Sistema de facturaci&oacute;n en linea para Argentina</a>\n                        <a class=\"text-muted\" href=\"factura-electronica-afip-arca.html\"  title=\"Factura electronica AFIP/ARCA\"  alt=\"Factura electronica AFIP/ARCA\" >AFIP/ARCA Factura electr&oacute;nica </a>\n            <a class=\"text-muted\" href=\"factura-electronica-arca.html\"  title=\"Factura electronica ARCA Argentina\"  alt=\"Factura electronica ARCA Argentina\" >ARCA Factura electr&oacute;nica Argentina </a>\n            <a class=\"text-muted\" href=\"sistema-de-facturacion-electronica-argentina.html\" alt=\"TusFacturasAPP: Sistema de facturacion electronica para Argentina\" title=\"TusFacturasAPP: Sistema de facturacion electronica para Argentina\" >Sistema de facturaci&oacute;n</a>\n            <a class=\"text-muted\"   href=\"api-factura-electronica-afip.html\" title=\"API factura electrónica AFIP/ARCA. SDK AFIP/ARCA.\" alt=\"API factura electrónica AFIP/ARCA. SDK AFIP/ARCA.\" >API para factura electr&oacute;nica AFIP/ARCA</a>\n            <a class=\"text-muted\"   href=\"integracion-mercadopago-pago-online.html\" title=\"Integracion con MercadoPago para cobrar online las facturas que emitas\"  alt=\"Integracion con MercadoPago para cobrar online las facturas que emitas\" >Cobr&aacute; con MercadoPago</a>\n            <a class=\"text-muted\"   href=\"integracion-tiendacrypto-pago-facturas-en-criptomonedas.html\" title=\"Integraci&oacute;n con TiendaCRypto para cobrar en criptomonedas las facturas que emitas.\"  alt=\"Integraci&oacute;n con TiendaCrypto, para cobrar en criptomonedas las facturas que emitas.\" >Cobr&aacute; tus facturas con TiendaCrypto</a>\n            <a class=\"text-muted\" href=\"sistema-de-gestion-para-pymes.html\" alt=\"TusFacturasAPP: Sistema de gestion para Pymes\" title=\"TusFacturasAPP: Sistema de gestion para Pymes\" >Sistema de gesti&oacute;n para pymes</a>\n            <a class=\"text-muted\" href=\"software-de-facturacion-para-pymes.html\" alt=\"TusFacturasAPP: Software de facturacion facil y amigable para pymes\" title=\"TusFacturasAPP: Software de facturacion facil y amigable para pymes\" >Software de facturaci&oacute;n para pymes</a>\n            <a class=\"text-muted\" href=\"bot-de-facturacion-para-monotributistas.html\" alt=\"TusFacturasAPP: BOT de facturación para Monotributistas desde excel\" title=\"TusFacturasAPP: BOT de facturación para Monotributistas desde excel\" >Bot de facturaci&oacute;n para monotributistas</a>\n            <a class=\"text-muted\" href=\"software-de-facturacion-para-monotributistas.html\" alt=\"TusFacturasAPP: Software de facturacion facil y amigable para monotributistas\" title=\"TusFacturasAPP: Software de facturacion facil y amigable para monotributistas\" >Software de facturaci&oacute;n para monotributistas</a>\n            <a class=\"text-muted\" href=\"software-de-facturacion-para-medicos-de-argentina.html\" alt=\"TusFacturasAPP: Software de facturacion facil y amigable para medicos de Argentina\" title=\"TusFacturasAPP: Software de facturacion facil y amigable para medicos de Argentina\" >Software de facturaci&oacute;n para m&eacute;dicos de Argentina</a>\n            <a class=\"text-muted\" href=\"sistema-de-gestion-para-pymes.html\" alt=\"TusFacturasAPP: Sistema de gestion para Pymes\" title=\"TusFacturasAPP: Sistema de gestion para Pymes\" >Sistema de gesti&oacute;n para pymes</a>\n\n            <a class=\"text-muted\" href=\"sistema-de-facturacion-para-contadores-estudios-contables.html\" alt=\"TusFacturasAPP: Sistema de facturaci&oacute;n ARCA para contadores. Software de facturaci&oacute;n ARCA para estudios contables\" title=\"TusFacturasAPP: Sistema de facturaci&oacute;n ARCA para contadores. Software de facturaci&oacute;n ARCA para estudios contables\" >Sistema de facturaci&oacute;n ARCA para contadores. Software de facturaci&oacute;n ARCA para estudios contables</a>\n\n\n            \n\n        </small> \n    </div>    \n\n\n<script>\n  window.intercomSettings = {\n    api_base: \"https://api-iam.intercom.io\",\n    app_id: \"q116habp\",\n  };\n</script>\n\n\n<script>\n  // Completamos previamente el ID de tu aplicación en la URL del widget: 'https://widget.intercom.io/widget/q116habp'\n  (function(){var w=window;var ic=w.Intercom;if(typeof ic===\"function\"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/q116habp';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();\n</script>\n\n  \n  \n\n</body>\n\n\n\n</html>"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 68,
+    "fecha": "2025-12-10",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 2000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": true
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 69,
+    "fecha": "2025-12-10",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 2800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": true
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 70,
+    "fecha": "2025-12-10",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 2000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "El domicilio fiscal est&aacute; vacio y debe contenter informaci&oacute;n ya que es obligatorio",
+        "Debes seleccionar una provincia valida",
+        "Error al crear al proveedor . No se podra generar el comprobante. Revise los datos enviados.",
+        "El campo operacion enviado es invalido. Las opciones son : V=Ventas o C=compras",
+        "El formato de fecha de vencimiento no es valido. Se espera recibir dd/mm/aaaa. ",
+        "La fecha de vencimiento del comprobante es menor a la fecha del comprobante.  ",
+        "El producto CafÃ© posee la cantidad por bulto en cero.",
+        "El producto CafÃ© posee la cantidad por bulto en cero."
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "El domicilio fiscal est&aacute; vacio y debe contenter informaci&oacute;n ya que es obligatorio"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Debes seleccionar una provincia valida"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al proveedor . No se podra generar el comprobante. Revise los datos enviados."
+        },
+        {
+          "code": "TFC-8004",
+          "text": "El campo operacion enviado es invalido. Las opciones son : V=Ventas o C=compras"
+        },
+        {
+          "code": "TFC-8004",
+          "text": "El formato de fecha de vencimiento no es valido. Se espera recibir dd/mm/aaaa. "
+        },
+        {
+          "code": "TFC-8004",
+          "text": "La fecha de vencimiento del comprobante es menor a la fecha del comprobante.  "
+        },
+        {
+          "code": "TFC-8005",
+          "text": "El producto CafÃ© posee la cantidad por bulto en cero."
+        },
+        {
+          "code": "TFC-8005",
+          "text": "El producto CafÃ© posee la cantidad por bulto en cero."
+        }
+      ],
+      "external_reference": ""
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 09:48:03",
+    "total": 1000
+  },
+  {
+    "id": 72,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 1
+      }
+    ],
+    "total": 1500,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "El domicilio fiscal est&aacute; vacio y debe contenter informaci&oacute;n ya que es obligatorio",
+        "Debes seleccionar una provincia valida",
+        "Error al crear al proveedor . No se podra generar el comprobante. Revise los datos enviados.",
+        "El campo operacion enviado es invalido. Las opciones son : V=Ventas o C=compras",
+        "El formato de fecha de vencimiento no es valido. Se espera recibir dd/mm/aaaa. ",
+        "La fecha de vencimiento del comprobante es menor a la fecha del comprobante.  ",
+        "El producto Pan posee la cantidad por bulto en cero.",
+        "El producto Medialunas posee la cantidad por bulto en cero."
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "El domicilio fiscal est&aacute; vacio y debe contenter informaci&oacute;n ya que es obligatorio"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Debes seleccionar una provincia valida"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al proveedor . No se podra generar el comprobante. Revise los datos enviados."
+        },
+        {
+          "code": "TFC-8004",
+          "text": "El campo operacion enviado es invalido. Las opciones son : V=Ventas o C=compras"
+        },
+        {
+          "code": "TFC-8004",
+          "text": "El formato de fecha de vencimiento no es valido. Se espera recibir dd/mm/aaaa. "
+        },
+        {
+          "code": "TFC-8004",
+          "text": "La fecha de vencimiento del comprobante es menor a la fecha del comprobante.  "
+        },
+        {
+          "code": "TFC-8005",
+          "text": "El producto Pan posee la cantidad por bulto en cero."
+        },
+        {
+          "code": "TFC-8005",
+          "text": "El producto Medialunas posee la cantidad por bulto en cero."
+        }
+      ],
+      "external_reference": ""
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 09:48:20",
+    "total": 1500
+  },
+  {
+    "fecha": "11/12/2025, 10:09:42",
+    "total": 2800
+  },
+  {
+    "id": 75,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 2800,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 76,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 77,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 1
+      }
+    ],
+    "total": 300,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 11:06:33",
+    "total": 1000
+  },
+  {
+    "id": 79,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 80,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 81,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 12:08:50",
+    "total": 1000
+  },
+  {
+    "id": 83,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 12:09:36",
+    "total": 1000
+  },
+  {
+    "fecha": "11/12/2025, 12:16:15",
+    "total": 1800
+  },
+  {
+    "id": 86,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 12:17:58",
+    "total": 1000
+  },
+  {
+    "fecha": "11/12/2025, 12:18:11",
+    "total": 1800
+  },
+  {
+    "id": 89,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 90,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "El domicilio fiscal est&aacute; vacio y debe contenter informaci&oacute;n ya que es obligatorio",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "El domicilio fiscal est&aacute; vacio y debe contenter informaci&oacute;n ya que es obligatorio"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765466516550
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 91,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765466692165,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000001 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "11/12/2025",
+      "comprobante_nro": "00001-00000001",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/YdqZCX9mAcBhPYB1KiGyDd8222084y/00000001",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/YdqZCX9mAcBhPYB1KiGyDd8222084y/70038-20354416736-35443021-11-00001-00000001.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/YdqZCX9mAcBhPYB1KiGyDd8222084y/70038-20354416736-35443021-11-00001-00000001.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 03:08:17",
+    "total": 2000
+  },
+  {
+    "id": 93,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 2000,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 94,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 2
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 2
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      }
+    ],
+    "total": 10600,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 95,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      }
+    ],
+    "total": 4300,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "ERROR DE VALIDACION: El proximo numero de comprobante deberia ser 00001-00000002 en lugar de 00001-00000001. Cod. Error #6661134.99391.10.1.8222084"
+      ],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765476591301,
+      "requiere_fec": "NO"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 96,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "ERROR DE VALIDACION: El proximo numero de comprobante deberia ser 00001-00000002 en lugar de 00001-00000001. Cod. Error #6661134.99391.10.1.8222084"
+      ],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765477649445,
+      "requiere_fec": "NO"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 97,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765482479450,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000002 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "11/12/2025",
+      "comprobante_nro": "00001-00000002",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/agqnFwWLnTnhyA0Y3H84Lm8224410y/00000002",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/agqnFwWLnTnhyA0Y3H84Lm8224410y/70038-20354416736-35443021-11-00001-00000002.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/agqnFwWLnTnhyA0Y3H84Lm8224410y/70038-20354416736-35443021-11-00001-00000002.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 98,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "ERROR DE VALIDACION: El proximo numero de comprobante deberia ser 00001-00000003 en lugar de 00001-00000002. Cod. Error #6661134.99391.10.1.8224410"
+      ],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765482482040,
+      "requiere_fec": "NO"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "11/12/2025, 07:26:31",
+    "total": 1200
+  },
+  {
+    "id": 100,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765492004594
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 101,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765492057047,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000003 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "11/12/2025",
+      "comprobante_nro": "00001-00000003",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/WwqPCzArJi8hG9Jgncxe9p8228201y/00000003",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/WwqPCzArJi8hG9Jgncxe9p8228201y/70038-20354416736-35443021-11-00001-00000003.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/WwqPCzArJi8hG9Jgncxe9p8228201y/70038-20354416736-35443021-11-00001-00000003.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 102,
+    "fecha": "2025-12-11",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765492663149,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000004 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "11/12/2025",
+      "comprobante_nro": "00001-00000004",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/6d02ClWAxuZh0q61YhoxMp8228350y/00000004",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/6d02ClWAxuZh0q61YhoxMp8228350y/70038-20354416736-35443021-11-00001-00000004.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/0c1233bd1ed090a6f61c8a96ae7ecd78/6d02ClWAxuZh0q61YhoxMp8228350y/70038-20354416736-35443021-11-00001-00000004.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "12/12/2025, 01:04:22",
+    "total": 1800
+  },
+  {
+    "fecha": "12/12/2025, 01:04:32",
+    "total": 4000
+  },
+  {
+    "id": 105,
+    "fecha": "2025-12-12",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      }
+    ],
+    "total": 3700,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 106,
+    "fecha": "2025-12-12",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 3800,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 107,
+    "fecha": "2025-12-12",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 108,
+    "fecha": "2025-12-12",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765555802050,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000005 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "12/12/2025",
+      "comprobante_nro": "00001-00000005",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/n4pbFweXxTahz5peAsKAr8231255y/00000005",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/5a2c1bd97d57c3d97662f3f29cb81448/n4pbFweXxTahz5peAsKAr8231255y/70038-20354416736-35443021-11-00001-00000005.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/5a2c1bd97d57c3d97662f3f29cb81448/n4pbFweXxTahz5peAsKAr8231255y/70038-20354416736-35443021-11-00001-00000005.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "16/12/2025, 11:31:42",
+    "total": 1200
+  },
+  {
+    "fecha": "16/12/2025, 11:31:56",
+    "total": 2000
+  },
+  {
+    "fecha": "16/12/2025, 11:32:10",
+    "total": 2000
+  },
+  {
+    "id": 112,
+    "fecha": "2025-12-16",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 3500,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765895536387
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "16/12/2025, 11:45:51",
+    "total": 1000
+  },
+  {
+    "fecha": "16/12/2025, 11:46:03",
+    "total": 2500
+  },
+  {
+    "id": 115,
+    "fecha": "2025-12-16",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765896367074
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 116,
+    "fecha": "2025-12-16",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 117,
+    "fecha": "2025-12-16",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 1
+      }
+    ],
+    "total": 1500,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765896449754,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000006 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "16/12/2025",
+      "comprobante_nro": "00001-00000006",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/d3p0hZYBesZhjpe4xFeVzD8255296y/00000006",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/39707ed62c6c762910f469224a46a9bc/d3p0hZYBesZhjpe4xFeVzD8255296y/70038-20354416736-35443021-11-00001-00000006.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/39707ed62c6c762910f469224a46a9bc/d3p0hZYBesZhjpe4xFeVzD8255296y/70038-20354416736-35443021-11-00001-00000006.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "17/12/2025, 08:34:45",
+    "total": 5800
+  },
+  {
+    "id": 119,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 3
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 10
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 5
+      },
+      {
+        "id": 6,
+        "nombre": "suizo",
+        "precio": 1000,
+        "cantidad": 1
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 2
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 2
+      },
+      {
+        "id": "otro-1765974152929",
+        "nombre": "gh",
+        "precio": 353,
+        "cantidad": 1
+      },
+      {
+        "id": "otro-1765974181104",
+        "nombre": "gjfg",
+        "precio": 25252,
+        "cantidad": 1
+      },
+      {
+        "id": "otro-1765974213548",
+        "nombre": "hghg",
+        "precio": 42525,
+        "cantidad": 1
+      }
+    ],
+    "total": 107530,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 120,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765974654440,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000007 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "17/12/2025",
+      "comprobante_nro": "00001-00000007",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/ePqAFoelqsnhBwWaBFE11K8260738y/00000007",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/ef9959c257a3be62baaf2d1b48d3adcd/ePqAFoelqsnhBwWaBFE11K8260738y/70038-20354416736-35443021-11-00001-00000007.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/ef9959c257a3be62baaf2d1b48d3adcd/ePqAFoelqsnhBwWaBFE11K8260738y/70038-20354416736-35443021-11-00001-00000007.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 121,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 2100,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765974762554
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 122,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "suizo",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765974915102
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 123,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 1
+      }
+    ],
+    "total": 1500,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765975846133,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000008 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "17/12/2025",
+      "comprobante_nro": "00001-00000008",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/xLJWCrDq9TAhlZvbMTWoKj8261123y/00000008",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/ef9959c257a3be62baaf2d1b48d3adcd/xLJWCrDq9TAhlZvbMTWoKj8261123y/70038-20354416736-35443021-11-00001-00000008.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/ef9959c257a3be62baaf2d1b48d3adcd/xLJWCrDq9TAhlZvbMTWoKj8261123y/70038-20354416736-35443021-11-00001-00000008.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 124,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1765975876656
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 125,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765975954691,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000009 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "17/12/2025",
+      "comprobante_nro": "00001-00000009",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/mYpmIE4MZswh02Mr9CBJGe8261133y/00000009",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/ef9959c257a3be62baaf2d1b48d3adcd/mYpmIE4MZswh02Mr9CBJGe8261133y/70038-20354416736-35443021-11-00001-00000009.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/ef9959c257a3be62baaf2d1b48d3adcd/mYpmIE4MZswh02Mr9CBJGe8261133y/70038-20354416736-35443021-11-00001-00000009.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 126,
+    "fecha": "2025-12-17",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "suizo",
+        "precio": 1000,
+        "cantidad": 5
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "cantidad": 5
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "cantidad": 2
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "cantidad": 2
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "cantidad": 2
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 3
+      }
+    ],
+    "total": 20500,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1765980102830,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000010 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "17/12/2025",
+      "comprobante_nro": "00001-00000010",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/micrositios/descargas/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/n4pbFweXxTahz5Anrs5V2r8262005y/00000010",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/ef9959c257a3be62baaf2d1b48d3adcd/n4pbFweXxTahz5Anrs5V2r8262005y/70038-20354416736-35443021-11-00001-00000010.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/ef9959c257a3be62baaf2d1b48d3adcd/n4pbFweXxTahz5Anrs5V2r8262005y/70038-20354416736-35443021-11-00001-00000010.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "19/12/2025, 08:44:07",
+    "total": 20300
+  },
+  {
+    "fecha": "19/12/2025, 08:50:26",
+    "total": 1000
+  },
+  {
+    "fecha": "19/12/2025, 08:52:28",
+    "total": 2500
+  },
+  {
+    "id": 130,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766145154518
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 131,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766145205848
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 132,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 4
+      }
+    ],
+    "total": 4000,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766145417616
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 133,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 4
+      }
+    ],
+    "total": 4000,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766145434832
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 134,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "categoria": "Bebidas",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1766146222865,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000011 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "19/12/2025",
+      "comprobante_nro": "00001-00000011",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/msd/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/ZGvKC3rjysghqMy6zU8m048274277y/00000011",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/7848b04eafd66e1c640bc55f70d4fe41/ZGvKC3rjysghqMy6zU8m048274277y/70038-20354416736-35443021-11-00001-00000011.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/7848b04eafd66e1c640bc55f70d4fe41/ZGvKC3rjysghqMy6zU8m048274277y/70038-20354416736-35443021-11-00001-00000011.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "35443021",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "19/12/2025, 09:58:39",
+    "total": 27700
+  },
+  {
+    "fecha": "19/12/2025, 11:47:42",
+    "total": 1200
+  },
+  {
+    "fecha": "19/12/2025, 11:47:50",
+    "total": 2500
+  },
+  {
+    "fecha": "19/12/2025, 11:47:55",
+    "total": 300
+  },
+  {
+    "id": 139,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 2
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766155713491
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 140,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 2
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766155688739
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 141,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 2
+      },
+      {
+        "id": 1,
+        "nombre": "Pan",
+        "precio": 1200,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 1800,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido",
+        "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados.",
+        "Si envias el tipo de documento DNI, debes enviar un numero mayor a cero. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-6001",
+          "text": "Si seleccionas DNI, debes ingresar un n&uacute;mero de documento v&aacute;lido"
+        },
+        {
+          "code": "TFC-6001",
+          "text": "Error al crear al cliente . No se podra generar el comprobante. Revise los datos enviados."
+        }
+      ],
+      "external_reference": 1766155719233
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "nro_doc": "0",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 142,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "categoria": "Bebidas",
+        "destacado": true,
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "categoria": "Comidas",
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 5300,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1766156847708,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000012 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "19/12/2025",
+      "comprobante_nro": "00001-00000012",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/msd/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/y2pZtJ6GEF9h05KDLtjWVG8275447y/00000012",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/7848b04eafd66e1c640bc55f70d4fe41/y2pZtJ6GEF9h05KDLtjWVG8275447y/70038-20354416736-35443021-11-00001-00000012.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/7848b04eafd66e1c640bc55f70d4fe41/y2pZtJ6GEF9h05KDLtjWVG8275447y/70038-20354416736-35443021-11-00001-00000012.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443021"
+    }
+  },
+  {
+    "id": 143,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "categoria": "Bebidas",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 144,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1766156927014,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000013 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "19/12/2025",
+      "comprobante_nro": "00001-00000013",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/msd/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/rxp6FGpQyTDh3M5BDtlgD48275452y/00000013",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/7848b04eafd66e1c640bc55f70d4fe41/rxp6FGpQyTDh3M5BDtlgD48275452y/70038-20354416736-35443022-11-00001-00000013.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/7848b04eafd66e1c640bc55f70d4fe41/rxp6FGpQyTDh3M5BDtlgD48275452y/70038-20354416736-35443022-11-00001-00000013.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443022"
+    }
+  },
+  {
+    "id": 145,
+    "fecha": "2025-12-19",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "fecha": "12/1/2026, 09:21:05",
+    "total": 1000
+  },
+  {
+    "id": 147,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 300,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "El formato de fecha de comprobante no es valido. Se espera recibir dd/mm/aaaa. ",
+        "El formato de fecha de vencimiento no es valido. Se espera recibir dd/mm/aaaa. "
+      ],
+      "error_cod": [],
+      "error_details": [
+        {
+          "code": "TFC-8004",
+          "text": "El formato de fecha de comprobante no es valido. Se espera recibir dd/mm/aaaa. "
+        },
+        {
+          "code": "TFC-8004",
+          "text": "El formato de fecha de vencimiento no es valido. Se espera recibir dd/mm/aaaa. "
+        }
+      ],
+      "external_reference": 1768220880158
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443021"
+    }
+  },
+  {
+    "id": 148,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 149,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 150,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 3800,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 151,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 1000,
+    "metodoPago": "transferencia",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 152,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 300,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 153,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 154,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 300,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 155,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      },
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 3500,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 156,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      },
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 3500,
+    "metodoPago": "tarjeta",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 157,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Medialunas",
+        "precio": 300,
+        "categoria": "Panadería",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 300,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1768223430992,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000014 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "12/01/2026",
+      "comprobante_nro": "00001-00000014",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/msd/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/gZqPt0gj7sBhYBg4DfZry8582174y/00000014",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/6704713059193fcca0aafe775769386b/gZqPt0gj7sBhYBg4DfZry8582174y/70038-20354416736-35443021-11-00001-00000014.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/6704713059193fcca0aafe775769386b/gZqPt0gj7sBhYBg4DfZry8582174y/70038-20354416736-35443021-11-00001-00000014.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443021"
+    }
+  },
+  {
+    "id": 158,
+    "fecha": "2026-01-12",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2500,
+    "metodoPago": "tarjeta",
+    "factura": {
+      "error": "N",
+      "errores": [],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1768228229795,
+      "requiere_fec": "NO",
+      "observaciones": "",
+      "rta": "El comprobante FACTURA C 00001-00000015 (MAXIMILIANO EZEQUIEL WAIGAND) se ha guardado correctamente ",
+      "cae": " ",
+      "vencimiento_cae": "01/01/2000",
+      "vencimiento_pago": "12/01/2026",
+      "comprobante_nro": "00001-00000015",
+      "comprobante_tipo": "FACTURA C",
+      "afip_codigo_barras": "",
+      "afip_qr": "",
+      "micrositios": {
+        "descarga": "https://servicios.tusfacturas.app/msd/5af2d016566bd5ffc0b57911b0da2b25/d308736c83a1049473968e38576027618138cd154d45ab855038be46f1ff2ab9/XpqWCA4QXsYh5VGyQFX0px8582954y/00000015",
+        "cliente": ""
+      },
+      "envio_x_mail": "N",
+      "envio_x_mail_direcciones": "",
+      "comprobante_pdf_url": "https://www.tusfacturas.app/app/descarga/pdf/6704713059193fcca0aafe775769386b/XpqWCA4QXsYh5VGyQFX0px8582954y/70038-20354416736-35443021-11-00001-00000015.pdf",
+      "comprobante_ticket_url": "https://www.tusfacturas.app/app/ticket/pdf/6704713059193fcca0aafe775769386b/XpqWCA4QXsYh5VGyQFX0px8582954y/70038-20354416736-35443021-11-00001-00000015.pdf"
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443021"
+    }
+  },
+  {
+    "id": 159,
+    "fecha": "2026-01-20",
+    "items": [
+      {
+        "id": 3,
+        "nombre": "Facturas surtidas",
+        "precio": 2500,
+        "categoria": "Panadería",
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "Sándwich",
+        "precio": 1800,
+        "categoria": "Comidas",
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "categoria": "Bebidas",
+        "destacado": true,
+        "cantidad": 1
+      }
+    ],
+    "total": 5300,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "\n    Tu suscripcion actual no tiene cupo disponible para facturar, ya que te permite crear 5 comprobantes. \n    Hasta el momento, has emitido \n    5 comprobantes. \n     . Excederas tu limite. "
+      ],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1768911602207
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443021"
+    }
+  },
+  {
+    "id": 160,
+    "fecha": "2026-01-20",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "Café",
+        "precio": 1000,
+        "categoria": "Bebidas",
+        "destacado": true,
+        "cantidad": 1
+      },
+      {
+        "id": 6,
+        "nombre": "Suizo",
+        "precio": 1000,
+        "categoria": "Panadería",
+        "cantidad": 1
+      }
+    ],
+    "total": 2000,
+    "metodoPago": "transferencia",
+    "factura": {
+      "error": "S",
+      "errores": [
+        "\n    Tu suscripcion actual no tiene cupo disponible para facturar, ya que te permite crear 5 comprobantes. \n    Hasta el momento, has emitido \n    5 comprobantes. \n     . Excederas tu limite. "
+      ],
+      "error_cod": [],
+      "error_details": [],
+      "external_reference": 1768917275987
+    },
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final",
+      "nro_doc": "35443021"
+    }
+  },
+  {
+    "fecha": "19/2/2026, 12:59:17",
+    "total": 6500
+  },
+  {
+    "fecha": "20/2/2026, 10:00:24",
+    "total": 4000
+  }
+]
