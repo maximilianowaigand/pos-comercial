@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "fecha": "2025-12-05T13:57:29.515Z",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  },
+  {
+    "id": 2,
+    "fecha": "2025-12-05T13:57:42.036Z",
+    "items": [
+      {
+        "id": 6,
+        "nombre": "Café",
+        "precio": 1000,
+        "cantidad": 1
+      }
+    ],
+    "total": 1000
+  }
+]

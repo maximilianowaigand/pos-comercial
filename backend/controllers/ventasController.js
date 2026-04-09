@@ -1,0 +1,64 @@
+const { registrarVenta, getTotales } = require("../data/ventasData");
+const db = require('../db/index');
+
+// Registrar venta
+exports.registrarVenta = async (req, res) => {
+  const data = req.body;
+  console.log("BODY RECIBIDO EN BACKEND:", data);
+
+  if (!data.items || data.items.length === 0) {
+    return res.json({ success: false, error: "No hay productos en la venta" });
+  }
+
+  try {
+    const result = await registrarVenta(data);
+    res.json({ success: true, ...result });
+  } catch (error) {
+    res.json({ success: false, error: error.message });
+  }
+};
+
+// Totales del día
+exports.totalDia = async (req, res) => {
+  try {
+    const totales = await getTotales();
+    res.json({ totalDia: totales.totalDia, efectivo: totales.efectivo, transferencia: totales.transferencia, debito: totales.debito });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Totales del mes
+exports.totalMes = async (req, res) => {
+  try {
+    const totales = await getTotales();
+    res.json({ totalMes: totales.totalMes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Listar ventas
+exports.listarVentas = (req, res) => {
+  const sql = `
+    SELECT 
+      v.id_venta, 
+      v.fecha, 
+      v.hora, 
+      v.medio_pago, 
+      v.total, 
+      v.estado,
+      GROUP_CONCAT(p.nombre_producto || ' x' || dv.cantidad, ', ') AS productos
+    FROM ventas v
+    LEFT JOIN detalle_venta dv ON v.id_venta = dv.id_venta
+    LEFT JOIN productos p ON dv.id_producto = p.id_producto
+    GROUP BY v.id_venta
+    ORDER BY v.fecha DESC, v.hora DESC
+  `;
+  db.all(sql, [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+};
