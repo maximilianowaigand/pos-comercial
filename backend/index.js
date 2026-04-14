@@ -26,11 +26,9 @@ app.use("/productos", productosRoutes); // 🔧 mejor así
 app.use("/api/clima", climaRoutes);
 
 // ---- SERVIR FRONTEND (PRODUCCIÓN) ----
-app.use(express.static(path.join(__dirname, "dist")));
-
-// Para React Router (muy importante)
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
 });
 
 // ---- SERVER ----

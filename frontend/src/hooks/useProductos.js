@@ -5,7 +5,7 @@ export function useProductos(categoria) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/productos")
+    fetch("/productos")
       .then(res => {
         if (!res.ok) throw new Error("Error en la respuesta");
         return res.json();

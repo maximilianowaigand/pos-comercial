@@ -1,25 +1,26 @@
+
 export async function fetchTotales() {
   try {
-    const res = await fetch("/api/ventas/total-dia");
-    const data = await res.json();
+    const [resDia, resMes] = await Promise.all([
+      fetch("/api/ventas/total-dia"),
+      fetch("/api/ventas/total-mes")
+    ]);
 
-    console.log("TOTALES DESDE BACKEND:", data);
+    const diaDatos = await resDia.json();
+    const mesDatos = await resMes.json();
+
+    console.log("TOTALES DIA:", diaDatos);
+    console.log("TOTALES MES:", mesDatos);
 
     return {
-      efectivo: data.efectivo || 0,
-      transferencia: data.transferencia || 0,
-      debito: data.debito || 0,
-      totalDia: data.totalDia || 0,
-      totalMes: data.totalMes || 0
+      efectivo: diaDatos.efectivo || 0,
+      transferencia: diaDatos.transferencia || 0,
+      debito: diaDatos.debito || 0,
+      totalDia: diaDatos.totalDia || 0,
+      totalMes: mesDatos.totalMes || 0
     };
   } catch (error) {
     console.error("Error fetchTotales:", error);
-    return {
-      efectivo: 0,
-      transferencia: 0,
-      debito: 0,
-      totalDia: 0,
-      totalMes: 0
-    };
+    return { efectivo: 0, transferencia: 0, debito: 0, totalDia: 0, totalMes: 0 };
   }
 }
