@@ -2,7 +2,7 @@ import styles from "../BotonExportar/BotonExportar.module.css"
 
 export default function BotonExportar() {
   const exportar = () => {
-    window.open("http://localhost:4000/api/export-excel", "_blank");
+    window.open("/api/export-excel", "_blank");
   };
 
   return (

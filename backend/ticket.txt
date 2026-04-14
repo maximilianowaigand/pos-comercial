@@ -1,13 +1,12 @@
-PANADERIA MAXI
+PANADERIA TRES SABORES
 ------------------------------
-Ticket N°: 160
-Fecha: 20/1/2026, 10:54:37
+Ticket N°: 172
+Fecha: 6/4/2026, 04:13:28
 Pago: TRANSFERENCIA
 ------------------------------
-Café x1 $1000
-Suizo x1 $1000
+Café x3 $3600
 ------------------------------
-TOTAL: $2000
+TOTAL: $3600
 ------------------------------
 GRACIAS POR SU COMPRA
 

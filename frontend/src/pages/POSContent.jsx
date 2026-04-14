@@ -7,6 +7,8 @@ import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
 import Categorias from "../components/categorias/Categorias";
 import Totales from "../components/Totales/Totales";
+import HistorialVentas from "../components/HistorialVentas/HistorialVentas";
+import CrearProducto from "../components/CrearProducto/CrearProducto";
 import { usePOSContext } from "../context/POSContext";
 import { useProductos } from "../hooks/useProductos";
 
@@ -112,6 +114,13 @@ export default function POSContent() {
       />
 
       <BotonExportar />
+
+     
+      <CrearProducto />
+
+      <HistorialVentas />
+
+    
     </div>
   );
 }

@@ -21,7 +21,7 @@ export default function BotonGuardar({ venta, onFinish, metodoPago }) {
     console.log("BODY:", body);
 
     try {
-      const res = await fetch("http://localhost:4000/api/ventas/registrar-venta", {
+      const res = await fetch("/api/ventas/registrar-venta", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)

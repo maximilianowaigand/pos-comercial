@@ -5,12 +5,15 @@ export function useProductos(categoria) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:4000/productos")
-      .then(res => res.json())
+    fetch("/productos")
+      .then(res => {
+        if (!res.ok) throw new Error("Error en la respuesta");
+        return res.json();
+      })
       .then(data => {
-            console.log("Productos desde DB:", data);
-            setProductos(Array.isArray(data) ? data : []);
-            setLoading(false);
+        console.log("Productos desde DB:", data);
+        setProductos(Array.isArray(data) ? data : []);
+        setLoading(false);
       })
       .catch(err => {
         console.error("Error cargando productos:", err);
@@ -20,13 +23,15 @@ export function useProductos(categoria) {
 
   const categorias = [
     "Todos",
-    ...new Set(productos.map(p => p.categoria))
+    ...new Set(productos.map(p => p.categoria || "Sin categoría"))
   ];
 
   const productosFiltrados =
     categoria === "Todos"
       ? productos
-      : productos.filter(p => p.categoria === categoria);
+      : productos.filter(
+          p => (p.categoria || "Sin categoría") === categoria
+        );
 
   return { categorias, productosFiltrados, loading };
 }

@@ -31,14 +31,6 @@ El sistema permite registrar transacciones, almacenar información de productos 
 
 ---
 
-🗄️ Base de datos
-
-El proyecto incluye scripts SQL en /database:
-
-schema.sql: estructura de la base de datos
-queries.sql: consultas de análisis
-seed.sql: datos de ejemplo
-
 ## 📊 Ejemplo de consulta SQL
 
 ```sql

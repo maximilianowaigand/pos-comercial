@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   addItem,
   decreaseItem,
-  removeItem
 } from "../utils/cartFuncions";
 import { fetchTotales } from "../utils/api";
 

@@ -11,4 +11,6 @@ router.get("/total-dia", ventasController.totalDia);
 // Total del mes
 router.get("/total-mes", ventasController.totalMes);
 
+router.get("/", ventasController.listarVentas);
+
 module.exports = router;

@@ -54,7 +54,7 @@ exports.printTicket = async (req, res) => {
 
     // IMPRIMIR TICKET
     let text = "";
-    text += "PANADERIA MAXI\n";
+    text += "PANADERIA TRES SABORES\n";
     text += "------------------------------\n";
     text += `Ticket N°: ${nuevaVenta.id}\n`;
     text += `Fecha: ${new Date().toLocaleString()}\n`;

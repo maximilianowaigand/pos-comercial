@@ -1,7 +1,7 @@
 const axios = require("axios");
-const pool = require("../db");
+const db = require("../db");
 
-// Coordenadas zona céntrica comercial (ajustá si querés)
+// Coordenadas
 const LAT = -31.73197;
 const LON = -60.5238;
 
@@ -32,47 +32,50 @@ async function obtenerForecast() {
   }
 }
 
-async function guardarClima() {
-  const connection = await pool.getConnection();
+function guardarClima() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await obtenerForecast();
 
-  try {
-    const data = await obtenerForecast();
+      db.serialize(() => {
+        db.run("BEGIN TRANSACTION");
 
-    await connection.beginTransaction();
+        const stmt = db.prepare(`
+          INSERT INTO clima_diario 
+          (fecha, temp_min, temp_max, lluvia_mm, prob_lluvia)
+          VALUES (?, ?, ?, ?, ?)
+          ON CONFLICT(fecha) DO UPDATE SET
+            temp_min = excluded.temp_min,
+            temp_max = excluded.temp_max,
+            lluvia_mm = excluded.lluvia_mm,
+            prob_lluvia = excluded.prob_lluvia
+        `);
 
-    for (let i = 0; i < data.time.length; i++) {
-      await connection.query(
-        `
-        INSERT INTO clima_diario 
-        (fecha, temp_min, temp_max, lluvia_mm, prob_lluvia)
-        VALUES (?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-          temp_min = VALUES(temp_min),
-          temp_max = VALUES(temp_max),
-          lluvia_mm = VALUES(lluvia_mm),
-          prob_lluvia = VALUES(prob_lluvia)
-        `,
-        [
-          data.time[i],
-          data.temperature_2m_min[i],
-          data.temperature_2m_max[i],
-          data.precipitation_sum[i],
-          data.precipitation_probability_max[i]
-        ]
-      );
+        for (let i = 0; i < data.time.length; i++) {
+          stmt.run([
+            data.time[i],
+            data.temperature_2m_min[i],
+            data.temperature_2m_max[i],
+            data.precipitation_sum[i],
+            data.precipitation_probability_max[i]
+          ]);
+        }
+
+        stmt.finalize();
+
+        db.run("COMMIT", (err) => {
+          if (err) return reject(err);
+
+          console.log("Clima guardado correctamente");
+          resolve({ ok: true });
+        });
+      });
+
+    } catch (error) {
+      db.run("ROLLBACK");
+      reject(error);
     }
-
-    await connection.commit();
-
-    console.log("Clima guardado correctamente");
-    return { ok: true };
-
-  } catch (error) {
-    await connection.rollback();
-    throw error;
-  } finally {
-    connection.release();
-  }
+  });
 }
 
 module.exports = { guardarClima };
