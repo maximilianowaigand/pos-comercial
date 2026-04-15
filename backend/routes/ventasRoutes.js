@@ -3,7 +3,7 @@ const router = express.Router();
 const ventasController = require("../controllers/ventasController");
 
 // Registrar venta
-router.post("/registrar-venta", ventasController.registrarVenta);
+router.post("/", ventasController.registrarVenta);
 
 // Total del día
 router.get("/total-dia", ventasController.totalDia);

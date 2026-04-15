@@ -7,9 +7,11 @@ const VentasContext = createContext();
 export function VentasProvider({ children }) {
   // 🛒 Carrito
   const [venta, setVenta] = useState([]);
+  const [ventas, setVentas] = useState([]);
   const [metodoPago, setMetodoPago] = useState("efectivo");
   const [mostrarCliente, setMostrarCliente] = useState(false);
   const [datosCliente, setDatosCliente] = useState(null);
+
 
   // 📊 Totales del día/mes
   const [totalesDia, setTotalesDia] = useState({
@@ -22,6 +24,7 @@ export function VentasProvider({ children }) {
 
   useEffect(() => {
     obtenerTotales();
+    obtenerVentas();
   }, []);
 
   // 📡 Fetch totales
@@ -30,7 +33,7 @@ export function VentasProvider({ children }) {
     setTotalesDia({
       efectivo: data.efectivo,
       transferencia: data.transferencia,
-      debito: data.debito,
+      tarjeta: data.debito,
       totalDia: data.totalDia
     });
     setTotalMes(data.totalMes);
@@ -54,6 +57,31 @@ export function VentasProvider({ children }) {
     setDatosCliente(null);
   }
 
+  async function agregarVenta(body) {
+  try {
+    const res = await fetch("/api/ventas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    await res.json();
+
+    // 🔥 TRAE LA DATA COMPLETA DESDE BACKEND
+    await obtenerVentas();
+
+    // 🔥 actualiza totales
+    await obtenerTotales();
+
+    limpiarVenta();
+
+  } catch (error) {
+    console.error("Error agregando venta:", error);
+    throw error;
+  }
+}
   function actualizarPrecio(id, nuevoPrecio) {
     setVenta(prev =>
       prev.map(item =>
@@ -70,11 +98,22 @@ export function VentasProvider({ children }) {
   // 💰 Total derivado
   const total = calcularTotal(venta);
 
+  async function obtenerVentas() {
+  try {
+    const res = await fetch("/api/ventas");
+    const data = await res.json();
+    setVentas(data);
+  } catch (error) {
+    console.error("Error cargando ventas:", error);
+  }
+}
+
   return (
     <VentasContext.Provider value={{
       // carrito
       venta,
       total,
+      agregarVenta,
       agregar,
       disminuir,
       borrar,
@@ -89,7 +128,8 @@ export function VentasProvider({ children }) {
       // totales
       totalesDia,
       totalMes,
-      obtenerTotales
+      obtenerTotales,
+      ventas,
     }}>
       {children}
     </VentasContext.Provider>

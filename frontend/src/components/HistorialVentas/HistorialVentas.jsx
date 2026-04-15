@@ -1,31 +1,9 @@
-import { useEffect, useState } from "react";
 import { useVentas } from "../../context/VentasContext";
 
 export default function HistorialVentas() {
-  const { ventas, fetchVentas } = useVentas();
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const cargarVentas = async () => {
-      try {
-        setLoading(true);
-        await fetchVentas();
-        setError(null);
-      } catch (err) {
-        console.error("Error cargando ventas:", err);
-        setError("No se pudieron cargar las ventas");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    cargarVentas();
-  }, [fetchVentas]);
-
-  if (loading) return <p>Cargando historial de ventas...</p>;
-  if (error) return <p>{error}</p>;
+  const { ventas } = useVentas();
 
   return (
     <div style={{ padding: 20 }}>

@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "galleta",
+        "precio": 2800,
+        "categoria": "panaderia",
+        "cantidad": 1
+      }
+    ],
+    "total": 2800,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  },
+  {
+    "id": 2,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "cookies",
+        "precio": 5500,
+        "categoria": "Sin Tacc",
+        "cantidad": 1
+      }
+    ],
+    "total": 5500,
+    "metodoPago": "efectivo",
+    "factura": null,
+    "cliente": {
+      "razon_social": "Consumidor Final",
+      "tipo_doc": "DNI",
+      "condicion_iva": "Consumidor Final"
+    }
+  }
+]

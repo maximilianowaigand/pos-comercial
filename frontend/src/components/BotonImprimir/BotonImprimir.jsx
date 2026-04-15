@@ -1,75 +1,61 @@
-export default function BotonImprimir({
-  items,
-  total,
-  metodoPago,
-  datosCliente,
-  limpiar,
-  refresh
-}) {
+import { useVentas } from "../../context/VentasContext";
 
-const imprimir = async () => {
-  try {
-    const clienteParaFactura = {
-      razon_social: "Consumidor Final",
-      tipo_doc: "DNI",
-      condicion_iva: "Consumidor Final",
-      ...(datosCliente?.nro_doc && { nro_doc: datosCliente.nro_doc })
+export default function BotonImprimir({ items = [], metodoPago }) {
+
+  const { agregarVenta } = useVentas();
+
+  const imprimir = async () => {
+    if (items.length === 0) return;
+
+    const confirmar = window.confirm("¿Confirmar venta e imprimir?");
+    if (!confirmar) return;
+
+    const body = {
+      items: items.map(p => ({
+        producto_id: p.id,
+        cantidad: p.cantidad,
+        precio_unitario: p.precio
+      })),
+      metodo_pago: metodoPago
     };
 
-    // 🥇 1. GUARDAR VENTA
-    const resVenta = await fetch("/api/ventas/registrar-venta", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-      items: items.map(p => ({
-      producto_id: p.id,
-      cantidad: p.cantidad,
-      precio_unitario: p.precio
-  })),
-  metodo_pago: metodoPago
-}),
-    });
+    try {
+      const dataVenta = await agregarVenta(body);
 
-    const dataVenta = await resVenta.json();
+      await fetch("/api/print", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          items,
+          total: dataVenta.total,
+          metodoPago
+        })
+      });
 
-    if (!dataVenta.ventaId) {
-      alert("Error guardando la venta");
-      return;
+      alert("Venta guardada e impresa ✅");
+
+    } catch (e) {
+      console.error(e);
+      alert("Error en la operación");
     }
-
-    // 🥈 2. IMPRIMIR
-    const resPrint = await fetch("http://localhost:3000/api/print", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        items,
-        total: dataVenta.total, // 💥 usar total REAL
-        metodoPago,
-        datosCliente: clienteParaFactura
-      }),
-    });
-
-    if (!resPrint.ok) {
-      alert("Error imprimiendo");
-      return;
-    }
-
-    // 🥉 3. ACTUALIZAR UI
-    limpiar();
-    refresh(); // 💥 esto ya lo tenías bien
-
-  } catch (err) {
-    console.error(err);
-    alert("Error general");
-  }
-};
+  };
 
   return (
     <button
-      style={{ padding: 20, background: "black", color: "white" }}
       onClick={imprimir}
+      disabled={items.length === 0}
+      style={{
+        background: items.length === 0 ? "#555" : "black",
+        color: "white",
+        padding: 5,
+        borderRadius: 5,
+        marginTop: 10,
+        width: "20%"
+      }}
     >
-      Gardar + Imprimir
+      GUARDAR + IMPRIMIR
     </button>
   );
 }

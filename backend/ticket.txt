@@ -1,12 +1,12 @@
 PANADERIA TRES SABORES
 ------------------------------
-Ticket N°: 172
-Fecha: 6/4/2026, 04:13:28
-Pago: TRANSFERENCIA
+Ticket N°: 2
+Fecha: 15/4/2026, 01:33:01
+Pago: EFECTIVO
 ------------------------------
-Café x3 $3600
+cookies x1 $5500
 ------------------------------
-TOTAL: $3600
+TOTAL: $5500
 ------------------------------
 GRACIAS POR SU COMPRA
 
