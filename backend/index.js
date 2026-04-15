@@ -11,7 +11,6 @@ app.use(express.json());
 const ventasRoutes = require("./routes/ventasRoutes");
 const printRoutes = require("./routes/printRoutes");
 const exportRoutes = require("./routes/exportRoutes");
-const statsRoute = require("./routes/statsRoute");
 const facturaRoutes = require("./routes/facturaRoutes");
 const productosRoutes = require("./routes/productosRoutes");
 const climaRoutes = require("./routes/clima");
@@ -19,7 +18,6 @@ const climaRoutes = require("./routes/clima");
 app.use("/api/ventas", ventasRoutes);
 app.use("/api", printRoutes);
 app.use("/api", exportRoutes);
-app.use("/api", statsRoute);
 app.use("/api", facturaRoutes);
 app.use("/api", require("./routes/testFactura"));
 app.use("/productos", productosRoutes); // 🔧 mejor así

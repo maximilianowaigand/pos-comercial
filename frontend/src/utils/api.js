@@ -15,7 +15,7 @@ export async function fetchTotales() {
     return {
       efectivo: diaDatos.efectivo || 0,
       transferencia: diaDatos.transferencia || 0,
-      debito: diaDatos.debito || 0,
+      tarjeta: diaDatos.debito || 0,
       totalDia: diaDatos.totalDia || 0,
       totalMes: mesDatos.totalMes || 0
     };

@@ -1,23 +1,5 @@
-
-const fs = require("fs");
-const { exec } = require("child_process");
-const path = require("path");
-
-// 👇 IMPORTACIÓN CORRECTA
 const { emitirFacturaTusFacturas } = require("./facturaController");
-
-const ventasFile = path.join(__dirname, "../data/ventas.json");
-
-// Leer ventas
-function leerVentas() {
-  if (!fs.existsSync(ventasFile)) return [];
-  return JSON.parse(fs.readFileSync(ventasFile, "utf8"));
-}
-
-// Guardar ventas
-function guardarVentas(ventas) {
-  fs.writeFileSync(ventasFile, JSON.stringify(ventas, null, 2));
-}
+const ventasService = require("../services/ventasService"); // 👈 nuevo
 
 exports.printTicket = async (req, res) => {
   try {
@@ -32,31 +14,25 @@ exports.printTicket = async (req, res) => {
     let factura = null;
     const mp = metodoPago.toLowerCase();
 
-    // 🔥 FACTURAR SÓLO TARJETA O TRANSFERENCIA
+    // 🔥 FACTURACIÓN
     if ((mp === "tarjeta" || mp === "transferencia") && datosCliente?.nro_doc) {
       factura = await emitirFacturaTusFacturas(items, total, datosCliente, metodoPago);
     }
 
-    // Guardar venta
-    const ventas = leerVentas();
-    const nuevaVenta = {
-      id: ventas.length + 1,
-      fecha: new Date().toISOString().slice(0, 10),
+    // 🟢 GUARDAR EN SQLITE (NO JSON)
+    const nuevaVenta = await ventasService.guardarVenta({
       items,
       total,
-      metodoPago,
+      metodo_pago: metodoPago,
       factura,
       cliente: datosCliente
-    };
+    });
 
-    ventas.push(nuevaVenta);
-    guardarVentas(ventas);
-
-    // IMPRIMIR TICKET
+    // 🖨️ TICKET
     let text = "";
     text += "PANADERIA TRES SABORES\n";
     text += "------------------------------\n";
-    text += `Ticket N°: ${nuevaVenta.id}\n`;
+    text += `Ticket N°: ${nuevaVenta.ventaId}\n`;
     text += `Fecha: ${new Date().toLocaleString()}\n`;
     text += `Pago: ${metodoPago.toUpperCase()}\n`;
     text += "------------------------------\n";
@@ -79,6 +55,10 @@ exports.printTicket = async (req, res) => {
     text += "GRACIAS POR SU COMPRA\n";
     text += "\f";
 
+    const fs = require("fs");
+    const { exec } = require("child_process");
+    const path = require("path");
+
     const filePath = path.join(__dirname, "../ticket.txt");
     fs.writeFileSync(filePath, text);
 
@@ -87,13 +67,14 @@ exports.printTicket = async (req, res) => {
         console.error("❌ Error imprimiendo:", err);
         return res.json({
           ok: true,
-          warning: "Imprimió venta pero no imprimió ticket",
+          warning: "Venta guardada pero no se imprimió ticket",
           factura
         });
       }
 
       res.json({
         ok: true,
+        ventaId: nuevaVenta.ventaId,
         facturado: factura !== null,
         factura
       });
@@ -104,4 +85,3 @@ exports.printTicket = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-

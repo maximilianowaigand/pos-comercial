@@ -1,4 +1,4 @@
-const { registrarVenta, getTotales } = require("../data/ventasData");
+const { registrarVenta, getTotales, getTotalMes } = require("../services/ventasService");
 const db = require('../db/index');
 
 // Registrar venta
@@ -22,7 +22,7 @@ exports.registrarVenta = async (req, res) => {
 exports.totalDia = async (req, res) => {
   try {
     const totales = await getTotales();
-    res.json({ totalDia: totales.totalDia, efectivo: totales.efectivo, transferencia: totales.transferencia, debito: totales.debito });
+    res.json({ totalDia: totales.totalDia, efectivo: totales.efectivo, transferencia: totales.transferencia, tarjeta: totales.tarjeta });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
@@ -32,7 +32,7 @@ exports.totalDia = async (req, res) => {
 // Totales del mes
 exports.totalMes = async (req, res) => {
   try {
-    const totales = await getTotales();
+    const totales = await getTotalMes();
     res.json({ totalMes: totales.totalMes });
   } catch (error) {
     console.error(error);

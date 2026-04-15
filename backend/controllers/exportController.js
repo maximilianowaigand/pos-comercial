@@ -1,42 +1,43 @@
 const ExcelJS = require("exceljs");
-const fs = require("fs");
+const db = require("../db"); // 👈 SQLite
 
 exports.exportarExcel = async (req, res) => {
   try {
-    // Cargar ventas
-    const ventasData = JSON.parse(
-      fs.readFileSync("./data/ventas.json", "utf8")
+    // 🟢 leer desde SQLite
+    const ventasData = await db.all(
+      `SELECT fecha, total, metodo_pago FROM ventas ORDER BY id DESC`
     );
 
-    // Crear workbook
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("Ventas");
 
-    // Encabezados
     sheet.columns = [
-      { header: "Fecha", key: "fecha", width: 20 },
+      { header: "Fecha", key: "fecha", width: 25 },
       { header: "Total", key: "total", width: 15 },
+      { header: "Método de pago", key: "metodo_pago", width: 20 },
     ];
 
-    // Agregar filas
     ventasData.forEach(v => {
       sheet.addRow({
         fecha: v.fecha,
         total: v.total,
+        metodo_pago: v.metodo_pago
       });
     });
 
-    // Crear archivo temporal
     const filePath = `ventas-${Date.now()}.xlsx`;
     await workbook.xlsx.writeFile(filePath);
 
-    // Enviar archivo al frontend
     res.download(filePath, "ventas.xlsx", () => {
-      fs.unlinkSync(filePath); // borrar archivo temporal
+      const fs = require("fs");
+      fs.unlinkSync(filePath);
     });
 
   } catch (e) {
     console.error("Error al exportar Excel:", e);
-    res.status(500).json({ success: false, error: "Error al generar Excel" });
+    res.status(500).json({
+      success: false,
+      error: "Error al generar Excel"
+    });
   }
 };
