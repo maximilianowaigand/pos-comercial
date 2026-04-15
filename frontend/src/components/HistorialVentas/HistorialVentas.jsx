@@ -50,7 +50,7 @@ export default function HistorialVentas() {
               <td>{v.medio_pago}</td>
               <td>${v.total}</td>
               <td>{v.estado}</td>
-              <td>{v.productos}</td> {/* <-- Cambiado para que funcione con tu backend actual */}
+              <td>{v.productos}</td> 
             </tr>
           ))}
         </tbody>

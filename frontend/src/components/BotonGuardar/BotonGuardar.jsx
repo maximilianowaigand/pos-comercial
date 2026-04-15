@@ -1,49 +1,49 @@
+
 export default function BotonGuardar({ venta, onFinish, metodoPago }) {
+
   const registrarVenta = async () => {
-    if (venta.length === 0) return;
+  if (venta.length === 0) return;
 
-    const confirmar = window.confirm(
-  `Total: $${venta.reduce((t, p) => t + p.precio * p.cantidad, 0)}
-    ¿Desea confirmar y guardar la venta?`
-    );
+  const confirmar = window.confirm("¿Confirmar venta?");
 
-    // ✨ Solo enviamos id y cantidad, MySQL calculará el total
-    const body = {
-      items: venta.map(p => ({
-        producto_id: p.id,
-        cantidad: p.cantidad,
-        precio_unitario: p.precio
-      })),
-      metodo_pago: metodoPago
-    };
+  if (!confirmar) {
+    console.log("🚫 CANCELADO - NO debería ejecutar fetch");
+    return;
+  }
 
-    console.log("VENTA A ENVIAR:", venta);
-    console.log("BODY:", body);
-
-    try {
-      const res = await fetch("/api/ventas/registrar-venta", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-
-      const data = await res.json();
-
-      if (data.ventaId) {
-        // Aquí usamos el total que devuelve MySQL (trigger)
-        alert(`Venta guardada correctamente ✅ ID: ${data.ventaId}, Total: $${data.total}`);
-        
-      
-        if (onFinish) onFinish(); // Ejecutamos callback si hay
-      } else {
-        alert("Error: " + (data.error || "No se pudo guardar la venta"));
-      }
-    } catch (e) {
-      console.error(e);
-      alert("No se pudo conectar al backend.");
-    }
+  const body = {
+    items: venta.map(p => ({
+      producto_id: p.id,
+      cantidad: p.cantidad,
+      precio_unitario: p.precio
+    })),
+    metodo_pago: metodoPago
   };
 
+  console.log("VENTA:", venta);
+  console.log("ITEMS:", body.items);
+
+  try {
+    const res = await fetch("/api/ventas/registrar-venta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+    console.log("RESPUESTA:", data);
+
+    if (data.ventaId) {
+      alert("Venta guardada ✅");
+      if (onFinish) onFinish();
+    } else {
+      alert("Error: " + data.error);
+    }
+
+  } catch (e) {
+    console.error(e);
+  }
+};
   return (
     <button
       onClick={registrarVenta}

@@ -17,7 +17,7 @@ function registrarVenta(data) {
       // 1️⃣ Crear venta
       db.run(
         `INSERT INTO ventas (fecha, hora, medio_pago, estado) 
-         VALUES (DATE('now'), TIME('now'), ?, 'ABIERTA')`,
+         VALUES (DATE('now', 'localtime'), TIME('now', 'localtime'), ?, 'ABIERTA')`,
         [metodo_pago],
         function (err) {
           if (err) return reject(err);
