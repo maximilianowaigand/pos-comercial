@@ -40,5 +40,122 @@
       "tipo_doc": "DNI",
       "condicion_iva": "Consumidor Final"
     }
+  },
+  {
+    "id": 3,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 2,
+        "nombre": "galleta",
+        "precio": 2800,
+        "categoria": "panaderia",
+        "cantidad": 1
+      },
+      {
+        "id": 5,
+        "nombre": "cookies",
+        "precio": 5500,
+        "categoria": "Sin Tacc",
+        "cantidad": 1
+      }
+    ],
+    "total": 8300,
+    "metodoPago": "efectivo",
+    "factura": null
+  },
+  {
+    "id": 4,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "pan",
+        "precio": 2400,
+        "categoria": "panaderia",
+        "cantidad": 1
+      }
+    ],
+    "total": 2400,
+    "metodoPago": "transferencia",
+    "factura": null
+  },
+  {
+    "id": 5,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "cookies",
+        "precio": 5500,
+        "categoria": "Sin Tacc",
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "suizo",
+        "precio": 2800,
+        "categoria": "panaderia",
+        "cantidad": 1
+      }
+    ],
+    "total": 8300,
+    "metodoPago": "tarjeta",
+    "factura": null
+  },
+  {
+    "id": 6,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "suizo",
+        "precio": 2800,
+        "categoria": "panaderia",
+        "cantidad": 1
+      }
+    ],
+    "total": 2800,
+    "metodoPago": "tarjeta",
+    "factura": null
+  },
+  {
+    "id": 7,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 4,
+        "nombre": "suizo",
+        "precio": 2800,
+        "categoria": "panaderia",
+        "cantidad": 1
+      }
+    ],
+    "total": 2800,
+    "metodoPago": "tarjeta",
+    "factura": null
+  },
+  {
+    "id": 8,
+    "fecha": "2026-04-15",
+    "items": [
+      {
+        "id": 5,
+        "nombre": "cookies",
+        "precio": 5500,
+        "categoria": "Sin Tacc",
+        "cantidad": 1
+      },
+      {
+        "id": 4,
+        "nombre": "suizo",
+        "precio": 2800,
+        "categoria": "panaderia",
+        "cantidad": 1
+      }
+    ],
+    "total": 8300,
+    "metodoPago": "tarjeta",
+    "factura": null
   }
 ]

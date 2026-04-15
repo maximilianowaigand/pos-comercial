@@ -98,15 +98,7 @@ export default function POSContent() {
         />
       </div>
 
-      <BotonImprimir
-        items={venta}
-        total={total}
-        metodoPago={metodoPago}
-        datosCliente={datosCliente}
-        limpiar={limpiarVenta}
-        refresh={obtenerTotales}
-      />
-
+      <BotonImprimir/>
       <BotonExportar />
       <CrearProducto />
       <HistorialVentas />

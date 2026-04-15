@@ -1,12 +1,13 @@
 PANADERIA TRES SABORES
 ------------------------------
-Ticket N°: 2
-Fecha: 15/4/2026, 01:33:01
-Pago: EFECTIVO
+Ticket N°: 8
+Fecha: 15/4/2026, 05:57:48
+Pago: TARJETA
 ------------------------------
 cookies x1 $5500
+suizo x1 $2800
 ------------------------------
-TOTAL: $5500
+TOTAL: $8300
 ------------------------------
 GRACIAS POR SU COMPRA
 
