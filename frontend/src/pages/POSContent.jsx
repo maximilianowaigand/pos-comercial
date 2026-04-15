@@ -1,4 +1,3 @@
-
 import ProdDetalles from "../components/ProdDetalles/ProdDetalles";
 import OtroProducto from "../components/OtroProducto/OtroProducto";
 import BotonGuardar from "../components/BotonGuardar/BotonGuardar";
@@ -9,10 +8,8 @@ import Categorias from "../components/categorias/Categorias";
 import Totales from "../components/Totales/Totales";
 import HistorialVentas from "../components/HistorialVentas/HistorialVentas";
 import CrearProducto from "../components/CrearProducto/CrearProducto";
-import { usePOSContext } from "../context/POSContext";
-import { useProductos } from "../hooks/useProductos";
-
-
+import { useVentas } from "../context/VentasContext";
+import { useProductos } from "../context/ProductosContext";
 
 export default function POSContent() {
   const {
@@ -23,40 +20,39 @@ export default function POSContent() {
     metodoPago,
     mostrarCliente,
     datosCliente,
-    categoria,
-    setCategoria,
     agregar,
-    handleMetodoPagoChange,
+    disminuir,
+    borrar,
     limpiarVenta,
-    obtenerTotales,
-    setDatosCliente
-  } = usePOSContext();
+    actualizarPrecio,
+    handleMetodoPagoChange,
+    setDatosCliente,
+    obtenerTotales
+  } = useVentas();
 
-  const { categorias, productosFiltrados } = useProductos(categoria);
-
-  
+  const {
+    categorias,
+    productosFiltrados,
+    categoria,
+    setCategoria
+  } = useProductos();
 
   return (
     <div style={{ padding: 20 }}>
       <h1>POS Panadería</h1>
-      
-      
-      
-      <Totales 
-      totalesDia={totalesDia}
-      totalMes={totalMes}
-      />
 
+      <Totales totalesDia={totalesDia} totalMes={totalMes} />
 
       <Categorias
-      categorias={categorias}
-      categoriaActual={categoria}
-      onSelect={setCategoria}
+        categorias={categorias}
+        categoriaActual={categoria}
+        onSelect={setCategoria}
       />
 
       <div style={{ display: "flex", gap: 10 }}>
+
         {/* PRODUCTOS */}
-        <div style={{width: 300, display: "grid", gap: 10 }}>
+        <div style={{ width: 300, display: "grid", gap: 10 }}>
           {productosFiltrados.map(p => (
             <button
               key={p.id}
@@ -67,11 +63,10 @@ export default function POSContent() {
               <br />${p.precio}
             </button>
           ))}
-
-          <OtroProducto key={categoria}
-                        onAdd={agregar} />
+          <OtroProducto onAdd={agregar} />
         </div>
 
+        {/* DETALLE CARRITO */}
         <ProdDetalles />
 
         {/* MÉTODO DE PAGO */}
@@ -95,7 +90,7 @@ export default function POSContent() {
         <BotonGuardar
           venta={venta}
           total={total}
-          metodoPago={metodoPago} 
+          metodoPago={metodoPago}
           onFinish={() => {
             limpiarVenta();
             obtenerTotales();
@@ -103,7 +98,6 @@ export default function POSContent() {
         />
       </div>
 
-      {/* IMPRIMIR */}
       <BotonImprimir
         items={venta}
         total={total}
@@ -114,13 +108,8 @@ export default function POSContent() {
       />
 
       <BotonExportar />
-
-     
       <CrearProducto />
-
       <HistorialVentas />
-
-    
     </div>
   );
 }

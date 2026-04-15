@@ -1,15 +1,16 @@
+import { useVentas } from "../../context/VentasContext";
 
-export default function BotonGuardar({ venta, onFinish, metodoPago }) {
 
-  const registrarVenta = async () => {
+export default function BotonGuardar({ venta, metodoPago }) {
+
+  const { agregarVenta } = useVentas();
+
+const registrarVenta = async () => {
   if (venta.length === 0) return;
 
   const confirmar = window.confirm("¿Confirmar venta?");
 
-  if (!confirmar) {
-    console.log("🚫 CANCELADO - NO debería ejecutar fetch");
-    return;
-  }
+  if (!confirmar) return;
 
   const body = {
     items: venta.map(p => ({
@@ -20,28 +21,14 @@ export default function BotonGuardar({ venta, onFinish, metodoPago }) {
     metodo_pago: metodoPago
   };
 
-  console.log("VENTA:", venta);
-  console.log("ITEMS:", body.items);
-
   try {
-    const res = await fetch("/api/ventas/registrar-venta", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
+    await agregarVenta(body); // 🔥 contexto hace todo
 
-    const data = await res.json();
-    console.log("RESPUESTA:", data);
-
-    if (data.ventaId) {
-      alert("Venta guardada ✅");
-      if (onFinish) onFinish();
-    } else {
-      alert("Error: " + data.error);
-    }
+    alert("Venta guardada ✅");
 
   } catch (e) {
     console.error(e);
+    alert("Error al guardar venta");
   }
 };
   return (

@@ -1,4 +1,4 @@
-import POS from "./pages/pos";
+import POS from "./pages/Pos";
 
 function App() {
   return <POS />;

@@ -1,4 +1,4 @@
-import { usePOSContext } from "../../context/POSContext";
+import { useVentas } from "../../context/VentasContext";
 
 export default function ProdDetalles() {
   const {
@@ -9,7 +9,7 @@ export default function ProdDetalles() {
     borrar,
     limpiarVenta,
     actualizarPrecio
-  } = usePOSContext();
+  } = useVentas();
 
   return (
     <div style={{ width: 600, background: "#222", padding: 20, borderRadius: 10, color: "white" }}>
