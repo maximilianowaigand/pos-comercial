@@ -59,7 +59,7 @@ export default function CrearProducto({ productos = [] }) {
     setLoading(true);
 
     try {
-      const res = await fetch("/productos", {
+      const res = await fetch("api/productos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

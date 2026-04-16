@@ -6,7 +6,6 @@ import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
 import Categorias from "../components/categorias/Categorias";
 import Totales from "../components/Totales/Totales";
-import CrearProducto from "../components/CrearProducto/CrearProducto";
 import { useVentas } from "../context/VentasContext";
 import { useProductos } from "../context/ProductosContext";
 import { useNavigate } from "react-router-dom";
@@ -67,6 +66,10 @@ export default function POSContent() {
         }}
       >
         📊 Historial
+      </button>
+
+      <button onClick={() => navigate("/crear-producto")}>
+        + Crear producto
       </button>
     </div>
 
@@ -129,7 +132,6 @@ export default function POSContent() {
 
       <BotonImprimir/>
       <BotonExportar />
-      <CrearProducto />
     </div>
   );
 }

@@ -12,7 +12,7 @@ export function ProductosProvider({ children }) {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const res = await fetch("/productos");
+        const res = await fetch("/api/productos");
         const data = await res.json();
 
         setProductos(Array.isArray(data) ? data : []);

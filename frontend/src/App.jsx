@@ -1,15 +1,21 @@
 import { Routes, Route } from "react-router-dom";
 import { VentasProvider } from "./context/VentasContext";
+import { ProductosProvider } from "./context/ProductosContext";
 import POS from "./pages/Pos";
 import HistorialVentas from "./components/HistorialVentas/HistorialVentas";
+import CrearProducto from "./components/CrearProducto/CrearProducto";
+
 
 function App() {
   return (
     <VentasProvider>
-      <Routes>
-        <Route path="/" element={<POS />} />
-        <Route path="/historial" element={<HistorialVentas />} />
-      </Routes>
+      <ProductosProvider>
+        <Routes>
+          <Route path="/" element={<POS />} />
+          <Route path="/historial" element={<HistorialVentas />} />
+          <Route path="/crear-producto" element={<CrearProducto />} />
+        </Routes>
+      </ProductosProvider>
     </VentasProvider>
   );
 }

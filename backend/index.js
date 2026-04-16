@@ -20,7 +20,7 @@ app.use("/api", printRoutes);
 app.use("/api", exportRoutes);
 app.use("/api", facturaRoutes);
 app.use("/api", require("./routes/testFactura"));
-app.use("/productos", productosRoutes); // 🔧 mejor así
+app.use("/api/productos", productosRoutes); 
 app.use("/api/clima", climaRoutes);
 
 // ---- SERVIR FRONTEND (PRODUCCIÓN) ----
@@ -34,3 +34,5 @@ const PORT = 3000; // 🔧 usamos uno solo
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });
+
+

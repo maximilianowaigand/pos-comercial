@@ -22,10 +22,17 @@ export function VentasProvider({ children }) {
   });
   const [totalMes, setTotalMes] = useState(0);
 
-  useEffect(() => {
-    obtenerTotales();
-    obtenerVentas();
-  }, []);
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const init = async () => {
+    await obtenerTotales();
+    await obtenerVentas();
+    setLoading(false);
+  };
+
+  init();
+}, []);
 
   // 📡 Fetch totales
   async function obtenerTotales() {
