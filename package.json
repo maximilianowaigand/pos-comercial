@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "node-thermal-printer": "^4.5.0",
-    "react-router-dom": "^7.14.1"
+    "react-router-dom": "^6.30.3"
   }
 }

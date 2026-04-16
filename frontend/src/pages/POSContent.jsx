@@ -6,12 +6,15 @@ import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
 import Categorias from "../components/categorias/Categorias";
 import Totales from "../components/Totales/Totales";
-import HistorialVentas from "../components/HistorialVentas/HistorialVentas";
 import CrearProducto from "../components/CrearProducto/CrearProducto";
 import { useVentas } from "../context/VentasContext";
 import { useProductos } from "../context/ProductosContext";
+import { useNavigate } from "react-router-dom";
 
 export default function POSContent() {
+
+  const navigate = useNavigate();
+
   const {
     venta,
     total,
@@ -40,6 +43,32 @@ export default function POSContent() {
   return (
     <div style={{ padding: 20 }}>
       <h1>POS Panadería</h1>
+
+      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+  <button
+    onClick={() => navigate("/")}
+    style={{
+      padding: 10,
+      background: "black",
+      color: "white",
+      borderRadius: 5
+    }}
+  >
+    🛒 POS
+      </button>
+
+      <button
+        onClick={() => navigate("/historial")}
+        style={{
+          padding: 10,
+          background: "#0099ff",
+          color: "white",
+          borderRadius: 5
+        }}
+      >
+        📊 Historial
+      </button>
+    </div>
 
       <Totales totalesDia={totalesDia} totalMes={totalMes} />
 
@@ -101,7 +130,6 @@ export default function POSContent() {
       <BotonImprimir/>
       <BotonExportar />
       <CrearProducto />
-      <HistorialVentas />
     </div>
   );
 }
