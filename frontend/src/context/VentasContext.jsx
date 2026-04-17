@@ -60,7 +60,7 @@ useEffect(() => {
   }
 
   function limpiarVenta() {
-    setVenta([]);
+    setVentas([]);
     setDatosCliente(null);
   }
 
@@ -74,10 +74,31 @@ useEffect(() => {
       body: JSON.stringify(body)
     });
 
-    await res.json();
+    const data = await res.json();
 
     // 🔥 TRAE LA DATA COMPLETA DESDE BACKEND
-    await obtenerVentas();
+    async function obtenerVentas() {
+  try {
+    const res = await fetch("/api/ventas");
+
+    if (!res.ok) {
+      throw new Error("Error en API");
+    }
+
+    const data = await res.json();
+
+    console.log("📦 Ventas backend:", data);
+
+    // 🔥 soporta ambos formatos
+    const lista = Array.isArray(data) ? data : data.ventas;
+
+    setVentas(lista ? [...lista] : []);
+
+  } catch (error) {
+    console.error("Error cargando ventas:", error);
+    setVentas([]);
+  }
+}
 
     // 🔥 actualiza totales
     await obtenerTotales();

@@ -1,52 +1,101 @@
 const db = require("../db");
 
-// 🧾 guardar venta con detalle
+// 🧾 Registrar venta con detalle
 function registrarVenta(data) {
   return new Promise((resolve, reject) => {
-    const { items, metodo_pago, total } = data;
+    const { items, metodo_pago } = data; // 👈 ya no recibe total ni precio_unitario
 
-    db.serialize(() => {
-      db.run("BEGIN TRANSACTION");
+    // 1️⃣ Consultar precio_base de cada producto en la DB
+    const ids = items.map(i => i.producto_id);
+    const placeholders = ids.map(() => "?").join(", ");
 
-      db.run(
-        `INSERT INTO ventas (fecha, hora, medio_pago, total, estado)
-         VALUES (DATE('now','localtime'), TIME('now','localtime'), ?, ?, 'CERRADA')`,
-        [metodo_pago, total],
-        function (err) {
-          if (err) return reject(err);
+    db.all(
+      `SELECT id_producto, precio_base FROM productos WHERE id_producto IN (${placeholders})`,
+      ids,
+      (err, productos) => {
+        if (err) return reject(err);
 
-          const ventaId = this.lastID;
+        // Mapa id → precio_base
+        const precios = {};
+        productos.forEach(p => {
+          precios[p.id_producto] = p.precio_base;
+        });
 
-          const stmt = db.prepare(`
-            INSERT INTO detalle_venta
-            (id_venta, id_producto, cantidad, precio_unitario)
-            VALUES (?, ?, ?, ?)
-          `);
-
-          for (const item of items) {
-            stmt.run([
-              ventaId,
-              item.producto_id,
-              item.cantidad,
-              item.precio_unitario
-            ]);
+        // Validar que todos los productos existen
+        for (const item of items) {
+          if (precios[item.producto_id] === undefined) {
+            return reject(new Error(`Producto ${item.producto_id} no encontrado`));
           }
-
-          stmt.finalize();
-
-          db.run("COMMIT");
-
-          resolve({
-            ventaId,
-            total
-          });
         }
-      );
-    });
+
+        db.serialize(() => {
+          db.run("BEGIN TRANSACTION");
+
+          // 2️⃣ Insertar venta (total en 0, el trigger lo calcula)
+          db.run(
+            `INSERT INTO ventas (fecha, hora, medio_pago, total, estado)
+             VALUES (DATE('now','localtime'), TIME('now','localtime'), ?, 0, 'CERRADA')`,
+            [metodo_pago],
+            function (err) {
+              if (err) {
+                db.run("ROLLBACK");
+                return reject(err);
+              }
+
+              const ventaId = this.lastID;
+
+              // 3️⃣ Insertar detalle con precio_base de la DB
+              const stmt = db.prepare(`
+                INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
+                VALUES (?, ?, ?, ?)
+              `);
+
+              for (const item of items) {
+                stmt.run([
+                  ventaId,
+                  item.producto_id,
+                  item.cantidad,
+                  precios[item.producto_id] // 👈 precio de la DB, no del frontend
+                ]);
+              }
+
+              stmt.finalize((err) => {
+                if (err) {
+                  db.run("ROLLBACK");
+                  return reject(err);
+                }
+
+                db.run("COMMIT", (err) => {
+                  if (err) {
+                    db.run("ROLLBACK");
+                    return reject(err);
+                  }
+
+                  // 4️⃣ Leer el total real calculado por el trigger
+                  db.get(
+                    `SELECT total FROM ventas WHERE id_venta = ?`,
+                    [ventaId],
+                    (err, row) => {
+                      if (err) return reject(err);
+
+                      resolve({
+                        ventaId,
+                        total: row.total,
+                        precios // 👈 lo devolvemos para armar el ticket
+                      });
+                    }
+                  );
+                });
+              });
+            }
+          );
+        });
+      }
+    );
   });
 }
 
-// 📊 totales
+// 📊 Totales del día
 function getTotales() {
   return new Promise((resolve, reject) => {
     db.all(
@@ -79,6 +128,7 @@ function getTotales() {
   });
 }
 
+// 📊 Total del mes
 function getTotalMes() {
   return new Promise((resolve, reject) => {
     db.get(
@@ -89,17 +139,10 @@ function getTotalMes() {
       [],
       (err, row) => {
         if (err) return reject(err);
-
-        resolve({
-          totalMes: row.totalMes || 0
-        });
+        resolve({ totalMes: row.totalMes || 0 });
       }
     );
   });
 }
 
-module.exports = {
-  registrarVenta,
-  getTotales,
-  getTotalMes
-};
+module.exports = { registrarVenta, getTotales, getTotalMes };

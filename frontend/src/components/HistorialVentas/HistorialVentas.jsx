@@ -28,10 +28,9 @@ export default function HistorialVentas() {
 });
 
   // 🎯 ORDEN + LIMITE
-  const ventasFinal = ventasFiltradas
-    .slice(-20)
-    .reverse();
-
+  const ventasFinal = [...ventasFiltradas]
+  .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+  .slice(0, 20);
   // 💰 TOTAL
   const totalFiltrado = ventasFiltradas.reduce(
     (acc, v) => acc + Number(v.total),

@@ -1,34 +1,39 @@
 const { emitirFacturaTusFacturas } = require("./facturaController");
-const ventasService = require("../services/ventasService"); // 👈 nuevo
+const ventasService = require("../services/ventasService");
 
 exports.printTicket = async (req, res) => {
   try {
-    const { items, total, metodoPago, datosCliente } = req.body;
+    const { items, metodoPago, datosCliente } = req.body;
 
-    if (!items || !total || !metodoPago) {
+    if (!items || items.length === 0 || !metodoPago) {
       return res.status(400).json({ error: "Datos incompletos" });
     }
 
-    console.log("📩 Datos recibidos en /print:", req.body);
+    console.log("📩 PRINT REQUEST:", req.body);
 
     let factura = null;
     const mp = metodoPago.toLowerCase();
 
-    // 🔥 FACTURACIÓN
-    if ((mp === "tarjeta" || mp === "transferencia") && datosCliente?.nro_doc) {
-      factura = await emitirFacturaTusFacturas(items, total, datosCliente, metodoPago);
-    }
-
-    // 🟢 GUARDAR EN SQLITE (NO JSON)
-    const nuevaVenta = await ventasService.guardarVenta({
+    // 1️⃣ Guardar venta (DB maneja precios + total)
+    const nuevaVenta = await ventasService.registrarVenta({
       items,
-      total,
-      metodo_pago: metodoPago,
-      factura,
-      cliente: datosCliente
+      metodo_pago: metodoPago
     });
 
-    // 🖨️ TICKET
+    // 2️⃣ Facturación (usa total real de DB)
+    if (
+      (mp === "tarjeta" || mp === "transferencia") &&
+      datosCliente?.nro_doc
+    ) {
+      factura = await emitirFacturaTusFacturas(
+        items,
+        nuevaVenta.total,
+        datosCliente,
+        metodoPago
+      );
+    }
+
+    // 3️⃣ Ticket
     let text = "";
     text += "PANADERIA TRES SABORES\n";
     text += "------------------------------\n";
@@ -38,17 +43,16 @@ exports.printTicket = async (req, res) => {
     text += "------------------------------\n";
 
     items.forEach(i => {
-      text += `${i.nombre} x${i.cantidad} $${i.precio * i.cantidad}\n`;
+      text += `Producto ${i.producto_id} x${i.cantidad}\n`;
     });
 
     text += "------------------------------\n";
-    text += `TOTAL: $${total}\n`;
+    text += `TOTAL: $${nuevaVenta.total}\n`;
 
     if (factura?.cae) {
       text += "------------------------------\n";
       text += `FACTURA N°: ${factura.numero_comprobante}\n`;
       text += `CAE: ${factura.cae}\n`;
-      text += `VTO CAE: ${factura.vencimiento_cae}\n`;
     }
 
     text += "------------------------------\n";
@@ -64,10 +68,10 @@ exports.printTicket = async (req, res) => {
 
     exec(`notepad /p "${filePath}"`, err => {
       if (err) {
-        console.error("❌ Error imprimiendo:", err);
         return res.json({
           ok: true,
-          warning: "Venta guardada pero no se imprimió ticket",
+          warning: "Venta guardada pero no se imprimió",
+          ventaId: nuevaVenta.ventaId,
           factura
         });
       }
@@ -75,13 +79,13 @@ exports.printTicket = async (req, res) => {
       res.json({
         ok: true,
         ventaId: nuevaVenta.ventaId,
-        facturado: factura !== null,
+        total: nuevaVenta.total,
         factura
       });
     });
 
   } catch (err) {
-    console.error("❌ Error en printTicket:", err);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.error("❌ Error printTicket:", err);
+    res.status(500).json({ error: "Error interno" });
   }
 };
