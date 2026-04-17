@@ -1,9 +1,15 @@
 import { useVentas } from "../../context/VentasContext";
-import { useState } from "react";
+import { useState, useEffect,  } from "react";
+import BackButton from "../BackButton/BackButton";
 
 export default function HistorialVentas() {
 
-  const { ventas } = useVentas();
+  const { ventas, obtenerVentas } = useVentas();
+
+  useEffect(() => {
+  obtenerVentas();
+}, []);
+
 
   const [filtroMetodo, setFiltroMetodo] = useState("");
   const [soloHoy, setSoloHoy] = useState(false);
@@ -39,6 +45,7 @@ export default function HistorialVentas() {
 
   return (
     <div style={{ padding: 20 }}>
+      <BackButton />
       <h2>Historial de Ventas</h2>
 
       {/* 🔎 FILTROS */}

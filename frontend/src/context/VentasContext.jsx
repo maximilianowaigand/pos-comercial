@@ -5,36 +5,38 @@ import { fetchTotales } from "../utils/api";
 const VentasContext = createContext();
 
 export function VentasProvider({ children }) {
-  // 🛒 Carrito
+
   const [venta, setVenta] = useState([]);
   const [ventas, setVentas] = useState([]);
   const [metodoPago, setMetodoPago] = useState("efectivo");
   const [mostrarCliente, setMostrarCliente] = useState(false);
   const [datosCliente, setDatosCliente] = useState(null);
-
-
-  // 📊 Totales del día/mes
-  const [totalesDia, setTotalesDia] = useState({
-    efectivo: 0,
-    transferencia: 0,
-    debito: 0,
-    totalDia: 0
-  });
+  const [totalesDia, setTotalesDia] = useState({ efectivo: 0, transferencia: 0, debito: 0, totalDia: 0 });
   const [totalMes, setTotalMes] = useState(0);
-
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const init = async () => {
-    await obtenerTotales();
-    await obtenerVentas();
-    setLoading(false);
-  };
+  useEffect(() => {
+    const init = async () => {
+      await obtenerTotales();
+      await obtenerVentas();
+      setLoading(false);
+    };
+    init();
+  }, []);
 
-  init();
-}, []);
+  async function obtenerVentas() {
+    try {
+      const res = await fetch("/api/ventas");
+      const data = await res.json();
+      console.log("📦 Ventas:", data);
+      const lista = Array.isArray(data) ? data : data.ventas;
+      setVentas(lista ?? []);
+    } catch (error) {
+      console.error("Error cargando ventas:", error);
+      setVentas([]);
+    }
+  }
 
-  // 📡 Fetch totales
   async function obtenerTotales() {
     const data = await fetchTotales();
     setTotalesDia({
@@ -46,75 +48,32 @@ useEffect(() => {
     setTotalMes(data.totalMes);
   }
 
-  // 🛒 Acciones del carrito
-  function agregar(prod) {
-    setVenta(prev => addItem(prev, prod));
-  }
-
-  function disminuir(id) {
-    setVenta(prev => decreaseItem(prev, id));
-  }
-
-  function borrar(id) {
-    setVenta(prev => removeItem(prev, id));
-  }
-
-  function limpiarVenta() {
-    setVentas([]);
-    setDatosCliente(null);
-  }
-
   async function agregarVenta(body) {
-  try {
     const res = await fetch("/api/ventas", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
 
-    const data = await res.json();
+    if (!res.ok) throw new Error("Error al guardar venta");
 
-    // 🔥 TRAE LA DATA COMPLETA DESDE BACKEND
-    async function obtenerVentas() {
-  try {
-    const res = await fetch("/api/ventas");
-
-    if (!res.ok) {
-      throw new Error("Error en API");
-    }
-
-    const data = await res.json();
-
-    console.log("📦 Ventas backend:", data);
-
-    // 🔥 soporta ambos formatos
-    const lista = Array.isArray(data) ? data : data.ventas;
-
-    setVentas(lista ? [...lista] : []);
-
-  } catch (error) {
-    console.error("Error cargando ventas:", error);
-    setVentas([]);
+    await obtenerVentas();  // ✅ refresca historial
+    await obtenerTotales(); // ✅ refresca totales
+    limpiarVenta();         // ✅ limpia carrito
   }
-}
 
-    // 🔥 actualiza totales
-    await obtenerTotales();
+  function agregar(prod) { setVenta(prev => addItem(prev, prod)); }
+  function disminuir(id) { setVenta(prev => decreaseItem(prev, id)); }
+  function borrar(id) { setVenta(prev => removeItem(prev, id)); }
 
-    limpiarVenta();
-
-  } catch (error) {
-    console.error("Error agregando venta:", error);
-    throw error;
+  function limpiarVenta() {
+    setVenta([]);
+    setDatosCliente(null);
   }
-}
+
   function actualizarPrecio(id, nuevoPrecio) {
     setVenta(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, precio: nuevoPrecio } : item
-      )
+      prev.map(item => item.id === id ? { ...item, precio: nuevoPrecio } : item)
     );
   }
 
@@ -123,41 +82,15 @@ useEffect(() => {
     setMostrarCliente(value !== "efectivo");
   }
 
-  // 💰 Total derivado
   const total = calcularTotal(venta);
-
-  async function obtenerVentas() {
-  try {
-    const res = await fetch("/api/ventas");
-    const data = await res.json();
-    setVentas(data);
-  } catch (error) {
-    console.error("Error cargando ventas:", error);
-  }
-}
 
   return (
     <VentasContext.Provider value={{
-      // carrito
-      venta,
-      total,
-      agregarVenta,
-      agregar,
-      disminuir,
-      borrar,
-      limpiarVenta,
-      actualizarPrecio,
-      // pago
-      metodoPago,
-      mostrarCliente,
-      datosCliente,
-      setDatosCliente,
-      handleMetodoPagoChange,
-      // totales
-      totalesDia,
-      totalMes,
-      obtenerTotales,
-      ventas,
+      venta, total, ventas,
+      agregarVenta, agregar, disminuir, borrar, limpiarVenta, actualizarPrecio,
+      metodoPago, mostrarCliente, datosCliente, setDatosCliente, handleMetodoPagoChange,
+      totalesDia, totalMes, obtenerTotales,
+      loading
     }}>
       {children}
     </VentasContext.Provider>
