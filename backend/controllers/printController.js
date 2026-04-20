@@ -1,7 +1,12 @@
 const { emitirFacturaTusFacturas } = require("./facturaController");
+const {
+  ThermalPrinter,
+  PrinterTypes,
+  BreakLine,
+} = require("node-thermal-printer");
 
 const TICKET_WIDTH = 30;
-const PRINTER_NAME = "POS58_Printer";
+const PRINTER_INTERFACE = "USB001";
 
 function separator() {
   return "-".repeat(TICKET_WIDTH);
@@ -54,6 +59,67 @@ function formatItemLine(cantidad, precio, subtotal) {
   return `${base}${" ".repeat(spaces)}${total}`.slice(0, TICKET_WIDTH);
 }
 
+function buildTicketLines({ items, metodoPago, total, factura }) {
+  const lines = [];
+  const now = new Date();
+
+  lines.push(center("PANADERIA TRES SABORES"));
+  lines.push(separator());
+  lines.push(`Fecha: ${now.toLocaleDateString()}`);
+  lines.push(`Hora: ${now.toLocaleTimeString()}`);
+  lines.push(`Pago: ${metodoPago.toUpperCase()}`);
+  lines.push(separator());
+
+  items.forEach((item) => {
+    wrapLine(item.nombre).forEach((line) => lines.push(line));
+    lines.push(
+      formatItemLine(
+        item.cantidad,
+        item.precio ?? 0,
+        (item.precio ?? 0) * item.cantidad
+      )
+    );
+    lines.push(separator());
+  });
+
+  lines.push(`TOTAL: $${total}`);
+
+  if (factura?.cae) {
+    lines.push(separator());
+    lines.push(`FACTURA N: ${factura.numero_comprobante}`);
+    lines.push(`CAE: ${factura.cae}`);
+  }
+
+  lines.push(separator());
+  lines.push(center("GRACIAS POR SU COMPRA"));
+
+  return lines;
+}
+
+async function printDirect(lines) {
+  const printer = new ThermalPrinter({
+    type: PrinterTypes.EPSON,
+    interface: PRINTER_INTERFACE,
+    width: TICKET_WIDTH,
+    breakLine: BreakLine.WORD,
+    removeSpecialCharacters: false,
+    lineCharacter: "-",
+    options: {
+      timeout: 1000,
+    },
+  });
+
+  printer.clear();
+  printer.alignLeft();
+
+  lines.forEach((line) => printer.println(line));
+
+  printer.newLine();
+  printer.cut();
+
+  await printer.execute();
+}
+
 exports.printTicket = async (req, res) => {
   try {
     console.log("PRINT REQUEST:", req.body);
@@ -84,52 +150,41 @@ exports.printTicket = async (req, res) => {
       );
     }
 
-    const lines = [];
-    lines.push(center("PANADERIA TRES SABORES"));
-    lines.push(separator());
-    lines.push(`Fecha: ${new Date().toLocaleDateString()}`);
-    lines.push(`Hora: ${new Date().toLocaleTimeString()}`);
-    lines.push(`Pago: ${metodoPago.toUpperCase()}`);
-    lines.push(separator());
-
-    itemsNormalizados.forEach((item) => {
-      wrapLine(item.nombre).forEach((line) => lines.push(line));
-      lines.push(
-        formatItemLine(
-          item.cantidad,
-          item.precio ?? 0,
-          (item.precio ?? 0) * item.cantidad
-        )
-      );
-      lines.push(separator());
+    const lines = buildTicketLines({
+      items: itemsNormalizados,
+      metodoPago,
+      total,
+      factura,
     });
-
-    lines.push(`TOTAL: $${total}`);
-
-    if (factura?.cae) {
-      lines.push(separator());
-      lines.push(`FACTURA N: ${factura.numero_comprobante}`);
-      lines.push(`CAE: ${factura.cae}`);
-    }
-
-    lines.push(separator());
-    lines.push(center("GRACIAS POR SU COMPRA"));
-    lines.push("\f");
 
     const fs = require("fs");
     const { exec } = require("child_process");
     const path = require("path");
-
     const filePath = path.join(__dirname, "../ticket.txt");
-    fs.writeFileSync(filePath, lines.join("\r\n"), "utf8");
+    fs.writeFileSync(filePath, `${lines.join("\r\n")}\r\n\f`, "utf8");
 
-    exec(`cmd /c print /d:"${PRINTER_NAME}" "${filePath}"`, (err) => {
-      if (err) {
-        return res.json({ ok: true, warning: "No se imprimio", factura });
-      }
+    try {
+      await printDirect(lines);
+      return res.json({ ok: true, factura });
+    } catch (directError) {
+      console.error("Direct print failed, fallback to notepad:", directError);
 
-      res.json({ ok: true, factura });
-    });
+      exec(`notepad /p "${filePath}"`, (err) => {
+        if (err) {
+          return res.json({
+            ok: false,
+            warning: "No se imprimio",
+            factura,
+          });
+        }
+
+        res.json({
+          ok: true,
+          warning: "Se uso impresion de respaldo",
+          factura,
+        });
+      });
+    }
   } catch (err) {
     console.error("Error printTicket:", err);
     res.status(500).json({ error: "Error interno" });
