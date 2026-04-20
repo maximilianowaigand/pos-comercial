@@ -1,0 +1,27 @@
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.productButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e6d5bf;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.productName {
+  font-weight: 600;
+}
+
+.productPrice {
+  color: #c4571d;
+  font-weight: 700;
+}

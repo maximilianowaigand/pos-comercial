@@ -1,0 +1,73 @@
+.card {
+  display: grid;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+}
+
+.list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e3d4c1;
+}
+
+.info {
+  display: grid;
+  gap: 8px;
+  color: #3b2d20;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.priceInput {
+  width: 90px;
+  padding: 8px 10px;
+  border: 1px solid #d9c7b1;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.actions button,
+.clearButton {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f0e1cf;
+  color: #3b2d20;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer h2 {
+  margin: 0;
+}

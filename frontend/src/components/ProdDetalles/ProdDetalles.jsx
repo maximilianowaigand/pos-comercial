@@ -1,4 +1,5 @@
 import { useVentas } from "../../context/VentasContext";
+import styles from "./ProdDetalles.module.css";
 
 export default function ProdDetalles() {
   const {
@@ -8,74 +9,59 @@ export default function ProdDetalles() {
     disminuir,
     borrar,
     limpiarVenta,
-    actualizarPrecio
+    actualizarPrecio,
   } = useVentas();
 
   return (
-    <div style={{ width: 600, background: "#222", padding: 20, borderRadius: 10, color: "white" }}>
-      <h2>Detalle</h2>
+    <div className={styles.card}>
+      <h2 className={styles.title}>Detalle</h2>
 
-      <ul style={{ maxHeight: 500, overflowY: "auto", padding: 0 }}>
-        {venta.map(v => (
-          <li 
-            key={v.id} 
-            style={{ 
-              display: "flex", 
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 10,
-              borderBottom: "1px solid #444",
-              paddingBottom: 8
-            }}
-          >
-            {/* INFO PRODUCTO */}
-            <div>
+      <ul className={styles.list}>
+        {venta.map((v) => (
+          <li key={v.id} className={styles.item}>
+            <div className={styles.info}>
               <strong>{v.nombre}</strong>
-              <br />
-
-              {/* 🔥 PRECIO EDITABLE (AQUÍ ESTÁ LA CLAVE) */}
-              Precio: $
+              <div className={styles.priceRow}>
+                <span>Precio:</span>
                 <input
-                type="number"
-                value={v.precio === 0 ? "" : v.precio}
-                placeholder="Precio"
-                onChange={(e) => {
-                  const valor = e.target.value;
-
-                  // Permite borrar completamente el input
-                  if (valor === "") {
-                    actualizarPrecio(v.id, 0);
-                    return;
-                  }
-
-                  actualizarPrecio(v.id, Number(valor));
-                }}
-                style={{
-                  width: 80,
-                  marginLeft: 5,
-                  marginRight: 10
-                }}
-              />
-
-              <br />
-              Cantidad: {v.cantidad}
-              <br />
-              Subtotal: ${v.precio * v.cantidad}
+                  type="number"
+                  value={v.precio === 0 ? "" : v.precio}
+                  placeholder="Precio"
+                  className={styles.priceInput}
+                  onChange={(e) => {
+                    const valor = e.target.value;
+                    if (valor === "") {
+                      actualizarPrecio(v.id, 0);
+                      return;
+                    }
+                    actualizarPrecio(v.id, Number(valor));
+                  }}
+                />
+              </div>
+              <span>Cantidad: {v.cantidad}</span>
+              <span>Subtotal: ${v.precio * v.cantidad}</span>
             </div>
 
-            {/* BOTONES */}
-            <div style={{ display: "flex", gap: 5 }}>
-              <button onClick={() => disminuir(v.id)}>–</button>
-              <button onClick={() => agregar(v)}>+</button>
-              <button onClick={() => borrar(v.id)}>🗑</button>
+            <div className={styles.actions}>
+              <button type="button" onClick={() => disminuir(v.id)}>
+                -
+              </button>
+              <button type="button" onClick={() => agregar(v)}>
+                +
+              </button>
+              <button type="button" onClick={() => borrar(v.id)}>
+                Eliminar
+              </button>
             </div>
           </li>
         ))}
       </ul>
 
-      <div>
+      <div className={styles.footer}>
         <h2>Total: ${total}</h2>
-        <button onClick={limpiarVenta}>LIMPIAR</button>
+        <button type="button" className={styles.clearButton} onClick={limpiarVenta}>
+          LIMPIAR
+        </button>
       </div>
     </div>
   );

@@ -22,10 +22,10 @@ export default function FacturacionForm({ onChange }) {
   }
 
   return (
-    <div style={{ padding: 20, marginTop: 20, border: "1px solid #ccc" }}>
-      <h3>Datos para Facturar</h3>
+    <div className={styles.formCard}>
+      <h3 className={styles.title}>Datos para Facturar</h3>
 
-      <label>DNI (opcional)</label>
+      <label className={styles.label}>DNI (opcional)</label>
       <input
         type="text"
         inputMode="numeric"
@@ -33,11 +33,11 @@ export default function FacturacionForm({ onChange }) {
         value={dni}
         onChange={handleChange}
         placeholder="Ingresar DNI"
-        style={{ width: "50%", padding: 8 }}
+        className={styles.input}
       />
 
       <small className={styles.placeholder}>
-        *Los demás datos se completan automáticamente como Consumidor Final
+        *Los demas datos se completan automaticamente como Consumidor Final
       </small>
     </div>
   );

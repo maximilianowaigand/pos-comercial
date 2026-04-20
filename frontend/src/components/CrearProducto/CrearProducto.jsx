@@ -1,5 +1,6 @@
 import { useState } from "react";
 import BackButton from "../BackButton/BackButton";
+import styles from "./CrearProducto.module.css";
 
 const CATEGORIAS = [
   "Panaderia",
@@ -7,7 +8,7 @@ const CATEGORIAS = [
   "Lacteos",
   "Bebidas",
   "Otros",
-  "Sin Tacc"
+  "Sin Tacc",
 ];
 
 export default function CrearProducto({ productos = [] }) {
@@ -23,7 +24,6 @@ export default function CrearProducto({ productos = [] }) {
 
     const nombreLimpio = nombre.trim();
 
-    // 🛡️ Validaciones
     if (!nombreLimpio) {
       setMensaje("El nombre es obligatorio");
       return;
@@ -32,22 +32,21 @@ export default function CrearProducto({ productos = [] }) {
     const precioNum = Number(precio);
     const costoNum = Number(costo || 0);
 
-    if (isNaN(precioNum) || precioNum <= 0) {
+    if (Number.isNaN(precioNum) || precioNum <= 0) {
       setMensaje("El precio debe ser mayor a 0");
       return;
     }
 
-    if (isNaN(costoNum) || costoNum < 0) {
+    if (Number.isNaN(costoNum) || costoNum < 0) {
       setMensaje("El costo no puede ser negativo");
       return;
     }
 
     if (!categoria) {
-      setMensaje("Debes seleccionar una categoría");
+      setMensaje("Debes seleccionar una categoria");
       return;
     }
 
-    // 🚫 Evitar duplicados
     const existe = productos.find(
       (p) => p.nombre.toLowerCase() === nombreLimpio.toLowerCase()
     );
@@ -63,20 +62,20 @@ export default function CrearProducto({ productos = [] }) {
       const res = await fetch("api/productos", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           nombre: nombreLimpio,
           precio: precioNum,
           costo: costoNum,
-          categoria
-        })
+          categoria,
+        }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setMensaje(`✅ Producto creado: ${data.nombre}`);
+        setMensaje(`Producto creado: ${data.nombre}`);
         setNombre("");
         setPrecio("");
         setCosto("");
@@ -93,64 +92,60 @@ export default function CrearProducto({ productos = [] }) {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "20px auto" }}>
-
+    <div className={styles.wrapper}>
       <BackButton />
-      <h2>Crear Producto</h2>
+      <div className={styles.card}>
+        <h2 className={styles.title}>Crear Producto</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="Nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
 
-        <input
-          type="number"
-          placeholder="Precio"
-          value={precio}
-          onChange={(e) => setPrecio(e.target.value)}
-          min="1"
-          step="0.01"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+          <input
+            className={styles.input}
+            type="number"
+            placeholder="Precio"
+            value={precio}
+            onChange={(e) => setPrecio(e.target.value)}
+            min="1"
+            step="0.01"
+          />
 
-        <input
-          type="number"
-          placeholder="Costo"
-          value={costo}
-          onChange={(e) => setCosto(e.target.value)}
-          min="0"
-          step="0.01"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+          <input
+            className={styles.input}
+            type="number"
+            placeholder="Costo"
+            value={costo}
+            onChange={(e) => setCosto(e.target.value)}
+            min="0"
+            step="0.01"
+          />
 
-        {/* 📦 SELECT DE CATEGORÍAS */}
-        <select
-          value={categoria}
-          onChange={(e) => setCategoria(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px" }}
-        >
-          <option value="">Seleccionar categoría</option>
-          {CATEGORIAS.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+          <select
+            className={styles.input}
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+          >
+            <option value="">Seleccionar categoria</option>
+            {CATEGORIAS.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ width: "100%" }}
-        >
-          {loading ? "Guardando..." : "Crear Producto"}
-        </button>
-      </form>
+          <button className={styles.submitButton} type="submit" disabled={loading}>
+            {loading ? "Guardando..." : "Crear Producto"}
+          </button>
+        </form>
 
-      {mensaje && <p>{mensaje}</p>}
+        {mensaje ? <p className={styles.message}>{mensaje}</p> : null}
+      </div>
     </div>
   );
 }

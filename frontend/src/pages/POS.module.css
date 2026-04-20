@@ -1,0 +1,120 @@
+.page {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+  background: #f7f4ef;
+  color: #2a2118;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.05;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #6e5b49;
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.navButton {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  background: #1e1a17;
+  color: #fff8ef;
+}
+
+.secondary {
+  background: #d96b2b;
+  color: #fff8ef;
+}
+
+.ghost {
+  background: #efe2d2;
+  color: #4a3726;
+}
+
+.categorySection {
+  overflow-x: auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.1fr) minmax(260px, 320px);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  background: #fffaf3;
+  border: 1px solid #ecdcc8;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(92, 64, 39, 0.08);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.sectionHeader span {
+  color: #7a6654;
+  font-size: 0.95rem;
+}
+
+.sidePanel {
+  display: grid;
+  gap: 16px;
+}
+
+.paymentSelect {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d9c7b1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.extraProduct {
+  margin-top: 12px;
+}
+
+.actionsCard {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

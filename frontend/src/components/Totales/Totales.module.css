@@ -1,0 +1,46 @@
+.card {
+  background: linear-gradient(135deg, #d96b2b, #f0a33b);
+  padding: 20px;
+  border-radius: 18px;
+  color: #fff8ef;
+  box-shadow: 0 12px 30px rgba(130, 73, 24, 0.18);
+}
+
+.title {
+  margin: 0 0 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.metric h4,
+.metric p {
+  margin: 0;
+}
+
+.metric h4 {
+  margin-bottom: 6px;
+}
+
+.metric p {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid rgba(255, 248, 239, 0.35);
+  margin: 18px 0;
+}
+
+.totals {
+  display: grid;
+  gap: 8px;
+}
+
+.totals h3 {
+  margin: 0;
+}

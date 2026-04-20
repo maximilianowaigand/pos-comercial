@@ -1,0 +1,53 @@
+.wrapper {
+  max-width: 460px;
+  margin: 20px auto;
+}
+
+.card {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid #e3d4c1;
+  border-radius: 18px;
+  background: #fffaf3;
+  box-shadow: 0 12px 30px rgba(92, 64, 39, 0.08);
+}
+
+.title {
+  margin: 0;
+  color: #2a2118;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d9c7b1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.submitButton {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #0f8bd8;
+  color: #fff8ef;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  background: #7a7a7a;
+  cursor: not-allowed;
+}
+
+.message {
+  margin: 0;
+  color: #5c4a39;
+}

@@ -1,0 +1,76 @@
+.page {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.title,
+.total {
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.dateGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.control {
+  padding: 10px 12px;
+  border: 1px solid #d9c7b1;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: #3b2d20;
+}
+
+.clearButton {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #efe2d2;
+  color: #3b2d20;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tableWrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table thead th {
+  background: #f4eadf;
+}
+
+.empty {
+  margin: 0;
+  color: #5c4a39;
+}

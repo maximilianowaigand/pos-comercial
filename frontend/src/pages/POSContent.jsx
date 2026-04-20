@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 import ProdDetalles from "../components/ProdDetalles/ProdDetalles";
+import Products from "../components/Products/Products";
 import OtroProducto from "../components/OtroProducto/OtroProducto";
 import BotonGuardar from "../components/BotonGuardar/BotonGuardar";
 import BotonImprimir from "../components/BotonImprimir/BotonImprimir";
@@ -8,10 +11,21 @@ import Categorias from "../components/categorias/Categorias";
 import Totales from "../components/Totales/Totales";
 import { useVentas } from "../context/VentasContext";
 import { useProductos } from "../context/ProductosContext";
-import { useNavigate } from "react-router-dom";
+import styles from "./POS.module.css";
+
+const navigationItems = [
+  { label: "POS", path: "/", variant: "primary" },
+  { label: "Historial", path: "/historial", variant: "secondary" },
+  { label: "+ Crear producto", path: "/crear-producto", variant: "ghost" },
+];
+
+const paymentOptions = [
+  { value: "efectivo", label: "Efectivo" },
+  { value: "tarjeta", label: "Tarjeta" },
+  { value: "transferencia", label: "Transferencia" },
+];
 
 export default function POSContent() {
-
   const navigate = useNavigate();
 
   const {
@@ -21,117 +35,111 @@ export default function POSContent() {
     totalMes,
     metodoPago,
     mostrarCliente,
-    datosCliente,
     agregar,
-    disminuir,
-    borrar,
     limpiarVenta,
-    actualizarPrecio,
     handleMetodoPagoChange,
     setDatosCliente,
-    obtenerTotales
+    obtenerTotales,
   } = useVentas();
 
-  const {
-    categorias,
-    productosFiltrados,
-    categoria,
-    setCategoria
-  } = useProductos();
+  const { categorias, productosFiltrados, categoria, setCategoria } =
+    useProductos();
+
+  const handleVentaCompleta = () => {
+    limpiarVenta();
+    obtenerTotales();
+  };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>POS Panadería</h1>
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <div>
+          <h1 className={styles.title}>POS Panaderia</h1>
+          <p className={styles.subtitle}>
+            Ventas, productos y caja en una sola vista.
+          </p>
+        </div>
 
-      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-  <button
-    onClick={() => navigate("/")}
-    style={{
-      padding: 10,
-      background: "black",
-      color: "white",
-      borderRadius: 5
-    }}
-  >
-    🛒 POS
-      </button>
-
-      <button
-        onClick={() => navigate("/historial")}
-        style={{
-          padding: 10,
-          background: "#0099ff",
-          color: "white",
-          borderRadius: 5
-        }}
-      >
-        📊 Historial
-      </button>
-
-      <button onClick={() => navigate("/crear-producto")}>
-        + Crear producto
-      </button>
-    </div>
+        <nav className={styles.navigation}>
+          {navigationItems.map((item) => (
+            <button
+              key={item.path}
+              type="button"
+              className={`${styles.navButton} ${styles[item.variant]}`}
+              onClick={() => navigate(item.path)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </header>
 
       <Totales totalesDia={totalesDia} totalMes={totalMes} />
 
-      <Categorias
-        categorias={categorias}
-        categoriaActual={categoria}
-        onSelect={setCategoria}
-      />
-
-      <div style={{ display: "flex", gap: 10 }}>
-
-        {/* PRODUCTOS */}
-        <div style={{ width: 300, display: "grid", gap: 10 }}>
-          {productosFiltrados.map(p => (
-            <button
-              key={p.id}
-              onClick={() => agregar(p)}
-              style={{ padding: 20 }}
-            >
-              {p.nombre}
-              <br />${p.precio}
-            </button>
-          ))}
-          <OtroProducto onAdd={agregar} />
-        </div>
-
-        {/* DETALLE CARRITO */}
-        <ProdDetalles />
-
-        {/* MÉTODO DE PAGO */}
-        <div>
-          <h3>Método de Pago</h3>
-          <select
-            value={metodoPago}
-            onChange={(e) => handleMetodoPagoChange(e.target.value)}
-          >
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
-            <option value="transferencia">Transferencia</option>
-          </select>
-
-          {mostrarCliente && (
-            <FacturacionForm onChange={setDatosCliente} />
-          )}
-        </div>
-
-        {/* GUARDAR */}
-        <BotonGuardar
-          venta={venta}
-          total={total}
-          metodoPago={metodoPago}
-          onFinish={() => {
-            limpiarVenta();
-            obtenerTotales();
-          }}
+      <section className={styles.categorySection}>
+        <Categorias
+          categorias={categorias}
+          categoriaActual={categoria}
+          onSelect={setCategoria}
         />
-      </div>
+      </section>
 
-      <BotonImprimir/>
-      <BotonExportar />
+      <main className={styles.layout}>
+        <section className={styles.panel}>
+          <div className={styles.sectionHeader}>
+            <h2>Productos</h2>
+            <span>{productosFiltrados.length} disponibles</span>
+          </div>
+
+          <Products productos={productosFiltrados} onAgregar={agregar} />
+          <div className={styles.extraProduct}>
+            <OtroProducto onAdd={agregar} />
+          </div>
+        </section>
+
+        <section className={styles.panel}>
+          <div className={styles.sectionHeader}>
+            <h2>Detalle de venta</h2>
+            <span>{venta.length} items</span>
+          </div>
+          <ProdDetalles />
+        </section>
+
+        <aside className={styles.sidePanel}>
+          <section className={styles.panel}>
+            <div className={styles.sectionHeader}>
+              <h2>Metodo de pago</h2>
+            </div>
+
+            <select
+              className={styles.paymentSelect}
+              value={metodoPago}
+              onChange={(event) => handleMetodoPagoChange(event.target.value)}
+            >
+              {paymentOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            {mostrarCliente && <FacturacionForm onChange={setDatosCliente} />}
+          </section>
+
+          <section className={styles.panel}>
+            <div className={styles.actionsCard}>
+              <BotonGuardar
+                venta={venta}
+                total={total}
+                metodoPago={metodoPago}
+                onFinish={handleVentaCompleta}
+              />
+              <BotonImprimir />
+              <BotonExportar />
+            </div>
+          </section>
+        </aside>
+      </main>
     </div>
   );
 }

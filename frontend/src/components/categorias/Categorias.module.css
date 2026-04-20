@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+}
+
+.active {
+  background: #d96b2b;
+  color: #fff8ef;
+  font-weight: 700;
+}
+
+.inactive {
+  background: #333;
+  color: white;
+  font-weight: 500;
+}
