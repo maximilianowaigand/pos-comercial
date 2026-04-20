@@ -6,12 +6,9 @@
   color: #2a2118;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  flex-wrap: wrap;
+.hero {
+  display: grid;
+  gap: 8px;
 }
 
 .title {
@@ -23,35 +20,6 @@
 .subtitle {
   margin: 8px 0 0;
   color: #6e5b49;
-}
-
-.navigation {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.navButton {
-  border: 0;
-  border-radius: 999px;
-  padding: 12px 18px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.primary {
-  background: #1e1a17;
-  color: #fff8ef;
-}
-
-.secondary {
-  background: #d96b2b;
-  color: #fff8ef;
-}
-
-.ghost {
-  background: #efe2d2;
-  color: #4a3726;
 }
 
 .categorySection {

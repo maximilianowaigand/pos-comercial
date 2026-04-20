@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 import ProdDetalles from "../components/ProdDetalles/ProdDetalles";
 import OtroProducto from "../components/OtroProducto/OtroProducto";
 import BotonGuardar from "../components/BotonGuardar/BotonGuardar";
@@ -11,12 +9,6 @@ import { useVentas } from "../context/VentasContext";
 import { useProductos } from "../context/ProductosContext";
 import styles from "./POS.module.css";
 
-const navigationItems = [
-  { label: "POS", path: "/", variant: "primary" },
-  { label: "Historial", path: "/historial", variant: "secondary" },
-  { label: "+ Crear producto", path: "/crear-producto", variant: "ghost" },
-];
-
 const paymentOptions = [
   { value: "efectivo", label: "Efectivo" },
   { value: "tarjeta", label: "Tarjeta" },
@@ -24,8 +16,6 @@ const paymentOptions = [
 ];
 
 export default function POSContent() {
-  const navigate = useNavigate();
-
   const {
     venta,
     total,
@@ -50,27 +40,12 @@ export default function POSContent() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>POS Panaderia</h1>
-          <p className={styles.subtitle}>
-            Ventas, productos y caja en una sola vista.
-          </p>
-        </div>
-
-        <nav className={styles.navigation}>
-          {navigationItems.map((item) => (
-            <button
-              key={item.path}
-              type="button"
-              className={`${styles.navButton} ${styles[item.variant]}`}
-              onClick={() => navigate(item.path)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-      </header>
+      <section className={styles.hero}>
+        <h1 className={styles.title}>POS Panaderia</h1>
+        <p className={styles.subtitle}>
+          Ventas, productos y caja en una sola vista.
+        </p>
+      </section>
 
       <Totales totalesDia={totalesDia} totalMes={totalMes} />
 
