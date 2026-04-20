@@ -5,12 +5,6 @@ import BackButton from "../BackButton/BackButton";
 export default function HistorialVentas() {
 
   const { ventas, obtenerVentas } = useVentas();
-
-  useEffect(() => {
-  obtenerVentas();
-}, []);
-
-
   const [filtroMetodo, setFiltroMetodo] = useState("");
   const [soloHoy, setSoloHoy] = useState(false);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
@@ -42,7 +36,7 @@ export default function HistorialVentas() {
     (acc, v) => acc + Number(v.total),
     0
   );
-
+  console.log("VENTA:", venta);
   return (
     <div style={{ padding: 20 }}>
       <BackButton />

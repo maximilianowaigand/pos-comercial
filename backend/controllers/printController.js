@@ -14,9 +14,21 @@ exports.printTicket = async (req, res) => {
     let factura = null;
     const mp = metodoPago.toLowerCase();
 
+     // ✅ normalizá los items sin importar el formato que llegue
+    const itemsNormalizados = items.map(i => ({
+      producto_id: i.producto_id ?? i.id,
+      cantidad: i.cantidad
+    }));
+
+    if (!itemsNormalizados.length || !mp) {
+      return res.status(400).json({ error: "Datos incompletos" });
+    }
+
+    console.log("📩 PRINT REQUEST normalizado:", itemsNormalizados);
+
     // 1️⃣ Guardar venta (DB maneja precios + total)
     const nuevaVenta = await ventasService.registrarVenta({
-      items,
+      items: itemsNormalizados,  // ✅ usá los normalizados
       metodo_pago: metodoPago
     });
 

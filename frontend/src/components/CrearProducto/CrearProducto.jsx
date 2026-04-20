@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BackButton from "../BackButton/BackButton";
 
 const CATEGORIAS = [
   "Panaderia",
@@ -93,6 +94,8 @@ export default function CrearProducto({ productos = [] }) {
 
   return (
     <div style={{ maxWidth: "400px", margin: "20px auto" }}>
+
+      <BackButton />
       <h2>Crear Producto</h2>
 
       <form onSubmit={handleSubmit}>
