@@ -5,39 +5,25 @@ import BotonImprimir from "../components/BotonImprimir/BotonImprimir";
 import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
 import Totales from "../components/Totales/Totales";
-import { useVentas } from "../context/VentasContext";
-import { useProductos } from "../context/ProductosContext";
 import styles from "./POS.module.css";
 
-const paymentOptions = [
-  { value: "efectivo", label: "Efectivo" },
-  { value: "tarjeta", label: "Tarjeta" },
-  { value: "transferencia", label: "Transferencia" },
-];
-
-export default function POSContent() {
-  const {
-    venta,
-    total,
-    totalesDia,
-    totalMes,
-    metodoPago,
-    mostrarCliente,
-    agregar,
-    limpiarVenta,
-    handleMetodoPagoChange,
-    setDatosCliente,
-    obtenerTotales,
-  } = useVentas();
-
-  const { categorias, productosFiltrados, categoria, setCategoria } =
-    useProductos();
-
-  const handleVentaCompleta = () => {
-    limpiarVenta();
-    obtenerTotales();
-  };
-
+export default function POSContent({
+  venta,
+  total,
+  totalesDia,
+  totalMes,
+  metodoPago,
+  mostrarCliente,
+  categorias,
+  productosFiltrados,
+  categoria,
+  paymentOptions,
+  onAgregar,
+  onCategoriaChange,
+  onMetodoPagoChange,
+  onDatosClienteChange,
+  onVentaCompleta,
+}) {
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
@@ -55,7 +41,7 @@ export default function POSContent() {
             <button
               key={cat}
               type="button"
-              onClick={() => setCategoria(cat)}
+              onClick={() => onCategoriaChange(cat)}
               className={`${styles.categoryButton} ${
                 categoria === cat ? styles.categoryActive : styles.categoryInactive
               }`}
@@ -79,7 +65,7 @@ export default function POSContent() {
                 key={producto.id}
                 type="button"
                 className={styles.productButton}
-                onClick={() => agregar(producto)}
+                onClick={() => onAgregar(producto)}
               >
                 <span className={styles.productName}>{producto.nombre}</span>
                 <span className={styles.productPrice}>${producto.precio}</span>
@@ -88,7 +74,7 @@ export default function POSContent() {
           </div>
 
           <div className={styles.extraProduct}>
-            <OtroProducto onAdd={agregar} />
+            <OtroProducto onAdd={onAgregar} />
           </div>
         </section>
 
@@ -109,7 +95,7 @@ export default function POSContent() {
             <select
               className={styles.paymentSelect}
               value={metodoPago}
-              onChange={(event) => handleMetodoPagoChange(event.target.value)}
+              onChange={(event) => onMetodoPagoChange(event.target.value)}
             >
               {paymentOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -118,7 +104,7 @@ export default function POSContent() {
               ))}
             </select>
 
-            {mostrarCliente && <FacturacionForm onChange={setDatosCliente} />}
+            {mostrarCliente && <FacturacionForm onChange={onDatosClienteChange} />}
           </section>
 
           <section className={styles.panel}>
@@ -127,7 +113,7 @@ export default function POSContent() {
                 venta={venta}
                 total={total}
                 metodoPago={metodoPago}
-                onFinish={handleVentaCompleta}
+                onFinish={onVentaCompleta}
               />
               <BotonImprimir />
               <BotonExportar />
