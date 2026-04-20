@@ -1,6 +1,7 @@
 const { emitirFacturaTusFacturas } = require("./facturaController");
 
 const TICKET_WIDTH = 30;
+const PRINTER_NAME = "POS58_Printer";
 
 function separator() {
   return "-".repeat(TICKET_WIDTH);
@@ -122,7 +123,7 @@ exports.printTicket = async (req, res) => {
     const filePath = path.join(__dirname, "../ticket.txt");
     fs.writeFileSync(filePath, lines.join("\r\n"), "utf8");
 
-    exec(`notepad /p "${filePath}"`, (err) => {
+    exec(`cmd /c print /d:"${PRINTER_NAME}" "${filePath}"`, (err) => {
       if (err) {
         return res.json({ ok: true, warning: "No se imprimio", factura });
       }
