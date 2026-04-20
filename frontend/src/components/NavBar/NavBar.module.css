@@ -3,10 +3,13 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 20px 24px;
-  background: #fffaf3;
-  border-bottom: 1px solid #e6d5bf;
-  box-shadow: 0 8px 24px rgba(92, 64, 39, 0.06);
+  max-width: 1400px;
+  margin: 20px auto 0;
+  padding: 18px 24px;
+  background: #fff8f1;
+  border: 1px solid #ead8c4;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px rgba(92, 64, 39, 0.05);
 }
 
 .brand {
@@ -36,7 +39,7 @@
   border-radius: 999px;
   text-decoration: none;
   color: #4a3726;
-  background: #efe2d2;
+  background: #f1e4d4;
   font-weight: 600;
 }
 
@@ -49,5 +52,6 @@
   .navbar {
     flex-direction: column;
     align-items: flex-start;
+    margin: 16px 16px 0;
   }
 }
