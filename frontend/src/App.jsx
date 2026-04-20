@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { VentasProvider } from "./context/VentasContext";
 import { ProductosProvider } from "./context/ProductosContext";
-import POS from "./pages/Pos";
+import POS from "./pages/pos";
 import HistorialVentas from "./components/HistorialVentas/HistorialVentas";
 import CrearProducto from "./components/CrearProducto/CrearProducto";
 
