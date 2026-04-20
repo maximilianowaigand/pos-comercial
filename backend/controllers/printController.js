@@ -1,65 +1,56 @@
 const { emitirFacturaTusFacturas } = require("./facturaController");
-const ventasService = require("../services/ventasService");
 
 exports.printTicket = async (req, res) => {
   try {
-    const { items, metodoPago, datosCliente } = req.body;
+    console.log("📩 PRINT REQUEST:", req.body);
+
+    const { items, metodoPago, datosCliente, total } = req.body;
 
     if (!items || items.length === 0 || !metodoPago) {
       return res.status(400).json({ error: "Datos incompletos" });
     }
 
-    console.log("📩 PRINT REQUEST:", req.body);
-
-    let factura = null;
     const mp = metodoPago.toLowerCase();
 
-     // ✅ normalizá los items sin importar el formato que llegue
     const itemsNormalizados = items.map(i => ({
       producto_id: i.producto_id ?? i.id,
-      cantidad: i.cantidad
+      nombre: i.nombre,
+      cantidad: i.cantidad,
+      precio: i.precio
     }));
 
-    if (!itemsNormalizados.length || !mp) {
-      return res.status(400).json({ error: "Datos incompletos" });
-    }
+    let factura = null;
 
-    console.log("📩 PRINT REQUEST normalizado:", itemsNormalizados);
-
-    // 1️⃣ Guardar venta (DB maneja precios + total)
-    const nuevaVenta = await ventasService.registrarVenta({
-      items: itemsNormalizados,  // ✅ usá los normalizados
-      metodo_pago: metodoPago
-    });
-
-    // 2️⃣ Facturación (usa total real de DB)
     if (
       (mp === "tarjeta" || mp === "transferencia") &&
       datosCliente?.nro_doc
     ) {
       factura = await emitirFacturaTusFacturas(
-        items,
-        nuevaVenta.total,
+        itemsNormalizados,
+        total,
         datosCliente,
         metodoPago
       );
     }
 
-    // 3️⃣ Ticket
     let text = "";
     text += "PANADERIA TRES SABORES\n";
     text += "------------------------------\n";
-    text += `Ticket N°: ${nuevaVenta.ventaId}\n`;
     text += `Fecha: ${new Date().toLocaleString()}\n`;
     text += `Pago: ${metodoPago.toUpperCase()}\n`;
     text += "------------------------------\n";
 
-    items.forEach(i => {
-      text += `Producto ${i.producto_id} x${i.cantidad}\n`;
-    });
+    itemsNormalizados.forEach(i => {
+  const nombre = i.nombre.padEnd(20);
+  const cantidad = i.cantidad;
+  const subtotal = i.precio ? i.precio * i.cantidad : "";
+
+  text += `${i.nombre}\n`;
+  text += `${i.cantidad} x $${i.precio} = $${i.precio * i.cantidad}\n`;
+});
 
     text += "------------------------------\n";
-    text += `TOTAL: $${nuevaVenta.total}\n`;
+    text += `TOTAL: $${total}\n`;
 
     if (factura?.cae) {
       text += "------------------------------\n";
@@ -80,20 +71,10 @@ exports.printTicket = async (req, res) => {
 
     exec(`notepad /p "${filePath}"`, err => {
       if (err) {
-        return res.json({
-          ok: true,
-          warning: "Venta guardada pero no se imprimió",
-          ventaId: nuevaVenta.ventaId,
-          factura
-        });
+        return res.json({ ok: true, warning: "No se imprimió", factura });
       }
 
-      res.json({
-        ok: true,
-        ventaId: nuevaVenta.ventaId,
-        total: nuevaVenta.total,
-        factura
-      });
+      res.json({ ok: true, factura });
     });
 
   } catch (err) {

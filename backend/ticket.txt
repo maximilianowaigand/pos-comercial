@@ -1,14 +1,16 @@
 PANADERIA TRES SABORES
 ------------------------------
-Ticket N°: 98
-Fecha: 17/4/2026, 07:19:48
+Fecha: 20/4/2026, 11:17:39
 Pago: EFECTIVO
 ------------------------------
-Producto undefined x1
-Producto undefined x1
-Producto undefined x1
+pan
+1 x $2000 = $2000
+galleta
+1 x $1999 = $1999
+cookies
+1 x $5000 = $5000
 ------------------------------
-TOTAL: $11800
+TOTAL: $8999
 ------------------------------
 GRACIAS POR SU COMPRA
 

@@ -36,13 +36,11 @@ export default function HistorialVentas() {
     (acc, v) => acc + Number(v.total),
     0
   );
-  console.log("VENTA:", venta);
   return (
     <div style={{ padding: 20 }}>
       <BackButton />
       <h2>Historial de Ventas</h2>
 
-      {/* 🔎 FILTROS */}
       <div style={{ marginBottom: 10, display: "flex", gap: 10 }}>
         <select
           value={filtroMetodo}

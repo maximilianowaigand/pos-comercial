@@ -42,7 +42,7 @@ export function VentasProvider({ children }) {
     setTotalesDia({
       efectivo: data.efectivo,
       transferencia: data.transferencia,
-      tarjeta: data.debito,
+      tarjeta: data.tarjeta,
       totalDia: data.totalDia
     });
     setTotalMes(data.totalMes);

@@ -4,6 +4,6 @@ export function buildVentaPayload(venta, metodoPago) {
       producto_id: p.id,
       cantidad: p.cantidad,
     })),
-    metodo_pago: metodoPago
+    metodoPago  // ✅ camelCase
   };
 }

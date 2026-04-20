@@ -55,7 +55,7 @@ function registrarVenta(data) {
                   ventaId,
                   item.producto_id,
                   item.cantidad,
-                  precios[item.producto_id] // 👈 precio de la DB, no del frontend
+                  item.precio_unitario ?? precios[item.producto_id] // 👈 precio de la DB, no del frontend
                 ]);
               }
 

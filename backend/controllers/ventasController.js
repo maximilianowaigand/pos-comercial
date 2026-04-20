@@ -25,7 +25,7 @@ exports.totalDia = async (req, res) => {
     res.json({ totalDia: totales.totalDia, efectivo: totales.efectivo, transferencia: totales.transferencia, tarjeta: totales.tarjeta });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    return res.status(400).json({ success: false, error: "..." });;
   }
 };
 
