@@ -1,7 +1,7 @@
 import { useVentas } from "../../context/VentasContext";
 import styles from "./BotonGuardar.module.css";
 
-export default function BotonGuardar({ venta, metodoPago, onFinish }) {
+export default function BotonGuardar({ venta, metodoPago }) {
   const { agregarVenta } = useVentas();
 
   const registrarVenta = async () => {
@@ -21,7 +21,6 @@ export default function BotonGuardar({ venta, metodoPago, onFinish }) {
 
     try {
       await agregarVenta(body);
-      onFinish?.();
       alert("Venta guardada");
     } catch (e) {
       console.error(e);

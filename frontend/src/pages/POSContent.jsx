@@ -22,7 +22,6 @@ export default function POSContent({
   onCategoriaChange,
   onMetodoPagoChange,
   onDatosClienteChange,
-  onVentaCompleta,
 }) {
   return (
     <div className={styles.page}>
@@ -111,9 +110,7 @@ export default function POSContent({
             <div className={styles.actionsCard}>
               <BotonGuardar
                 venta={venta}
-                total={total}
                 metodoPago={metodoPago}
-                onFinish={onVentaCompleta}
               />
               <BotonImprimir />
               <BotonExportar />

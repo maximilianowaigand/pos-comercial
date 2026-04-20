@@ -17,19 +17,12 @@ export default function POS() {
     metodoPago,
     mostrarCliente,
     agregar,
-    limpiarVenta,
     handleMetodoPagoChange,
     setDatosCliente,
-    obtenerTotales,
   } = useVentas();
 
   const { categorias, productosFiltrados, categoria, setCategoria } =
     useProductos();
-
-  const handleVentaCompleta = () => {
-    limpiarVenta();
-    obtenerTotales();
-  };
 
   return (
     <POSContent
@@ -47,7 +40,6 @@ export default function POS() {
       onCategoriaChange={setCategoria}
       onMetodoPagoChange={handleMetodoPagoChange}
       onDatosClienteChange={setDatosCliente}
-      onVentaCompleta={handleVentaCompleta}
     />
   );
 }
