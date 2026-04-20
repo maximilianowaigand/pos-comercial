@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
 import ProdDetalles from "../components/ProdDetalles/ProdDetalles";
-import Products from "../components/Products/Products";
 import OtroProducto from "../components/OtroProducto/OtroProducto";
 import BotonGuardar from "../components/BotonGuardar/BotonGuardar";
 import BotonImprimir from "../components/BotonImprimir/BotonImprimir";
 import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
-import Categorias from "../components/categorias/Categorias";
 import Totales from "../components/Totales/Totales";
 import { useVentas } from "../context/VentasContext";
 import { useProductos } from "../context/ProductosContext";
@@ -77,11 +75,20 @@ export default function POSContent() {
       <Totales totalesDia={totalesDia} totalMes={totalMes} />
 
       <section className={styles.categorySection}>
-        <Categorias
-          categorias={categorias}
-          categoriaActual={categoria}
-          onSelect={setCategoria}
-        />
+        <div className={styles.categories}>
+          {categorias.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setCategoria(cat)}
+              className={`${styles.categoryButton} ${
+                categoria === cat ? styles.categoryActive : styles.categoryInactive
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </section>
 
       <main className={styles.layout}>
@@ -91,7 +98,20 @@ export default function POSContent() {
             <span>{productosFiltrados.length} disponibles</span>
           </div>
 
-          <Products productos={productosFiltrados} onAgregar={agregar} />
+          <div className={styles.productsGrid}>
+            {productosFiltrados.map((producto) => (
+              <button
+                key={producto.id}
+                type="button"
+                className={styles.productButton}
+                onClick={() => agregar(producto)}
+              >
+                <span className={styles.productName}>{producto.nombre}</span>
+                <span className={styles.productPrice}>${producto.precio}</span>
+              </button>
+            ))}
+          </div>
+
           <div className={styles.extraProduct}>
             <OtroProducto onAdd={agregar} />
           </div>

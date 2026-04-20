@@ -58,6 +58,32 @@
   overflow-x: auto;
 }
 
+.categories {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.categoryButton {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+}
+
+.categoryActive {
+  background: #d96b2b;
+  color: #fff8ef;
+  font-weight: 700;
+}
+
+.categoryInactive {
+  background: #333;
+  color: white;
+  font-weight: 500;
+}
+
 .layout {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.1fr) minmax(260px, 320px);
@@ -89,6 +115,34 @@
 .sectionHeader span {
   color: #7a6654;
   font-size: 0.95rem;
+}
+
+.productsGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.productButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e6d5bf;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.productName {
+  font-weight: 600;
+}
+
+.productPrice {
+  color: #c4571d;
+  font-weight: 700;
 }
 
 .sidePanel {
