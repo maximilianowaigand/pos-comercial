@@ -1,6 +1,5 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import { VentasProvider } from "./context/VentasContext";
 import { ProductosProvider } from "./context/ProductosContext";
 import NavBar from "./components/NavBar/NavBar";
@@ -9,7 +8,6 @@ import CrearProducto from "./components/CrearProducto/CrearProducto";
 import POS from "./pages/pos";
 
 
-const [productoEditando, setProductoEditando] = useState(null);
 
 function App() {
   return (
@@ -21,12 +19,7 @@ function App() {
             <Routes>
               <Route path="/" element={<POS />} />
               <Route path="/historial" element={<HistorialVentas />} />
-              <Route path="/crear-producto" element={<CrearProducto 
-              productoEditando={productoEditando}
-              setProductoEditando={setProductoEditando}
-                />
-                }
-              />
+              <Route path="/crear-producto" element={<CrearProducto />} />
               <Route path="*" element={<h1>404 not found</h1>} />
             </Routes>
           </main>

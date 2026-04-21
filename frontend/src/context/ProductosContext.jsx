@@ -8,6 +8,7 @@ export function ProductosProvider({ children }) {
   const [categoria, setCategoria] = useState("Todos");
   const [loading, setLoading] = useState(true);
 
+
   // 🔄 Cargar productos
   useEffect(() => {
     const fetchProductos = async () => {
@@ -43,6 +44,7 @@ export function ProductosProvider({ children }) {
   return (
     <ProductosContext.Provider value={{
       productos,
+      setProductos,
       categorias,
       productosFiltrados,
       categoria,

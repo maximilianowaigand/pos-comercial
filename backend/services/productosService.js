@@ -65,8 +65,23 @@ function actualizarProducto(data) {
   });
 }
 
+// DELETE
+function eliminarProducto(id) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      `DELETE FROM productos WHERE id_producto = ?`,
+      [id],
+      function (err) {
+        if (err) return reject(err);
+        resolve({ changes: this.changes });
+      }
+    );
+  });
+}
+
 module.exports = {
   listarProductos,
   crearProducto,
-  actualizarProducto
+  actualizarProducto,
+  eliminarProducto
 };

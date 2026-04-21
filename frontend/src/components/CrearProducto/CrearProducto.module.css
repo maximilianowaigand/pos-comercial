@@ -1,6 +1,13 @@
 .wrapper {
-  max-width: 460px;
-  margin: 20px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 20px 40px;
+  align-items: start;
+}
+
+.backButton {
+  grid-column: 1 / -1;
 }
 
 .card {
@@ -50,4 +57,24 @@
 .message {
   margin: 0;
   color: #5c4a39;
+}
+
+
+.select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d9c7b1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.btn {
+        flex: 1;
+  padding: 0.5rem;
+  background: #0099ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
