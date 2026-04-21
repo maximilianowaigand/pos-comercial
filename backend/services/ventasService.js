@@ -42,7 +42,7 @@ function registrarVenta(data) {
                 return reject(err);
               }
 
-              const ventaId = this.lastID;
+              const id_venta = this.lastID;
 
               // 3️⃣ Insertar detalle con precio_base de la DB
               const stmt = db.prepare(`
@@ -52,7 +52,7 @@ function registrarVenta(data) {
 
               for (const item of items) {
                 stmt.run([
-                  ventaId,
+                  id_venta,
                   item.producto_id,
                   item.cantidad,
                   item.precio_unitario ?? precios[item.producto_id] // 👈 precio de la DB, no del frontend
@@ -74,12 +74,12 @@ function registrarVenta(data) {
                   // 4️⃣ Leer el total real calculado por el trigger
                   db.get(
                     `SELECT total FROM ventas WHERE id_venta = ?`,
-                    [ventaId],
+                    [id_venta],
                     (err, row) => {
                       if (err) return reject(err);
 
                       resolve({
-                        ventaId,
+                        id_venta,
                         total: row.total,
                         precios // 👈 lo devolvemos para armar el ticket
                       });

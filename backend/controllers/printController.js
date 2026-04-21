@@ -4,7 +4,7 @@ exports.printTicket = async (req, res) => {
   try {
     console.log("📩 PRINT REQUEST:", req.body);
 
-    const { items, metodoPago, datosCliente, total } = req.body;
+    const { items, metodoPago, datosCliente, total, id_venta } = req.body;
 
     if (!items || items.length === 0 || !metodoPago) {
       return res.status(400).json({ error: "Datos incompletos" });
@@ -34,28 +34,42 @@ exports.printTicket = async (req, res) => {
     }
 
     let text = "";
-    text += "PANADERIA TRES SABORES\n";
-    text += "------------------------------\n";
-    text += `Fecha: ${new Date().toLocaleString()}\n`;
-    text += `Pago: ${metodoPago.toUpperCase()}\n`;
-    text += "------------------------------\n";
+
+    const center = (str) => {
+      const width = 32;
+      const left = Math.floor((width - str.length) / 2);
+      return " ".repeat(left > 0 ? left : 0) + str;
+    };
+
+    
+    text += center("PANADERIA TRES SABORES") + "\r\n";
+    text += `TICKET Nro ${id_venta.toString().padStart(5, "0")}\r\n`;
+    text += "------------------------------\r\n";
+    text += `Fecha: ${new Date().toLocaleString()}\r\n`;
+    text += `Pago: ${metodoPago.toUpperCase()}\r\n`;
+    text += "------------------------------\r\n";
 
     itemsNormalizados.forEach(i => {
-      text += `${i.nombre}\n`;
-      text += `${i.cantidad} x $${i.precio} = $${i.precio * i.cantidad}\n`;
+      text += `${i.nombre}\r\n`;
+      text += `${i.cantidad} x $${i.precio}\r\n`;
     });
 
-    text += "------------------------------\n";
-    text += `TOTAL: $${total}\n`;
+    text += "------------------------------\r\n";
+    text += `TOTAL: $${total}\r\n`;
 
     if (factura?.cae) {
-      text += "------------------------------\n";
-      text += `FACTURA N°: ${factura.numero_comprobante}\n`;
-      text += `CAE: ${factura.cae}\n`;
+      text += "------------------------------\r\n";
+      text += `FACTURA N°: ${factura.numero_comprobante}\r\n`;
+      text += `CAE: ${factura.cae}\r\n`;
     }
+    text += "------------------------------\r\n";
 
-    text += "------------------------------\n";
-    text += "GRACIAS POR SU COMPRA\n";
+    text += center("GRACIAS POR SU COMPRA") + "\r\n";
+    text += "\r\n";
+    text += center("Seguinos en Instagram") + "\r\n";
+    text += center("@tressaborespanaderia") + "\r\n";
+
+    text += "\r\n\r\n\r\n";
     text += "\f";
 
     const fs = require("fs");
@@ -65,7 +79,7 @@ exports.printTicket = async (req, res) => {
     const filePath = path.join(__dirname, "../ticket.txt");
     fs.writeFileSync(filePath, text);
 
-    exec(`notepad /p "${filePath}"`, err => {
+    exec(`copy /b "${filePath}" \\\\localhost\\POS58_Printer`, err => {
       if (err) {
         return res.json({ ok: true, warning: "No se imprimió", factura });
       }

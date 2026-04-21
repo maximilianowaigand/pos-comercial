@@ -1,12 +1,23 @@
-PANADERIA TRES SABORES
+     PANADERIA TRES SABORES
+TICKET Nro 00184
 ------------------------------
-Fecha: 20/4/2026, 04:36:23
+Fecha: 21/4/2026, 04:32:27
 Pago: EFECTIVO
 ------------------------------
-Medialunas
-1 x $2800 = $2800
+pan
+1 x $2400
+galleta
+1 x $2800
+cafe + medialunas
+1 x $3500
 ------------------------------
-TOTAL: $2800
+TOTAL: $8700
 ------------------------------
-GRACIAS POR SU COMPRA
+     GRACIAS POR SU COMPRA
+
+     Seguinos en Instagram
+     @tressaborespanaderia
+
+
+
 

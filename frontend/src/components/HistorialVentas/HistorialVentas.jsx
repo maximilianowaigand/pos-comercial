@@ -30,6 +30,48 @@ export default function HistorialVentas() {
     0
   );
 
+  const imprimirVenta = async (venta) => {
+  const confirmar = window.confirm(
+    `¿Reimprimir ticket #${venta.id_venta}?`
+  );
+  if (!confirmar) return;
+
+  try {
+    // 🔹 traer detalle real de la venta
+    const resVenta = await fetch(`/api/ventas/${venta.id_venta}`);
+    const data = await resVenta.json();
+
+    if (!resVenta.ok) {
+      alert("Error obteniendo venta");
+      return;
+    }
+
+    // 🔹 imprimir
+    const resPrint = await fetch("/api/print", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        items: data.items,
+        total: data.total,
+        metodoPago: data.medio_pago,
+        id_venta: data.id_venta,
+      }),
+    });
+
+    if (!resPrint.ok) {
+      alert("Error al imprimir");
+      return;
+    }
+
+    alert("Ticket reimpreso");
+  } catch (error) {
+    console.error(error);
+    alert("Error en impresión");
+  }
+};
+
   return (
     <div className={styles.page}>
       <BackButton />
@@ -93,6 +135,7 @@ export default function HistorialVentas() {
                 <th>Metodo de Pago</th>
                 <th>Total</th>
                 <th>Estado</th>
+                <th>Imprimir</th>
                 <th>Productos</th>
               </tr>
             </thead>
@@ -106,6 +149,11 @@ export default function HistorialVentas() {
                   <td>{v.medio_pago}</td>
                   <td>${v.total}</td>
                   <td>{v.estado}</td>
+                  <td>
+                      <button className={styles.printButton}
+                      onClick={() => imprimirVenta(v)}> 🖨️
+                      </button>
+                    </td>
                   <td>
                     {Array.isArray(v.productos)
                       ? v.productos.join(", ")

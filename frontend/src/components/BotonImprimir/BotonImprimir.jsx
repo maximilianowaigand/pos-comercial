@@ -21,6 +21,7 @@ export default function BotonImprimir() {
     };
 
     try {
+      // ✅ 1. Guardar venta
       const res = await fetch("/api/ventas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,25 +35,34 @@ export default function BotonImprimir() {
         return;
       }
 
+      // ✅ 2. Obtener respuesta
       const data = await res.json();
 
-      if (!data.ventaId) {
+      if (!data.id_venta) {
         alert(`Error guardando venta: ${data.error}`);
         return;
       }
 
+      // ✅ 3. Imprimir ticket
       await fetch("/api/print", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: venta, total, metodoPago }),
+        body: JSON.stringify({
+          items: venta,
+          total,
+          metodoPago,
+          id_venta: data.id_venta,
+        }),
       });
 
+      // ✅ 4. Limpiar estado
       alert("Venta guardada e impresa");
       limpiarVenta();
       obtenerTotales();
-    } catch (e) {
-      console.error(e);
-      alert("Error en la operacion");
+
+    } catch (error) {
+      console.error(error);
+      alert("Error en la operación");
     }
   };
 

@@ -65,15 +65,17 @@ git clone https://github.com/maximilianowaigand/pos-comercial.git
 ```bash
 cd backend
 npm install
-npm run dev
+npm run build
+
+cd backend
+node index.js
 ```
 
 ### 3. Frontend
 
 ```bash
-cd frontend
-npm install
-npm start
+cd backend
+node index.js
 ```
 
 ---
