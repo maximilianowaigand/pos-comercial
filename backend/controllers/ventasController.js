@@ -99,3 +99,4 @@ exports.listarVentas = (req, res) => {
     res.json(rows);
   });
 };
+

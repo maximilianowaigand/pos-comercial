@@ -1,17 +1,15 @@
      PANADERIA TRES SABORES
-TICKET Nro 00184
+TICKET Nro 00174
 ------------------------------
-Fecha: 21/4/2026, 04:32:27
+Fecha: 21/4/2026, 04:35:54
 Pago: EFECTIVO
 ------------------------------
-pan
-1 x $2400
+suizo
+1 x $2800
 galleta
 1 x $2800
-cafe + medialunas
-1 x $3500
 ------------------------------
-TOTAL: $8700
+TOTAL: $5600
 ------------------------------
      GRACIAS POR SU COMPRA
 
