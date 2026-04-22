@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useMemo } from "react";
+
 
 const ProductosContext = createContext();
 
@@ -7,6 +9,7 @@ export function ProductosProvider({ children }) {
   const [productos, setProductos] = useState([]);
   const [categoria, setCategoria] = useState("Todos");
   const [loading, setLoading] = useState(true);
+  const [busqueda, setBusqueda] = useState("");
 
 
   // 🔄 Cargar productos
@@ -33,13 +36,29 @@ export function ProductosProvider({ children }) {
     ...new Set(productos.map(p => p.categoria || "Sin categoría"))
   ];
 
-  // 🧠 Filtrado seguro
-  const productosFiltrados =
+  const normalizar = (str) =>
+  str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+
+  const productosFiltrados = useMemo(() => {
+  let lista =
     categoria === "Todos"
       ? productos
       : productos.filter(
           p => (p.categoria || "Sin categoría") === categoria
         );
+
+  // 🔍 búsqueda en tiempo real
+  if (busqueda.trim().length > 0) {
+    const q = normalizar(busqueda);
+
+    lista = lista.filter(p =>
+      normalizar(p.nombre).includes(q)
+    );
+  }
+
+  return lista.slice(0, 50); // ⚡ evita lag
+}, [productos, categoria, busqueda]);  
 
   return (
     <ProductosContext.Provider value={{
@@ -49,7 +68,9 @@ export function ProductosProvider({ children }) {
       productosFiltrados,
       categoria,
       setCategoria,
-      loading
+      loading,
+      busqueda,
+      setBusqueda,
     }}>
       {children}
     </ProductosContext.Provider>

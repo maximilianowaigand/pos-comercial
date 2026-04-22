@@ -6,17 +6,16 @@ const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin 
 
 const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
 
+
+
 export default function ListaProductos() {
-  const { productos, setProductos } = useProductos();
-  const [busqueda, setBusqueda] = useState("");
-  const [expandido, setExpandido] = useState(null); // id del producto abierto
+
+  const {productosFiltrados, busqueda, setBusqueda, productos, setProductos} = useProductos();
+  const [expandido, setExpandido] = useState(null); 
   const [form, setForm] = useState(FORM_VACIO);
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const productosFiltrados = productos.filter((p) =>
-    p.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
 
   const handleEliminar = async (id) => {
   if (!window.confirm("¿Eliminár este producto?")) return;

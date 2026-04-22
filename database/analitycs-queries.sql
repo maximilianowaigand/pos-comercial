@@ -1,3 +1,14 @@
+-- =====================================
+-- 📊 QUERIES ANALÍTICAS - POS PANADERÍA
+-- =====================================
+-- Este archivo contiene consultas SQL para análisis de datos,
+-- reportes y uso en herramientas de BI (Power BI, etc.)
+--
+-- No forman parte del flujo operativo del sistema,
+-- sino del análisis posterior de ventas.
+
+
+
 -- Ventas totales
 SELECT SUM(total) AS ingresos_totales
 FROM ventas;

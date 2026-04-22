@@ -19,8 +19,14 @@ export default function CrearProducto({ onGuardado }) {
   }, [mensaje]);
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  let value = e.target.value;
+
+  if (e.target.name === "nombre") {
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  setForm((prev) => ({ ...prev, [e.target.name]: value }));
+};;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +39,17 @@ export default function CrearProducto({ onGuardado }) {
     if (precioNum <= 0) return setMensaje("Precio inválido");
     if (costoNum < 0) return setMensaje("Costo inválido");
     if (!form.categoria) return setMensaje("Selecciona una categoría");
+    
+    try {
+    const check = await fetch("/api/productos");
+    const productos = await check.json();
+    const existe = productos.some(
+      (p) => p.nombre.toLowerCase() === nombreLimpio.toLowerCase()
+    );
+    if (existe) return setMensaje("Ya existe un producto con ese nombre");
+  } catch {
+    return setMensaje("Error al verificar productos");
+  }
 
     setLoading(true);
 

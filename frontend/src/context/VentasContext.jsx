@@ -11,8 +11,13 @@ export function VentasProvider({ children }) {
   const [metodoPago, setMetodoPago] = useState("efectivo");
   const [mostrarCliente, setMostrarCliente] = useState(false);
   const [datosCliente, setDatosCliente] = useState(null);
-  const [totalesDia, setTotalesDia] = useState({ efectivo: 0, transferencia: 0, debito: 0, totalDia: 0 });
-  const [totalMes, setTotalMes] = useState(0);
+  const [totales, setTotales] = useState({
+    efectivo: 0,
+    transferencia: 0,
+    tarjeta: 0,
+    totalDia: 0,
+    totalMes: 0
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +33,6 @@ export function VentasProvider({ children }) {
     try {
       const res = await fetch("/api/ventas");
       const data = await res.json();
-      console.log("📦 Ventas:", data);
       const lista = Array.isArray(data) ? data : data.ventas;
       setVentas(lista ?? []);
     } catch (error) {
@@ -38,28 +42,39 @@ export function VentasProvider({ children }) {
   }
 
   async function obtenerTotales() {
-    const data = await fetchTotales();
-    setTotalesDia({
-      efectivo: data.efectivo,
-      transferencia: data.transferencia,
-      tarjeta: data.tarjeta,
-      totalDia: data.totalDia
-    });
-    setTotalMes(data.totalMes);
+    try {
+      const data = await fetchTotales();
+      setTotales({
+        efectivo: data.efectivo,
+        transferencia: data.transferencia,
+        tarjeta: data.tarjeta,
+        totalDia: data.totalDia,
+        totalMes: data.totalMes
+      });
+    } catch (error) {
+      console.error("Error cargando totales:", error);
+    }
   }
 
   async function agregarVenta(body) {
-    const res = await fetch("/api/ventas", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
+    try {
+      const res = await fetch("/api/ventas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
 
-    if (!res.ok) throw new Error("Error al guardar venta");
+      if (!res.ok) throw new Error("Error al guardar venta");
 
-    await obtenerVentas();  // ✅ refresca historial
-    await obtenerTotales(); // ✅ refresca totales
-    limpiarVenta();         // ✅ limpia carrito
+      const data = await res.json();
+      await obtenerVentas();
+      await obtenerTotales();
+      limpiarVenta();
+      return data;
+    } catch (err) {
+      console.error("Error en agregarVenta:", err);
+      throw err;
+    }
   }
 
   function agregar(prod) { setVenta(prev => addItem(prev, prod)); }
@@ -89,7 +104,8 @@ export function VentasProvider({ children }) {
       venta, total, ventas,
       agregarVenta, agregar, disminuir, borrar, limpiarVenta, actualizarPrecio,
       metodoPago, mostrarCliente, datosCliente, setDatosCliente, handleMetodoPagoChange,
-      totalesDia, totalMes, obtenerTotales,
+      obtenerVentas, obtenerTotales,
+      totales,
       loading
     }}>
       {children}

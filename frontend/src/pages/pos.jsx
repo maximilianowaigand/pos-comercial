@@ -1,19 +1,14 @@
 import POSContent from "./POSContent";
 import { useVentas } from "../context/VentasContext";
 import { useProductos } from "../context/ProductosContext";
+import { paymentOptions } from "../utils/paymentOptions";
 
-const paymentOptions = [
-  { value: "efectivo", label: "Efectivo" },
-  { value: "tarjeta", label: "Tarjeta" },
-  { value: "transferencia", label: "Transferencia" },
-];
 
 export default function POS() {
   const {
     venta,
     total,
-    totalesDia,
-    totalMes,
+    totales,
     metodoPago,
     mostrarCliente,
     agregar,
@@ -21,15 +16,14 @@ export default function POS() {
     setDatosCliente,
   } = useVentas();
 
-  const { categorias, productosFiltrados, categoria, setCategoria } =
+  const { categorias, productosFiltrados, categoria, setCategoria, busqueda } =
     useProductos();
 
   return (
     <POSContent
       venta={venta}
       total={total}
-      totalesDia={totalesDia}
-      totalMes={totalMes}
+      totales={totales} 
       metodoPago={metodoPago}
       mostrarCliente={mostrarCliente}
       categorias={categorias}

@@ -16,4 +16,5 @@ router.get("/", ventasController.listarVentas);
 
 router.get("/:id", ventasController.getVentaById);
 
+
 module.exports = router;

@@ -1,17 +1,16 @@
 import ProdDetalles from "../components/ProdDetalles/ProdDetalles";
-import OtroProducto from "../components/OtroProducto/OtroProducto";
 import BotonGuardar from "../components/BotonGuardar/BotonGuardar";
 import BotonImprimir from "../components/BotonImprimir/BotonImprimir";
 import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
 import Totales from "../components/Totales/Totales";
+import Categorias from "../components/categorias/Categorias";
 import styles from "./POS.module.css";
 
 export default function POSContent({
   venta,
   total,
-  totalesDia,
-  totalMes,
+  totales,
   metodoPago,
   mostrarCliente,
   categorias,
@@ -32,23 +31,14 @@ export default function POSContent({
         </p>
       </section>
 
-      <Totales totalesDia={totalesDia} totalMes={totalMes} />
+      <Totales totales={totales} />
 
       <section className={styles.categorySection}>
-        <div className={styles.categories}>
-          {categorias.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => onCategoriaChange(cat)}
-              className={`${styles.categoryButton} ${
-                categoria === cat ? styles.categoryActive : styles.categoryInactive
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        <Categorias
+              categorias={categorias}
+              categoriaActual={categoria}
+              onSelect={onCategoriaChange}
+            />
       </section>
 
       <main className={styles.layout}>
@@ -70,11 +60,9 @@ export default function POSContent({
                 <span className={styles.productPrice}>${producto.precio}</span>
               </button>
             ))}
+            
           </div>
 
-          <div className={styles.extraProduct}>
-            <OtroProducto onAdd={onAgregar} />
-          </div>
         </section>
 
         <section className={styles.panel}>

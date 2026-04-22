@@ -3,6 +3,7 @@
   gap: 8px;
   margin-bottom: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .button {
@@ -10,6 +11,7 @@
   border-radius: 999px;
   border: 0;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .active {
@@ -22,4 +24,38 @@
   background: #333;
   color: white;
   font-weight: 500;
+}
+
+.button:hover {
+  opacity: 0.85;
+}
+
+.buscador {
+  padding: 8px 14px;
+  border-radius: 999px; 
+  border: 1px solid #333;
+  background: #1f1f1f;
+  color: white;
+  outline: none;
+  min-width: 220px;
+  font-size: 14px;
+  transition: 0.2s;
+  flex: 1;
+  max-width: 300px;
+}
+
+.buscador::placeholder {
+  color: #aaa;
+}
+
+.buscador:focus {
+  border-color: #d96b2b;
+  box-shadow: 0 0 0 2px rgba(217, 107, 43, 0.25);
+}
+
+
+/* texto estado */
+.estado {
+  color: #aaa;
+  font-size: 12px;
 }

@@ -1,12 +1,13 @@
 import styles from "./Totales.module.css";
 
-export default function Totales({ totalesDia = {}, totalMes = 0 }) {
+export default function Totales({ totales = {} }) {
   const {
     efectivo = 0,
     transferencia = 0,
     tarjeta = 0,
     totalDia = 0,
-  } = totalesDia;
+    totalMes = 0
+  } = totales;
 
   return (
     <section className={styles.card}>
