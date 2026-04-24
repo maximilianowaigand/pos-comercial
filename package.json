@@ -1,14 +1,16 @@
 {
+  "main": "electron/main.js",
   "name": "apppanaderia",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
     "preview": "npm --prefix frontend run preview",
     "dev:backend": "npm --prefix backend run dev",
-    "start:backend": "npm --prefix backend run start"
+    "start:backend": "npm --prefix backend run start",
+    "electron": "electron .",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "node-thermal-printer": "^4.5.0",
@@ -17,7 +19,26 @@
     "react-router-dom": "6.30.3"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "@vitejs/plugin-react": "^4.0.0"
+    "@vitejs/plugin-react": "^4.0.0",
+    "electron": "^41.3.0",
+    "electron-builder": "^26.8.1",
+    "vite": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.pos.panaderia",
+    "productName": "POS Panadería",
+    "asar": true,
+    "asarUnpack": [
+      "backend/**/*"
+    ],
+    "files": [
+      "backend/**/*",
+      "frontend/dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "electron/icon.ico"
+    }
   }
 }

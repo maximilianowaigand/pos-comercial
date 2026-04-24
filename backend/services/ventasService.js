@@ -1,9 +1,10 @@
+
 const db = require("../db");
 
 // 🧾 Registrar venta con detalle
 function registrarVenta(data) {
   return new Promise((resolve, reject) => {
-    const { items, metodo_pago } = data; // 👈 ya no recibe total ni precio_unitario
+    const { items, metodo_pago } = data;
 
     // 1️⃣ Consultar precio_base de cada producto en la DB
     const ids = items.map(i => i.producto_id);
@@ -15,78 +16,77 @@ function registrarVenta(data) {
       (err, productos) => {
         if (err) return reject(err);
 
-        // Mapa id → precio_base
         const precios = {};
         productos.forEach(p => {
           precios[p.id_producto] = p.precio_base;
         });
 
-        // Validar que todos los productos existen
         for (const item of items) {
           if (precios[item.producto_id] === undefined) {
             return reject(new Error(`Producto ${item.producto_id} no encontrado`));
           }
         }
 
-        db.serialize(() => {
-          db.run("BEGIN TRANSACTION");
+        // 2️⃣ Iniciar transacción con callback explícito (sin db.serialize)
+        db.run("BEGIN TRANSACTION", (err) => {
+          if (err) return reject(err);
 
-          // 2️⃣ Insertar venta (total en 0, el trigger lo calcula)
           db.run(
             `INSERT INTO ventas (fecha, hora, medio_pago, total, estado)
              VALUES (DATE('now','localtime'), TIME('now','localtime'), ?, 0, 'CERRADA')`,
             [metodo_pago],
             function (err) {
               if (err) {
-                db.run("ROLLBACK");
-                return reject(err);
+                return db.run("ROLLBACK", () => reject(err));
               }
 
               const id_venta = this.lastID;
 
-              // 3️⃣ Insertar detalle con precio_base de la DB
-              const stmt = db.prepare(`
-                INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
-                VALUES (?, ?, ?, ?)
-              `);
+              // 3️⃣ Insertar items uno por uno con callbacks encadenados
+              const insertarItems = (index) => {
+                if (index >= items.length) {
+                  // Todos insertados → COMMIT
+                  return db.run("COMMIT", (err) => {
+                    if (err) {
+                      return db.run("ROLLBACK", () => reject(err));
+                    }
 
-              for (const item of items) {
-                stmt.run([
-                  id_venta,
-                  item.producto_id,
-                  item.cantidad,
-                  item.precio_unitario ?? precios[item.producto_id] // 👈 precio de la DB, no del frontend
-                ]);
-              }
-
-              stmt.finalize((err) => {
-                if (err) {
-                  db.run("ROLLBACK");
-                  return reject(err);
+                    // 4️⃣ Leer total calculado por el trigger
+                    db.get(
+                      `SELECT total FROM ventas WHERE id_venta = ?`,
+                      [id_venta],
+                      (err, row) => {
+                        if (err) return reject(err);
+                        resolve({
+                          id_venta,
+                          total: row.total,
+                          precios
+                        });
+                      }
+                    );
+                  });
                 }
 
-                db.run("COMMIT", (err) => {
-                  if (err) {
-                    db.run("ROLLBACK");
-                    return reject(err);
-                  }
-
-                  // 4️⃣ Leer el total real calculado por el trigger
-                  db.get(
-                    `SELECT total FROM ventas WHERE id_venta = ?`,
-                    [id_venta],
-                    (err, row) => {
-                      if (err) return reject(err);
-
-                      resolve({
-                        id_venta,
-                        total: row.total,
-                        precios // 👈 lo devolvemos para armar el ticket
-                      });
+                const item = items[index];
+                db.run(
+                  `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
+                   VALUES (?, ?, ?, ?)`,
+                  [
+                    id_venta,
+                    item.producto_id,
+                    item.cantidad,
+                    item.precio_unitario ?? precios[item.producto_id]
+                  ],
+                  (err) => {
+                    if (err) {
+                      return db.run("ROLLBACK", () => reject(err));
                     }
-                  );
-                });
-              });
+                    insertarItems(index + 1);
+                  }
+                );
+              };
+
+              insertarItems(0);
             }
           );
         });

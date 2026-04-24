@@ -82,9 +82,11 @@ export function VentasProvider({ children }) {
   function borrar(id) { setVenta(prev => removeItem(prev, id)); }
 
   function limpiarVenta() {
-    setVenta([]);
-    setDatosCliente(null);
-  }
+  setVenta([]);
+  setDatosCliente(null);
+  setMetodoPago("efectivo");        // 👈 CLAVE
+  setMostrarCliente(false);         // 👈 CLAVE
+}
 
   function actualizarPrecio(id, nuevoPrecio) {
     setVenta(prev =>
