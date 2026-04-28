@@ -76,7 +76,10 @@ exports.printTicket = async (req, res) => {
     const { exec } = require("child_process");
     const path = require("path");
 
-    const filePath = path.join(__dirname, "../ticket.txt");
+    const ticketDir = process.env.APP_DATA_DIR
+      ? path.resolve(process.env.APP_DATA_DIR)
+      : path.join(__dirname, "..");
+    const filePath = path.join(ticketDir, "ticket.txt");
     fs.writeFileSync(filePath, text);
 
     exec(`copy /b "${filePath}" \\\\localhost\\POS58_Printer`, err => {

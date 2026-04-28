@@ -3,6 +3,9 @@ const cors = require("cors");
 const path = require("path");
 
 const app = express();
+const frontendDistPath = process.env.FRONTEND_DIST_PATH
+  ? path.resolve(process.env.FRONTEND_DIST_PATH)
+  : path.join(__dirname, "../frontend/dist");
 
 app.use(cors());
 app.use(express.json());
@@ -24,9 +27,9 @@ app.use("/api/productos", productosRoutes);
 app.use("/api/clima", climaRoutes);
 
 // ---- SERVIR FRONTEND (PRODUCCIÓN) ----
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use(express.static(frontendDistPath));
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
 // ---- SERVER ----

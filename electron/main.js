@@ -1,9 +1,5 @@
 const { app, BrowserWindow } = require("electron");
-const { exec, execSync } = require("child_process");
 const path = require("path");
-const fs = require("fs");
-
-let backendProcess;
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -31,47 +27,34 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  const npm         = process.platform === "win32" ? "npm.cmd" : "npm";
-  const rootDir     = path.join(__dirname, "..");
-  const frontendCwd = path.join(rootDir, "frontend");
-  const backendCwd  = path.join(rootDir, "backend");
-  const backendEntry = path.join(backendCwd, "index.js");
-  const distPath    = path.join(frontendCwd, "dist");
+  const rootDir      = path.join(__dirname, "..");
+  const backendEntry = app.isPackaged
+    ? path.join(process.resourcesPath, "app.asar.unpacked", "backend", "index.js")
+    : path.join(rootDir, "backend", "index.js");
+  const frontendDistPath = app.isPackaged
+    ? path.join(process.resourcesPath, "app.asar", "frontend", "dist")
+    : path.join(rootDir, "frontend", "dist");
 
-  // 1. Buildear el frontend solo si dist no existe
-  if (!fs.existsSync(distPath)) {
-    console.log("Buildeando frontend...");
-    try {
-      execSync(`${npm} run build`, { cwd: frontendCwd, stdio: "inherit" });
-      console.log("Build completado.");
-    } catch (err) {
-      console.error("Error en el build del frontend:", err.message);
-      app.quit();
-      return;
-    }
-  } else {
-    console.log("Frontend ya buildeado, saltando build.");
+  process.env.FRONTEND_DIST_PATH = frontendDistPath;
+  process.env.APP_DATA_DIR = app.getPath("userData");
+
+  console.log("Cargando backend desde:", backendEntry);
+  console.log("Sirviendo frontend desde:", frontendDistPath);
+  console.log("Datos de la app en:", process.env.APP_DATA_DIR);
+
+  try {
+    require(backendEntry);
+    console.log("Backend cargado correctamente.");
+  } catch (err) {
+    console.error("Error al cargar el backend:", err);
+    app.quit();
+    return;
   }
 
-  // 2. Levantar el backend
-  console.log("Iniciando backend...");
-  backendProcess = exec(`node "${backendEntry}"`, {
-    cwd: backendCwd,
-    env: { ...process.env }
-  });
-
-  backendProcess.stdout.on("data", (d) => console.log("[Backend]", d.trim()));
-  backendProcess.stderr.on("data", (d) => console.error("[Backend error]", d.trim()));
-  backendProcess.on("error", (err) => console.error("Error al iniciar backend:", err));
-  backendProcess.on("exit", (code, signal) => {
-    console.error(`[Backend] Proceso terminado. Código: ${code}, Señal: ${signal}`);
-  });
-
-  // 3. Esperar que el backend levante y abrir la ventana
-  setTimeout(createWindow, 2000);
+  // Esperar que Express levante y abrir la ventana
+  setTimeout(createWindow, 4000);
 });
 
 app.on("window-all-closed", () => {
-  if (backendProcess) backendProcess.kill();
   app.quit();
 });

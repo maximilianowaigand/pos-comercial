@@ -10,7 +10,7 @@
     "dev:backend": "npm --prefix backend run dev",
     "start:backend": "npm --prefix backend run start",
     "electron": "electron .",
-    "dist": "electron-builder"
+    "dist": "npm run build && electron-builder"
   },
   "dependencies": {
     "node-thermal-printer": "^4.5.0",
