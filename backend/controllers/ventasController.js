@@ -86,6 +86,8 @@ exports.listarVentas = (req, res) => {
       v.hora, 
       v.medio_pago, 
       v.total, 
+      v.descuento_porcentaje,
+      v.descuento_monto,
       v.estado,
       GROUP_CONCAT(p.nombre_producto || ' x' || dv.cantidad, ', ') AS productos
     FROM ventas v

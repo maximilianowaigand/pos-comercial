@@ -4,11 +4,9 @@ import styles from "./ProdDetalles.module.css";
 export default function ProdDetalles() {
   const {
     venta,
-    total,
     agregar,
     disminuir,
     borrar,
-    limpiarVenta,
     actualizarPrecio,
   } = useVentas();
 
@@ -39,7 +37,7 @@ export default function ProdDetalles() {
                 />
               </div>
               <span>Cantidad: {v.cantidad}</span>
-              <span>Subtotal: ${v.precio * v.cantidad}</span>
+              <span>Subtotal: ${(v.precio * v.cantidad).toFixed(2)}</span>
             </div>
 
             <div className={styles.actions}>
@@ -56,13 +54,6 @@ export default function ProdDetalles() {
           </li>
         ))}
       </ul>
-
-      <div className={styles.footer}>
-        <h2>Total: ${total}</h2>
-        <button type="button" className={styles.clearButton} onClick={limpiarVenta}>
-          LIMPIAR
-        </button>
-      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import BackButton from "../BackButton/BackButton";
 import styles from "./CrearProducto.module.css";
 import ListaProductos from "../ListaProductos/ListaProductos";
+import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
 
 const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc"];
 
@@ -66,6 +67,7 @@ export default function CrearProducto({ onGuardado }) {
         setMensaje("✓ Producto creado");
         setForm(FORM_VACIO);
         onGuardado?.();
+        restoreKeyboardFocus();
       } else {
         setMensaje(data.error || "Error al guardar");
       }
@@ -86,6 +88,7 @@ export default function CrearProducto({ onGuardado }) {
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <input
+          data-keyboard-primary
           className={styles.input}
           name="nombre"
           placeholder="Nombre"

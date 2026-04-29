@@ -17,6 +17,7 @@ const exportRoutes = require("./routes/exportRoutes");
 const facturaRoutes = require("./routes/facturaRoutes");
 const productosRoutes = require("./routes/productosRoutes");
 const climaRoutes = require("./routes/clima");
+const statsRoutes = require("./routes/statsRoute");
 
 app.use("/api/ventas", ventasRoutes);
 app.use("/api", printRoutes);
@@ -25,6 +26,7 @@ app.use("/api", facturaRoutes);
 app.use("/api", require("./routes/testFactura"));
 app.use("/api/productos", productosRoutes); 
 app.use("/api/clima", climaRoutes);
+app.use("/api/stats", statsRoutes);
 
 // ---- SERVIR FRONTEND (PRODUCCIÓN) ----
 app.use(express.static(frontendDistPath));

@@ -82,7 +82,24 @@ function bootstrapLegacyDataIfNeeded() {
 
                 db.run("BEGIN TRANSACTION");
                 db.run("INSERT INTO productos SELECT * FROM legacy.productos");
-                db.run("INSERT INTO ventas SELECT * FROM legacy.ventas");
+                db.run(`
+                  INSERT INTO ventas (
+                    id_venta,
+                    fecha,
+                    hora,
+                    medio_pago,
+                    total,
+                    estado
+                  )
+                  SELECT
+                    id_venta,
+                    fecha,
+                    hora,
+                    medio_pago,
+                    total,
+                    estado
+                  FROM legacy.ventas
+                `);
                 db.run("INSERT INTO detalle_venta SELECT * FROM legacy.detalle_venta");
                 db.run("INSERT INTO clima_diario SELECT * FROM legacy.clima_diario");
                 db.run("COMMIT", (commitErr) => {
@@ -134,9 +151,33 @@ db.serialize(() => {
       hora TEXT NOT NULL,
       medio_pago TEXT NOT NULL,
       total REAL DEFAULT 0,
+      descuento_porcentaje REAL DEFAULT 0,
+      descuento_monto REAL DEFAULT 0,
       estado TEXT DEFAULT 'ABIERTA'
     )
   `);
+
+  db.run(
+    `
+      ALTER TABLE ventas ADD COLUMN descuento_porcentaje REAL DEFAULT 0
+    `,
+    (err) => {
+      if (err && !err.message.includes("duplicate column")) {
+        console.error("Error agregando descuento_porcentaje:", err.message);
+      }
+    }
+  );
+
+  db.run(
+    `
+      ALTER TABLE ventas ADD COLUMN descuento_monto REAL DEFAULT 0
+    `,
+    (err) => {
+      if (err && !err.message.includes("duplicate column")) {
+        console.error("Error agregando descuento_monto:", err.message);
+      }
+    }
+  );
 
   db.run(`
     CREATE TABLE IF NOT EXISTS detalle_venta (

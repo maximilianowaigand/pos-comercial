@@ -4,7 +4,15 @@ exports.printTicket = async (req, res) => {
   try {
     console.log("📩 PRINT REQUEST:", req.body);
 
-    const { items, metodoPago, datosCliente, total, id_venta } = req.body;
+    const {
+      items,
+      metodoPago,
+      datosCliente,
+      total,
+      id_venta,
+      descuentoPorcentaje = 0,
+      descuentoMonto = 0,
+    } = req.body;
 
     if (!items || items.length === 0 || !metodoPago) {
       return res.status(400).json({ error: "Datos incompletos" });
@@ -55,7 +63,10 @@ exports.printTicket = async (req, res) => {
     });
 
     text += "------------------------------\r\n";
-    text += `TOTAL: $${total}\r\n`;
+    if (Number(descuentoPorcentaje) > 0) {
+      text += `DESC. ${Number(descuentoPorcentaje).toFixed(2)}%: -$${Number(descuentoMonto).toFixed(2)}\r\n`;
+    }
+    text += `TOTAL: $${Number(total).toFixed(2)}\r\n`;
 
     if (factura?.cae) {
       text += "------------------------------\r\n";

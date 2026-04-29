@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useProductos } from "../../context/ProductosContext";
+import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./ListaProductos.module.css";
 
 const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc"];
@@ -18,7 +19,9 @@ export default function ListaProductos() {
 
 
   const handleEliminar = async (id) => {
-  if (!window.confirm("¿Eliminár este producto?")) return;
+  const confirmar = window.confirm("¿Eliminár este producto?");
+  restoreFocusAfterNativeDialog();
+  if (!confirmar) return;
 
   try {
     const res = await fetch(`/api/productos/${id}`, { method: "DELETE" });
@@ -27,6 +30,7 @@ export default function ListaProductos() {
       setProductos((prev) => prev.filter((p) => p.id !== id));
       setMensaje("✓ Producto eliminado");
       setTimeout(() => setMensaje(""), 3000);
+      restoreKeyboardFocus();
     } else {
       const data = await res.json();
       setMensaje(data.error || "Error al eliminar");
@@ -56,7 +60,9 @@ export default function ListaProductos() {
   };
 
   const handleGuardar = async (id) => {
-    if (!window.confirm("¿Guardar los cambios?")) return;
+    const confirmar = window.confirm("¿Guardar los cambios?");
+    restoreFocusAfterNativeDialog();
+    if (!confirmar) return;
     const nombreLimpio = form.nombre.trim();
     if (!nombreLimpio) return setMensaje("El nombre es obligatorio");
 
@@ -95,6 +101,7 @@ export default function ListaProductos() {
         setForm(FORM_VACIO);
         setMensaje("✓ Producto actualizado");
         setTimeout(() => setMensaje(""), 3000);
+        restoreKeyboardFocus();
       } else {
         setMensaje(data.error || "Error al guardar");
       }
@@ -108,6 +115,7 @@ export default function ListaProductos() {
   return (
     <div className={styles.wrapper}>
       <input
+        data-keyboard-primary
         className={styles.buscador}
         placeholder="Buscar producto..."
         value={busqueda}

@@ -5,18 +5,18 @@ import { fetchTotales } from "../utils/api";
 const VentasContext = createContext();
 
 export function VentasProvider({ children }) {
-
   const [venta, setVenta] = useState([]);
   const [ventas, setVentas] = useState([]);
   const [metodoPago, setMetodoPago] = useState("efectivo");
   const [mostrarCliente, setMostrarCliente] = useState(false);
   const [datosCliente, setDatosCliente] = useState(null);
+  const [descuentoPct, setDescuentoPct] = useState(0);
   const [totales, setTotales] = useState({
     efectivo: 0,
     transferencia: 0,
     tarjeta: 0,
     totalDia: 0,
-    totalMes: 0
+    totalMes: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +49,7 @@ export function VentasProvider({ children }) {
         transferencia: data.transferencia,
         tarjeta: data.tarjeta,
         totalDia: data.totalDia,
-        totalMes: data.totalMes
+        totalMes: data.totalMes,
       });
     } catch (error) {
       console.error("Error cargando totales:", error);
@@ -61,10 +61,12 @@ export function VentasProvider({ children }) {
       const res = await fetch("/api/ventas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
-      if (!res.ok) throw new Error("Error al guardar venta");
+      if (!res.ok) {
+        throw new Error("Error al guardar venta");
+      }
 
       const data = await res.json();
       await obtenerVentas();
@@ -77,20 +79,29 @@ export function VentasProvider({ children }) {
     }
   }
 
-  function agregar(prod) { setVenta(prev => addItem(prev, prod)); }
-  function disminuir(id) { setVenta(prev => decreaseItem(prev, id)); }
-  function borrar(id) { setVenta(prev => removeItem(prev, id)); }
+  function agregar(prod) {
+    setVenta((prev) => addItem(prev, prod));
+  }
+
+  function disminuir(id) {
+    setVenta((prev) => decreaseItem(prev, id));
+  }
+
+  function borrar(id) {
+    setVenta((prev) => removeItem(prev, id));
+  }
 
   function limpiarVenta() {
-  setVenta([]);
-  setDatosCliente(null);
-  setMetodoPago("efectivo");        // 👈 CLAVE
-  setMostrarCliente(false);         // 👈 CLAVE
-}
+    setVenta([]);
+    setDatosCliente(null);
+    setMetodoPago("efectivo");
+    setMostrarCliente(false);
+    setDescuentoPct(0);
+  }
 
   function actualizarPrecio(id, nuevoPrecio) {
-    setVenta(prev =>
-      prev.map(item => item.id === id ? { ...item, precio: nuevoPrecio } : item)
+    setVenta((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, precio: nuevoPrecio } : item))
     );
   }
 
@@ -99,17 +110,48 @@ export function VentasProvider({ children }) {
     setMostrarCliente(value !== "efectivo");
   }
 
-  const total = calcularTotal(venta);
+  function actualizarDescuentoPct(value) {
+    const numero = Number(value);
+
+    if (Number.isNaN(numero)) {
+      setDescuentoPct(0);
+      return;
+    }
+
+    setDescuentoPct(Math.min(100, Math.max(0, numero)));
+  }
+
+  const subtotal = calcularTotal(venta);
+  const descuentoMonto = Number((subtotal * (descuentoPct / 100)).toFixed(2));
+  const total = Number((subtotal - descuentoMonto).toFixed(2));
 
   return (
-    <VentasContext.Provider value={{
-      venta, total, ventas,
-      agregarVenta, agregar, disminuir, borrar, limpiarVenta, actualizarPrecio,
-      metodoPago, mostrarCliente, datosCliente, setDatosCliente, handleMetodoPagoChange,
-      obtenerVentas, obtenerTotales,
-      totales,
-      loading
-    }}>
+    <VentasContext.Provider
+      value={{
+        venta,
+        subtotal,
+        descuentoPct,
+        descuentoMonto,
+        total,
+        ventas,
+        agregarVenta,
+        agregar,
+        disminuir,
+        borrar,
+        limpiarVenta,
+        actualizarPrecio,
+        metodoPago,
+        mostrarCliente,
+        datosCliente,
+        setDatosCliente,
+        handleMetodoPagoChange,
+        actualizarDescuentoPct,
+        obtenerVentas,
+        obtenerTotales,
+        totales,
+        loading,
+      }}
+    >
       {children}
     </VentasContext.Provider>
   );
@@ -117,6 +159,8 @@ export function VentasProvider({ children }) {
 
 export function useVentas() {
   const context = useContext(VentasContext);
-  if (!context) throw new Error("useVentas debe usarse dentro de VentasProvider");
+  if (!context) {
+    throw new Error("useVentas debe usarse dentro de VentasProvider");
+  }
   return context;
 }

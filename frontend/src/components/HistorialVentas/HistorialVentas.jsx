@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useVentas } from "../../context/VentasContext";
 import BackButton from "../BackButton/BackButton";
+import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./HistorialVentas.module.css";
 
 export default function HistorialVentas() {
@@ -34,6 +35,7 @@ export default function HistorialVentas() {
   const confirmar = window.confirm(
     `¿Reimprimir ticket #${venta.id_venta}?`
   );
+  restoreFocusAfterNativeDialog();
   if (!confirmar) return;
 
   try {
@@ -43,6 +45,7 @@ export default function HistorialVentas() {
 
     if (!resVenta.ok) {
       alert("Error obteniendo venta");
+      restoreFocusAfterNativeDialog();
       return;
     }
 
@@ -55,6 +58,8 @@ export default function HistorialVentas() {
       body: JSON.stringify({
         items: data.items,
         total: data.total,
+        descuentoPorcentaje: data.descuento_porcentaje || 0,
+        descuentoMonto: data.descuento_monto || 0,
         metodoPago: data.medio_pago,
         id_venta: data.id_venta,
       }),
@@ -62,13 +67,17 @@ export default function HistorialVentas() {
 
     if (!resPrint.ok) {
       alert("Error al imprimir");
+      restoreFocusAfterNativeDialog();
       return;
     }
 
     alert("Ticket reimpreso");
+    restoreFocusAfterNativeDialog();
+    restoreKeyboardFocus();
   } catch (error) {
     console.error(error);
     alert("Error en impresión");
+    restoreFocusAfterNativeDialog();
   }
 };
 

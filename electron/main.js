@@ -12,6 +12,21 @@ function createWindow() {
     },
   });
 
+  const refocusWebContents = () => {
+    if (!win.isDestroyed()) {
+      win.focus();
+      win.webContents.focus();
+    }
+  };
+
+  win.on("focus", () => {
+    setTimeout(refocusWebContents, 0);
+  });
+
+  win.on("show", () => {
+    setTimeout(refocusWebContents, 0);
+  });
+
   let retries = 0;
   const tryLoad = setInterval(() => {
     win.loadURL("http://localhost:3000").then(() => {

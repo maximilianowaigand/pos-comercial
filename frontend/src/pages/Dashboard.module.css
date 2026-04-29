@@ -1,0 +1,146 @@
+.page {
+  display: grid;
+  gap: 24px;
+}
+
+.hero {
+  display: grid;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.05;
+  color: #2a2118;
+}
+
+.subtitle {
+  margin: 0;
+  color: #6e5b49;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.dualGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.card,
+.panel {
+  background: #fffaf3;
+  border: 1px solid #ecdcc8;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(92, 64, 39, 0.08);
+}
+
+.label {
+  display: block;
+  color: #7a6654;
+  margin-bottom: 10px;
+}
+
+.value {
+  font-size: 1.8rem;
+  color: #2a2118;
+}
+
+.delta {
+  display: block;
+  margin-top: 10px;
+  color: #7a6654;
+}
+
+.panelTitle {
+  margin: 0 0 12px;
+  color: #2a2118;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.chartSubtitle {
+  margin: 0;
+  color: #6e5b49;
+}
+
+.peakCard {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f4e5d2;
+  color: #4a3726;
+}
+
+.chart {
+  display: grid;
+  grid-template-columns: repeat(24, minmax(18px, 1fr));
+  align-items: end;
+  gap: 8px;
+  min-height: 240px;
+}
+
+.barGroup {
+  display: grid;
+  justify-items: center;
+  align-items: end;
+  gap: 8px;
+}
+
+.bar {
+  width: 100%;
+  min-height: 6px;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, #d96b2b 0%, #8f3f16 100%);
+}
+
+.barValue,
+.barLabel {
+  font-size: 0.75rem;
+  color: #7a6654;
+}
+
+.status,
+.summaryRows {
+  display: grid;
+  gap: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #4a3726;
+}
+
+.status {
+  margin: 0;
+  color: #4a3726;
+}
+
+@media (max-width: 768px) {
+  .chartHeader {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .chart {
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+}

@@ -4,6 +4,7 @@ import BotonImprimir from "../components/BotonImprimir/BotonImprimir";
 import BotonExportar from "../components/BotonExportar/BotonExportar";
 import FacturacionForm from "../components/FacturacionForm/FacturacionForm";
 import Totales from "../components/Totales/Totales";
+import VentaResumen from "../components/VentaResumen/VentaResumen";
 import Categorias from "../components/categorias/Categorias";
 import styles from "./POS.module.css";
 
@@ -54,7 +55,10 @@ export default function POSContent({
                 key={producto.id}
                 type="button"
                 className={styles.productButton}
-                onClick={() => onAgregar(producto)}
+                onClick={() => {
+                  onAgregar(producto);
+                  window.dispatchEvent(new Event("pos:restore-search-focus"));
+                }}
               >
                 <span className={styles.productName}>{producto.nombre}</span>
                 <span className={styles.productPrice}>${producto.precio}</span>
@@ -74,6 +78,13 @@ export default function POSContent({
         </section>
 
         <aside className={styles.sidePanel}>
+          <section className={styles.panel}>
+            <div className={styles.sectionHeader}>
+              <h2>Resumen de venta</h2>
+            </div>
+            <VentaResumen />
+          </section>
+
           <section className={styles.panel}>
             <div className={styles.sectionHeader}>
               <h2>Metodo de pago</h2>

@@ -1,14 +1,24 @@
 import { useVentas } from "../../context/VentasContext";
+import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./BotonImprimir.module.css";
 
 export default function BotonImprimir() {
-  const { venta, total, metodoPago, limpiarVenta, obtenerTotales } =
+  const {
+    venta,
+    total,
+    descuentoPct,
+    descuentoMonto,
+    metodoPago,
+    limpiarVenta,
+    obtenerTotales,
+  } =
     useVentas();
 
   const imprimir = async () => {
     if (venta.length === 0) return;
 
     const confirmar = window.confirm("¿Confirmar venta e imprimir?");
+    restoreFocusAfterNativeDialog();
     if (!confirmar) return;
 
     const body = {
@@ -18,6 +28,7 @@ export default function BotonImprimir() {
         precio_unitario: p.precio,
       })),
       metodo_pago: metodoPago,
+      descuento_porcentaje: descuentoPct,
     };
 
     try {
@@ -32,6 +43,7 @@ export default function BotonImprimir() {
         const text = await res.text();
         console.error(text);
         alert("Error guardando venta");
+        restoreFocusAfterNativeDialog();
         return;
       }
 
@@ -40,6 +52,7 @@ export default function BotonImprimir() {
 
       if (!data.id_venta) {
         alert(`Error guardando venta: ${data.error}`);
+        restoreFocusAfterNativeDialog();
         return;
       }
 
@@ -50,6 +63,8 @@ export default function BotonImprimir() {
         body: JSON.stringify({
           items: venta,
           total,
+          descuentoPorcentaje: descuentoPct,
+          descuentoMonto,
           metodoPago,
           id_venta: data.id_venta,
         }),
@@ -57,12 +72,15 @@ export default function BotonImprimir() {
 
       // ✅ 4. Limpiar estado
       alert("Venta guardada e impresa");
+      restoreFocusAfterNativeDialog();
       limpiarVenta();
       obtenerTotales();
+      restoreKeyboardFocus();
 
     } catch (error) {
       console.error(error);
       alert("Error en la operación");
+      restoreFocusAfterNativeDialog();
     }
   };
 

@@ -3,6 +3,7 @@ import styles from "./NavBar.module.css";
 
 const links = [
   { to: "/", label: "POS" },
+  { to: "/dashboard", label: "Dashboard" },
   { to: "/historial", label: "Historial" },
   { to: "/crear-producto", label: "Crear producto" },
 ];

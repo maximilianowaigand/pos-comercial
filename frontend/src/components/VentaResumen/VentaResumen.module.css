@@ -1,0 +1,42 @@
+.card {
+  display: grid;
+  gap: 14px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #3b2d20;
+}
+
+.discountBlock {
+  display: grid;
+  gap: 8px;
+  color: #3b2d20;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d9c7b1;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.totalRow {
+  padding-top: 10px;
+  border-top: 1px solid #e3d4c1;
+  font-size: 1.1rem;
+}
+
+.clearButton {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f0e1cf;
+  color: #3b2d20;
+  cursor: pointer;
+  font-weight: 600;
+}
