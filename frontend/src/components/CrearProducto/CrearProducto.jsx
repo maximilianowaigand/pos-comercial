@@ -3,6 +3,8 @@ import BackButton from "../BackButton/BackButton";
 import styles from "./CrearProducto.module.css";
 import ListaProductos from "../ListaProductos/ListaProductos";
 import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
+import API from "../../config/api";
+
 
 const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc"];
 
@@ -42,7 +44,7 @@ export default function CrearProducto({ onGuardado }) {
     if (!form.categoria) return setMensaje("Selecciona una categoría");
     
     try {
-    const check = await fetch("/api/productos");
+    const check = await fetch(`${API}/api/productos`);
     const productos = await check.json();
     const existe = productos.some(
       (p) => p.nombre.toLowerCase() === nombreLimpio.toLowerCase()
@@ -55,7 +57,7 @@ export default function CrearProducto({ onGuardado }) {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/productos", {
+      const res = await fetch(`${API}/api/ventas/total-dia`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre: nombreLimpio, precio: precioNum, costo: costoNum, categoria: form.categoria }),

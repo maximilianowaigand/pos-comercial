@@ -1,7 +1,7 @@
 import { useVentas } from "../../context/VentasContext";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./BotonImprimir.module.css";
-
+import API from "../../config/api"
 export default function BotonImprimir() {
   const {
     venta,
@@ -33,7 +33,7 @@ export default function BotonImprimir() {
 
     try {
       // ✅ 1. Guardar venta
-      const res = await fetch("/api/ventas", {
+      const res = await fetch(`${API}/api/ventas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

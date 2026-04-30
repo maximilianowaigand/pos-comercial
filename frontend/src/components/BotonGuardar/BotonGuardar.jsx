@@ -1,16 +1,19 @@
+import { useState } from "react";
 import { useVentas } from "../../context/VentasContext";
-import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
+import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./BotonGuardar.module.css";
 
 export default function BotonGuardar({ venta, metodoPago }) {
   const { agregarVenta, descuentoPct } = useVentas();
+  const [modal, setModal] = useState(null); // null | "confirmar" | "exito" | "error"
 
-  const registrarVenta = async () => {
+  const handleGuardar = () => {
     if (venta.length === 0) return;
+    setModal("confirmar");
+  };
 
-    const confirmar = window.confirm("¿Confirmar venta?");
-    restoreFocusAfterNativeDialog();
-    if (!confirmar) return;
+  const handleConfirmar = async () => {
+    setModal(null);
 
     const body = {
       items: venta.map((p) => ({
@@ -24,26 +27,79 @@ export default function BotonGuardar({ venta, metodoPago }) {
 
     try {
       await agregarVenta(body);
-      alert("Venta guardada");
-      restoreFocusAfterNativeDialog();
-      restoreKeyboardFocus();
+      setModal("exito");
+      setTimeout(() => {
+        setModal(null);
+        restoreKeyboardFocus("[data-keyboard-primary]");
+      }, 1200);
     } catch (e) {
       console.error(e);
-      alert("Error al guardar venta");
-      restoreFocusAfterNativeDialog();
+      setModal("error");
     }
   };
 
+  const handleCancelar = () => {
+    setModal(null);
+    restoreKeyboardFocus("[data-keyboard-primary]");
+  };
+
   return (
-    <button
-      type="button"
-      onClick={registrarVenta}
-      disabled={venta.length === 0}
-      className={`${styles.button} ${
-        venta.length === 0 ? styles.disabled : styles.primary
-      }`}
-    >
-      GUARDAR VENTA
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={handleGuardar}
+        disabled={venta.length === 0}
+        className={`${styles.button} ${
+          venta.length === 0 ? styles.disabled : styles.primary
+        }`}
+      >
+        GUARDAR VENTA
+      </button>
+
+      {modal && (
+        <div className={styles.overlay}>
+          <div className={styles.modal}>
+            {modal === "confirmar" && (
+              <>
+                <p className={styles.modalText}>¿Confirmar venta?</p>
+                <div className={styles.modalActions}>
+                  <button
+                    type="button"
+                    className={`${styles.button} ${styles.primary}`}
+                    onClick={handleConfirmar}
+                  >
+                    Confirmar
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.button} ${styles.secondary}`}
+                    onClick={handleCancelar}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </>
+            )}
+
+            {modal === "exito" && (
+              <p className={styles.modalText}>✅ Venta guardada</p>
+            )}
+
+            {modal === "error" && (
+              <>
+                <p className={styles.modalText}>❌ Error al guardar la venta</p>
+                <button
+                  type="button"
+                  className={`${styles.button} ${styles.secondary}`}
+                  onClick={handleCancelar}
+                >
+                  Cerrar
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMemo } from "react";
+import API from "../config/api";
+
 
 
 const ProductosContext = createContext();
@@ -16,7 +18,7 @@ export function ProductosProvider({ children }) {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const res = await fetch("/api/productos");
+        const res = await fetch(`${API}/api/productos`);
         const data = await res.json();
 
         setProductos(Array.isArray(data) ? data : []);

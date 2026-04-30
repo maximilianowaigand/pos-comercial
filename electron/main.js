@@ -1,5 +1,28 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const http = require("http");
+
+function waitForBackend(timeout = 15000) {
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
+
+    const check = () => {
+      http
+        .get("http://localhost:3001/api/productos", (res) => {
+          resolve();
+        })
+        .on("error", () => {
+          if (Date.now() - start > timeout) {
+            reject(new Error("Backend no respondió a tiempo"));
+          } else {
+            setTimeout(check, 300);
+          }
+        });
+    };
+
+    check();
+  });
+}
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -12,62 +35,62 @@ function createWindow() {
     },
   });
 
-  const refocusWebContents = () => {
-    if (!win.isDestroyed()) {
-      win.focus();
-      win.webContents.focus();
-    }
-  };
+  // 🔥 DEV vs PROD
+  const isDev = !app.isPackaged;
 
-  win.on("focus", () => {
-    setTimeout(refocusWebContents, 0);
-  });
-
-  win.on("show", () => {
-    setTimeout(refocusWebContents, 0);
-  });
-
-  let retries = 0;
-  const tryLoad = setInterval(() => {
-    win.loadURL("http://localhost:3000").then(() => {
-      clearInterval(tryLoad);
-    }).catch(() => {
-      retries++;
-      if (retries >= 20) {
-        clearInterval(tryLoad);
-        console.error("No se pudo cargar la app después de 20 intentos.");
-      }
-    });
-  }, 1000);
-}
-
-app.whenReady().then(() => {
-  const rootDir      = path.join(__dirname, "..");
-  const backendEntry = app.isPackaged
-    ? path.join(process.resourcesPath, "app.asar.unpacked", "backend", "index.js")
-    : path.join(rootDir, "backend", "index.js");
-  const frontendDistPath = app.isPackaged
-    ? path.join(process.resourcesPath, "app.asar", "frontend", "dist")
-    : path.join(rootDir, "frontend", "dist");
-
-  process.env.FRONTEND_DIST_PATH = frontendDistPath;
-  process.env.APP_DATA_DIR = app.getPath("userData");
-
-  console.log("Cargando backend desde:", backendEntry);
-  console.log("Sirviendo frontend desde:", frontendDistPath);
-  console.log("Datos de la app en:", process.env.APP_DATA_DIR);
-
-  try {
-    require(backendEntry);
-    console.log("Backend cargado correctamente.");
-  } catch (err) {
-    console.error("Error al cargar el backend:", err);
-    app.quit();
-    return;
+  if (isDev) {
+    win.loadURL("http://localhost:3000");
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(
+      path.join(__dirname, "../frontend/dist/index.html")
+    );
   }
 
-  // Esperar que Express levante y abrir la ventana
-  setTimeout(createWindow, 4000);
+  win.webContents.on("did-finish-load", () => {
+    win.focus();
+  });
+}
+
+app.whenReady().then(async () => {
+  const isDev = !app.isPackaged;
+
+  // 📦 DB path seguro
+  const dbDir = isDev
+    ? path.join(__dirname, "../backend/db")
+    : app.getPath("userData");
+
+  process.env.APP_DATA_DIR = dbDir;
+
+  if (isDev) {
+    createWindow();
+
+    // backend en dev
+    require("../backend/index.js");
+  } else {
+    const backendEntry = path.join(
+      process.resourcesPath,
+      "app.asar.unpacked",
+      "backend",
+      "index.js"
+    );
+
+    try {
+      require(backendEntry);
+    } catch (err) {
+      console.error("Error al cargar backend:", err);
+      app.quit();
+      return;
+    }
+
+    try {
+      await waitForBackend();
+      createWindow();
+    } catch (err) {
+      console.error("Backend no respondió:", err);
+      app.quit();
+    }
+  }
 });
 
 app.on("window-all-closed", () => {

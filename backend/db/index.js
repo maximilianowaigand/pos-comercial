@@ -4,12 +4,14 @@ const fs = require("fs");
 
 const dataDir = process.env.APP_DATA_DIR
   ? path.resolve(process.env.APP_DATA_DIR)
-  : __dirname;
-
+  : path.join(__dirname);
 fs.mkdirSync(dataDir, { recursive: true });
 
 const dbPath = path.join(dataDir, "database.sqlite");
 const legacyDbPath = path.join(__dirname, "database.sqlite");
+
+console.log("DB PATH:", dbPath);
+
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {

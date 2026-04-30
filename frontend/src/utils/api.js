@@ -1,9 +1,11 @@
+import API from "../config/api"
+
 
 export async function fetchTotales() {
   try {
     const [resDia, resMes] = await Promise.all([
-      fetch("/api/ventas/total-dia"),
-      fetch("/api/ventas/total-mes")
+      fetch(`${API}/api/ventas/total-dia`),
+      fetch(`${API}/api/ventas/total-mes`)
     ]);
 
     const diaDatos = await resDia.json();

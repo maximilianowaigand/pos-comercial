@@ -3,6 +3,7 @@ import { useVentas } from "../../context/VentasContext";
 import BackButton from "../BackButton/BackButton";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./HistorialVentas.module.css";
+import API from "../../config/api";
 
 export default function HistorialVentas() {
   const { ventas } = useVentas();
@@ -40,7 +41,7 @@ export default function HistorialVentas() {
 
   try {
     // 🔹 traer detalle real de la venta
-    const resVenta = await fetch(`/api/ventas/${venta.id_venta}`);
+    const resVenta = await fetch(`${API}/api/ventas/${venta.id_venta}`);
     const data = await resVenta.json();
 
     if (!resVenta.ok) {
@@ -50,7 +51,7 @@ export default function HistorialVentas() {
     }
 
     // 🔹 imprimir
-    const resPrint = await fetch("/api/print", {
+    const resPrint = await fetch(`${API}/api/print`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

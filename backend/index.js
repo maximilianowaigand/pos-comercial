@@ -35,9 +35,10 @@ app.get(/.*/, (req, res) => {
 });
 
 // ---- SERVER ----
-const PORT = 3000; // 🔧 usamos uno solo
+const PORT = 3001; // 🔧 usamos uno solo
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+
 });
 
 

@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { addItem, decreaseItem, removeItem, calcularTotal } from "../utils/cartFuncions";
 import { fetchTotales } from "../utils/api";
+import API from "../config/api";
+
 
 const VentasContext = createContext();
 
@@ -31,7 +33,7 @@ export function VentasProvider({ children }) {
 
   async function obtenerVentas() {
     try {
-      const res = await fetch("/api/ventas");
+      const res = await fetch(`${API}/api/ventas`);
       const data = await res.json();
       const lista = Array.isArray(data) ? data : data.ventas;
       setVentas(lista ?? []);
@@ -58,7 +60,7 @@ export function VentasProvider({ children }) {
 
   async function agregarVenta(body) {
     try {
-      const res = await fetch("/api/ventas", {
+      const res = await fetch(`${API}/api/ventas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
