@@ -32,7 +32,8 @@
     "productName": "POS Panadería",
     "asar": true,
     "asarUnpack": [
-      "backend/**/*"
+      "backend/**/*",
+      "frontend/dist/**/*"
     ],
     "files": [
       "backend/**/*",

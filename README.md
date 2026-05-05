@@ -1,108 +1,131 @@
+# POS Panaderia
 
- # 🛒 Sistema POS - Gestión y Análisis de Ventas
+Sistema de punto de venta para panaderia, desarrollado como aplicacion de escritorio con Electron y una interfaz web en React. Permite administrar productos, registrar ventas, consultar historial, imprimir tickets y visualizar metricas del negocio.
 
-## 📌 Descripción
+## Descripcion
 
-Aplicación fullstack de punto de venta (POS) desarrollada para gestionar ventas de un negocio y analizar los datos generados mediante una base de datos SQL.
+POS Panaderia centraliza la operacion diaria de caja en una sola aplicacion. El frontend esta construido con React y Vite, el backend expone una API REST con Express y los datos se guardan localmente en SQLite.
 
-El sistema permite registrar transacciones, almacenar información de productos y generar métricas clave para la toma de decisiones.
+El proyecto tambien incluye integracion para impresora termica, exportacion de ventas a Excel, dashboard de estadisticas y una base preparada para analisis SQL.
 
----
+## Funcionalidades
 
-## 🚀 Tecnologías utilizadas
+- Registro de ventas con detalle de productos, cantidades, metodo de pago y descuentos.
+- Gestion de productos con nombre, precio, costo y categoria.
+- Busqueda y filtrado de productos por categoria.
+- Historial de ventas con detalle y reimpresion de tickets.
+- Dashboard con totales, clientes, ticket promedio, comparativas y ventas por hora.
+- Exportacion de ventas a Excel.
+- Impresion de tickets mediante impresora termica.
+- Persistencia local con SQLite.
+- Empaquetado como aplicacion de escritorio con Electron.
 
-* Frontend: React.js
-* Backend: Node.js / Express
-* Base de datos: SQL (MySQL / PostgreSQL / SQLite)
+## Tecnologias
 
----
+- React
+- Vite
+- Node.js
+- Express
+- SQLite
+- Electron
+- node-thermal-printer
+- ExcelJS
 
-## ⚙️ Funcionalidades
+## Estructura del proyecto
 
-* Registro de ventas en tiempo real
-* Gestión de productos
-* Persistencia de datos en base de datos relacional
-* API REST para comunicación frontend-backend
-* Consultas SQL para análisis de datos:
-
-  * Ventas totales
-  * Productos más vendidos
-  * Ingresos por período
-
----
-
-## 📊 Ejemplo de consulta SQL
-
-```sql
-SELECT producto, SUM(cantidad) AS total_vendido
-FROM ventas
-GROUP BY producto
-ORDER BY total_vendido DESC;
+```text
+.
++-- backend/      API REST, base SQLite, servicios y controladores
++-- database/     Scripts SQL de esquema, datos iniciales y consultas
++-- electron/     Configuracion de la aplicacion de escritorio
++-- frontend/     Interfaz React/Vite
++-- dist/         Salida generada para distribucion
++-- package.json  Scripts principales del proyecto
 ```
 
----
+## Requisitos
 
-## 🧠 Aprendizajes
+- Node.js
+- npm
+- Windows, si se va a usar el empaquetado portable configurado para Electron
 
-* Desarrollo de aplicaciones fullstack
-* Integración entre React y APIs en Node.js
-* Diseño y normalización de bases de datos
-* Escritura de consultas SQL para análisis de datos
-* Manejo de estados y componentes en React
+## Instalacion
 
----
-
-## 📦 Instalación y uso
-
-### 1. Clonar el repositorio
+Desde la raiz del proyecto:
 
 ```bash
-git clone https://github.com/maximilianowaigand/pos-comercial.git
-```
-
-### 2. Backend
-
-```bash
-cd backend
 npm install
-npm run build
-
-cd backend
-node index.js
+npm --prefix frontend install
+npm --prefix backend install
 ```
 
-### 3. Frontend
+## Uso en desarrollo
+
+Para levantar backend, frontend y Electron al mismo tiempo:
 
 ```bash
-cd backend
-node index.js
+npm run dev
 ```
 
----
+Servicios utilizados:
 
-## 📁 Estructura del proyecto
+- Frontend: `http://localhost:3000`
+- Backend/API: `http://localhost:3001`
 
+Tambien se pueden ejecutar por separado:
+
+```bash
+npm run dev:frontend
+npm run dev:backend
+npm run electron
 ```
-/frontend   → Aplicación React
-/backend    → API en Node.js
-/database   → Scripts SQL
+
+## Build
+
+Para compilar el frontend:
+
+```bash
+npm run build
 ```
 
----
+Para generar la aplicacion de escritorio portable:
 
+```bash
+npm run dist
+```
 
+## API principal
 
-## 🎯 Futuras mejoras
+Algunas rutas disponibles:
 
-* Dashboard con gráficos
-* Autenticación de usuarios
-* Exportación de reportes
-* Deploy en la nube
+- `GET /api/productos`
+- `POST /api/productos`
+- `PUT /api/productos/:id`
+- `DELETE /api/productos/:id`
+- `GET /api/ventas`
+- `POST /api/ventas`
+- `GET /api/ventas/:id`
+- `GET /api/ventas/total-dia`
+- `GET /api/ventas/total-mes`
+- `GET /api/stats/dashboard`
+- `GET /api/export-excel`
+- `POST /api/print`
 
----
+## Base de datos
 
-## 👨‍💻 Autor
+La aplicacion usa SQLite y crea las tablas necesarias desde el backend. Los scripts de referencia estan en `database/`:
 
-maximiliano waigand
+- `sqlite-schema.sql`: estructura de tablas, indices y triggers.
+- `seed.sql`: datos iniciales de ejemplo.
+- `analitycs-queries.sql`: consultas para analizar ventas.
 
- # pos-comercial
+Tablas principales:
+
+- `productos`
+- `ventas`
+- `detalle_venta`
+- `clima`
+
+## Autor
+
+Maximiliano Waigand

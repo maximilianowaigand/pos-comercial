@@ -5,10 +5,14 @@ import styles from "./BotonGuardar.module.css";
 
 export default function BotonGuardar({ venta, metodoPago }) {
   const { agregarVenta, descuentoPct } = useVentas();
-  const [modal, setModal] = useState(null); // null | "confirmar" | "exito" | "error"
+  const [modal, setModal] = useState(null);
 
   const handleGuardar = () => {
     if (venta.length === 0) return;
+    if (!metodoPago) {
+      setModal("sinMetodo");
+      return;
+    }
     setModal("confirmar");
   };
 
@@ -59,6 +63,20 @@ export default function BotonGuardar({ venta, metodoPago }) {
       {modal && (
         <div className={styles.overlay}>
           <div className={styles.modal}>
+
+            {modal === "sinMetodo" && (
+              <>
+                <p className={styles.modalText}>⚠️ Seleccioná un método de pago</p>
+                <button
+                  type="button"
+                  className={`${styles.button} ${styles.secondary}`}
+                  onClick={handleCancelar}
+                >
+                  Cerrar
+                </button>
+              </>
+            )}
+
             {modal === "confirmar" && (
               <>
                 <p className={styles.modalText}>¿Confirmar venta?</p>
@@ -97,6 +115,7 @@ export default function BotonGuardar({ venta, metodoPago }) {
                 </button>
               </>
             )}
+
           </div>
         </div>
       )}

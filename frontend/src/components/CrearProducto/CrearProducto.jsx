@@ -3,10 +3,9 @@ import BackButton from "../BackButton/BackButton";
 import styles from "./CrearProducto.module.css";
 import ListaProductos from "../ListaProductos/ListaProductos";
 import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
-import API from "../../config/api";
 
 
-const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc"];
+const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc","Cereales","Yerba"];
 
 const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
 
@@ -32,19 +31,19 @@ export default function CrearProducto({ onGuardado }) {
 };;
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const nombreLimpio = form.nombre.trim();
-    if (!nombreLimpio) return setMensaje("El nombre es obligatorio");
+  const nombreLimpio = form.nombre.trim();
+  if (!nombreLimpio) return setMensaje("El nombre es obligatorio");
 
-    const precioNum = Number(form.precio);
-    const costoNum = Number(form.costo || 0);
-    if (precioNum <= 0) return setMensaje("Precio inválido");
-    if (costoNum < 0) return setMensaje("Costo inválido");
-    if (!form.categoria) return setMensaje("Selecciona una categoría");
-    
-    try {
-    const check = await fetch(`${API}/api/productos`);
+  const precioNum = Number(form.precio);
+  const costoNum = Number(form.costo || 0);
+  if (precioNum <= 0) return setMensaje("Precio inválido");
+  if (costoNum < 0) return setMensaje("Costo inválido");
+  if (!form.categoria) return setMensaje("Selecciona una categoría");
+
+  try {
+    const check = await fetch(`/api/productos`);
     const productos = await check.json();
     const existe = productos.some(
       (p) => p.nombre.toLowerCase() === nombreLimpio.toLowerCase()
@@ -54,31 +53,31 @@ export default function CrearProducto({ onGuardado }) {
     return setMensaje("Error al verificar productos");
   }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const res = await fetch(`${API}/api/ventas/total-dia`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre: nombreLimpio, precio: precioNum, costo: costoNum, categoria: form.categoria }),
-      });
+  try {
+    const res = await fetch(`/api/productos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre: nombreLimpio, precio: precioNum, costo: costoNum, categoria: form.categoria }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (res.ok) {
-        setMensaje("✓ Producto creado");
-        setForm(FORM_VACIO);
-        onGuardado?.();
-        restoreKeyboardFocus();
-      } else {
-        setMensaje(data.error || "Error al guardar");
-      }
-    } catch {
-      setMensaje("Error de servidor");
-    } finally {
-      setLoading(false);
+    if (res.ok) {
+      setMensaje("✓ Producto creado");
+      setForm(FORM_VACIO);
+      onGuardado?.();
+      restoreKeyboardFocus();
+    } else {
+      setMensaje(data.error || "Error al guardar");
     }
-  };
+  } catch {
+    setMensaje("Error de servidor");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
   <div className={styles.wrapper}>

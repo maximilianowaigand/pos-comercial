@@ -4,7 +4,7 @@ import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./ListaProductos.module.css";
 import API from "../../config/api";
 
-const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc"];
+const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc","Cereales"];
 const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
 
 export default function ListaProductos() {

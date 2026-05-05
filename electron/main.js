@@ -5,21 +5,17 @@ const http = require("http");
 function waitForBackend(timeout = 15000) {
   return new Promise((resolve, reject) => {
     const start = Date.now();
-
     const check = () => {
-      http
-        .get("http://localhost:3001/api/productos", (res) => {
-          resolve();
-        })
-        .on("error", () => {
-          if (Date.now() - start > timeout) {
-            reject(new Error("Backend no respondió a tiempo"));
-          } else {
-            setTimeout(check, 300);
-          }
-        });
+      http.get("http://localhost:3001/api/productos", () => {
+        resolve();
+      }).on("error", () => {
+        if (Date.now() - start > timeout) {
+          reject(new Error("Backend no respondió a tiempo"));
+        } else {
+          setTimeout(check, 300);
+        }
+      });
     };
-
     check();
   });
 }
@@ -35,27 +31,31 @@ function createWindow() {
     },
   });
 
-  // 🔥 DEV vs PROD
-  const isDev = !app.isPackaged;
+  const refocusWebContents = () => {
+    if (!win.isDestroyed()) {
+      win.focus();
+      win.webContents.focus();
+    }
+  };
 
-  if (isDev) {
-    win.loadURL("http://localhost:3000");
-    win.webContents.openDevTools();
-  } else {
-    win.loadFile(
-      path.join(__dirname, "../frontend/dist/index.html")
-    );
-  }
-
-  win.webContents.on("did-finish-load", () => {
-    win.focus();
+  win.on("focus", () => setTimeout(refocusWebContents, 0));
+  win.on("show", () => setTimeout(refocusWebContents, 0));
+  win.webContents.on("did-finish-load", () => refocusWebContents());
+  win.webContents.on("before-input-event", () => {
+    if (!win.webContents.isFocused()) win.webContents.focus();
   });
+
+  // Ambos usan HTTP — React Router funciona bien
+  if (app.isPackaged) {
+    win.loadURL("http://localhost:3001");
+  } else {
+    win.loadURL("http://localhost:3000");
+  }
 }
 
 app.whenReady().then(async () => {
   const isDev = !app.isPackaged;
 
-  // 📦 DB path seguro
   const dbDir = isDev
     ? path.join(__dirname, "../backend/db")
     : app.getPath("userData");
@@ -63,16 +63,21 @@ app.whenReady().then(async () => {
   process.env.APP_DATA_DIR = dbDir;
 
   if (isDev) {
+    // En dev el backend ya corre con nodemon
     createWindow();
-
-    // backend en dev
-    require("../backend/index.js");
   } else {
     const backendEntry = path.join(
       process.resourcesPath,
       "app.asar.unpacked",
       "backend",
       "index.js"
+    );
+
+    process.env.FRONTEND_DIST_PATH = path.join(
+      process.resourcesPath,
+      "app.asar.unpacked",
+      "frontend",
+      "dist"
     );
 
     try {

@@ -1,15 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { addItem, decreaseItem, removeItem, calcularTotal } from "../utils/cartFuncions";
 import { fetchTotales } from "../utils/api";
-import API from "../config/api";
-
 
 const VentasContext = createContext();
 
 export function VentasProvider({ children }) {
   const [venta, setVenta] = useState([]);
   const [ventas, setVentas] = useState([]);
-  const [metodoPago, setMetodoPago] = useState("efectivo");
+  const [metodoPago, setMetodoPago] = useState("");
   const [mostrarCliente, setMostrarCliente] = useState(false);
   const [datosCliente, setDatosCliente] = useState(null);
   const [descuentoPct, setDescuentoPct] = useState(0);
@@ -33,7 +31,7 @@ export function VentasProvider({ children }) {
 
   async function obtenerVentas() {
     try {
-      const res = await fetch(`${API}/api/ventas`);
+      const res = await fetch("/api/ventas");
       const data = await res.json();
       const lista = Array.isArray(data) ? data : data.ventas;
       setVentas(lista ?? []);
@@ -60,7 +58,7 @@ export function VentasProvider({ children }) {
 
   async function agregarVenta(body) {
     try {
-      const res = await fetch(`${API}/api/ventas`, {
+      const res = await fetch("/api/ventas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -96,7 +94,7 @@ export function VentasProvider({ children }) {
   function limpiarVenta() {
     setVenta([]);
     setDatosCliente(null);
-    setMetodoPago("efectivo");
+    setMetodoPago("");
     setMostrarCliente(false);
     setDescuentoPct(0);
   }
@@ -114,12 +112,10 @@ export function VentasProvider({ children }) {
 
   function actualizarDescuentoPct(value) {
     const numero = Number(value);
-
     if (Number.isNaN(numero)) {
       setDescuentoPct(0);
       return;
     }
-
     setDescuentoPct(Math.min(100, Math.max(0, numero)));
   }
 

@@ -91,16 +91,17 @@ export default function POSContent({
             </div>
 
             <select
-              className={styles.paymentSelect}
-              value={metodoPago}
-              onChange={(event) => onMetodoPagoChange(event.target.value)}
-            >
-              {paymentOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            className={styles.paymentSelect}
+            value={metodoPago}
+            onChange={(event) => onMetodoPagoChange(event.target.value)}
+          >
+            <option value="">Seleccionar método de pago</option>
+            {paymentOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
 
             {mostrarCliente && <FacturacionForm onChange={onDatosClienteChange} />}
           </section>
