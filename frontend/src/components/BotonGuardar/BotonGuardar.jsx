@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { useVentas } from "../../context/VentasContext";
-import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
+import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
+import { requiereFacturacionAutomatica } from "../../utils/facturacion";
 import styles from "./BotonGuardar.module.css";
 
 export default function BotonGuardar({ venta, metodoPago }) {
-  const { agregarVenta, descuentoPct } = useVentas();
+  const {
+    agregarVenta,
+    confirmarVentaRepetida,
+    descuentoPct,
+    datosCliente,
+    facturarVenta,
+    perfilFacturacion,
+  } = useVentas();
   const [modal, setModal] = useState(null);
 
   const handleGuardar = () => {
@@ -27,9 +35,18 @@ export default function BotonGuardar({ venta, metodoPago }) {
       })),
       metodo_pago: metodoPago,
       descuento_porcentaje: descuentoPct,
+      datosCliente: datosCliente || {},
+      facturar_venta: requiereFacturacionAutomatica(metodoPago) || facturarVenta,
+      perfil_facturacion: perfilFacturacion,
     };
 
     try {
+      const confirmarRepetida = await confirmarVentaRepetida(body);
+      restoreFocusAfterNativeDialog("[data-keyboard-primary]");
+      if (!confirmarRepetida) {
+        return;
+      }
+
       await agregarVenta(body);
       setModal("exito");
       setTimeout(() => {

@@ -1,12 +1,6 @@
-
-
 const axios = require("axios").default;
 
-
-
-exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => {
-
-    function fechaAppFactura(date = new Date()) {
+function fechaAppFactura(date = new Date()) {
   const d = new Date(date);
   const dia = String(d.getDate()).padStart(2, "0");
   const mes = String(d.getMonth() + 1).padStart(2, "0");
@@ -14,8 +8,9 @@ exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => 
   return `${dia}/${mes}/${anio}`;
 }
 
+exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => {
   try {
-    const detalle = items.map(it => ({
+    const detalle = items.map((it) => ({
       cantidad: it.cantidad.toString(),
       afecta_stock: "N",
       bonificacion_porcentaje: 0,
@@ -31,9 +26,7 @@ exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => 
         unidad_medida: 7,
         actualiza_precio: "N",
         rg5329: "N"
-        
-      },
-      
+      }
     }));
 
     const data = {
@@ -47,7 +40,6 @@ exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => 
         razon_social: cliente.razon_social || "Consumidor Final",
         domicilio: cliente.domicilio || "S/D",
         provincia: "8",
-        envia_por_mail: "N",
         reclama_deuda: "N",
         envia_por_mail: "N",
         condicion_pago: "210",
@@ -63,43 +55,34 @@ exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => 
         datos_informativos: {
           paga_misma_moneda: "N"
         },
-
         operacion: "V",
         punto_venta: "00003",
-        
-
         moneda: "PES",
         cotizacion: 1,
-
         periodo_facturado_desde: new Date().toLocaleDateString("es-AR"),
         periodo_facturado_hasta: new Date().toLocaleDateString("es-AR"),
         vencimiento: fechaAppFactura(),
         rubro: "Alimentos",
         rubro_grupo_contable: "Alimentos",
-
-        detalle:detalle,
+        detalle,
         afecta_stock: "S",
         bonificacion_porcentaje: 0,
-        leyenda:""
-      ,
+        leyenda: "",
         total: total.toString(),
-
         pagos: {
           formas_pago: [
             {
-              "descripcion":
+              descripcion:
                 metodoPago === "tarjeta"
                   ? "Tarjeta"
                   : "Transferencia Bancaria",
-              "importe": total
+              importe: total
             }
           ],
-          "total": total
+          total
         }
       }
     };
-
-    console.log("📤 Enviando factura:", data);
 
     const res = await axios.post(
       "https://www.tusfacturas.app/app/api/v2/facturacion/nuevo",
@@ -108,9 +91,8 @@ exports.emitirFacturaTusFacturas = async (items, total, cliente, metodoPago) => 
     );
 
     return res.data;
-
   } catch (error) {
-    console.error("❌ Error al facturar:", error.response?.data || error.message);
+    console.error("Error al facturar:", error.response?.data || error.message);
     return null;
   }
 };

@@ -11,9 +11,6 @@ export async function fetchTotales() {
     const diaDatos = await resDia.json();
     const mesDatos = await resMes.json();
 
-    console.log("TOTALES DIA:", diaDatos);
-    console.log("TOTALES MES:", mesDatos);
-
     return {
       efectivo: diaDatos.efectivo || 0,
       transferencia: diaDatos.transferencia || 0,

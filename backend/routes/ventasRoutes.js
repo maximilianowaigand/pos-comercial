@@ -14,6 +14,8 @@ router.get("/total-mes", ventasController.totalMes);
 
 router.get("/", ventasController.listarVentas);
 
+router.post("/:id/reintentar-facturacion", ventasController.reintentarFacturacion);
+
 router.get("/:id", ventasController.getVentaById);
 
 

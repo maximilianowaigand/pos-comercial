@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { VentasProvider } from "./context/VentasContext";
 import { ProductosProvider } from "./context/ProductosContext";
 import NavBar from "./components/NavBar/NavBar";
+import FacturacionPerfil from "./components/FacturacionPerfil/FacturacionPerfil";
 import HistorialVentas from "./components/HistorialVentas/HistorialVentas";
 import CrearProducto from "./components/CrearProducto/CrearProducto";
 import Dashboard from "./pages/Dashboard";
@@ -16,6 +17,7 @@ function App() {
       <VentasProvider>
         <ProductosProvider>
           <NavBar />
+          <FacturacionPerfil />
           <main className="app-content">
             <Routes>
               <Route path="/" element={<POS />} />

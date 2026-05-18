@@ -1,8 +1,8 @@
 const { getDashboardStats } = require("../services/ventasService");
 
-exports.dashboard = async (_req, res) => {
+exports.dashboard = async (req, res) => {
   try {
-    const stats = await getDashboardStats();
+    const stats = await getDashboardStats(req.query);
     res.json(stats);
   } catch (error) {
     console.error("Error obteniendo dashboard:", error);

@@ -1,4 +1,5 @@
 const db = require("../db");
+const { encolarFacturacionVenta } = require("./facturacionQueueService");
 
 function registrarVenta(data) {
   return new Promise((resolve, reject) => {
@@ -76,14 +77,37 @@ function registrarVenta(data) {
                           return db.run("ROLLBACK", () => reject(commitErr));
                         }
 
-                        resolve({
+                        const ventaRegistrada = {
                           id_venta,
                           subtotal,
                           total: totalFinal,
                           descuento_porcentaje: descuentoPorcentaje,
                           descuento_monto: descuentoMonto,
                           precios,
-                        });
+                        };
+
+                        encolarFacturacionVenta(id_venta, data)
+                          .then((facturacion) => {
+                            resolve({
+                              ...ventaRegistrada,
+                              facturacion,
+                            });
+                          })
+                          .catch((facturacionErr) => {
+                            console.error(
+                              "Venta guardada, pero no se pudo encolar facturacion:",
+                              facturacionErr.message
+                            );
+
+                            resolve({
+                              ...ventaRegistrada,
+                              facturacion: {
+                                queued: false,
+                                estado: "ERROR_COLA",
+                                error: facturacionErr.message,
+                              },
+                            });
+                          });
                       });
                     }
                   );
@@ -171,7 +195,7 @@ function getTotalMes() {
   });
 }
 
-function getPeriodoStats(desdeExpr, hastaExpr) {
+function getPeriodoStats(desde, hasta) {
   return new Promise((resolve, reject) => {
     db.get(
       `SELECT
@@ -180,7 +204,8 @@ function getPeriodoStats(desdeExpr, hastaExpr) {
         COUNT(CASE WHEN descuento_monto > 0 THEN 1 END) as descuentosOtorgados,
         IFNULL(SUM(descuento_monto), 0) as totalDescuentos
        FROM ventas
-       WHERE fecha >= ${desdeExpr} AND fecha <= ${hastaExpr}`,
+       WHERE fecha >= ? AND fecha <= ?`,
+      [desde, hasta],
       (err, row) => {
         if (err) {
           return reject(err);
@@ -210,7 +235,96 @@ function calcularVariacion(actual, anterior) {
   return ((actual - anterior) / anterior) * 100;
 }
 
-function getVentasPorHora() {
+function getFechaLocal() {
+  const ahora = new Date();
+  const local = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 10);
+}
+
+function addDays(fecha, dias) {
+  const date = new Date(`${fecha}T12:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + dias);
+  return date.toISOString().slice(0, 10);
+}
+
+function isDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value || "");
+}
+
+function isMonth(value) {
+  return /^\d{4}-\d{2}$/.test(value || "");
+}
+
+function normalizarFecha(value, fallback) {
+  return isDate(value) ? value : fallback;
+}
+
+function normalizarMes(value, fallbackFecha) {
+  return isMonth(value) ? value : fallbackFecha.slice(0, 7);
+}
+
+function getWeekRange(fecha) {
+  const date = new Date(`${fecha}T12:00:00Z`);
+  const day = date.getUTCDay() || 7;
+  const inicio = addDays(fecha, 1 - day);
+
+  return {
+    inicio,
+    fin: addDays(inicio, 6),
+  };
+}
+
+function getMonthRange(month) {
+  const inicio = `${month}-01`;
+  const date = new Date(`${inicio}T12:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() + 1);
+  date.setUTCDate(0);
+
+  return {
+    inicio,
+    fin: date.toISOString().slice(0, 10),
+  };
+}
+
+function getPreviousMonth(month) {
+  const date = new Date(`${month}-01T12:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() - 1);
+  return date.toISOString().slice(0, 7);
+}
+
+function getComparativa(actual, comparado) {
+  return {
+    clientes: calcularVariacion(actual.clientes, comparado.clientes),
+    total: calcularVariacion(actual.total, comparado.total),
+    ticketPromedio: calcularVariacion(
+      actual.ticketPromedio,
+      comparado.ticketPromedio
+    ),
+    descuentosOtorgados: calcularVariacion(
+      actual.descuentosOtorgados,
+      comparado.descuentosOtorgados
+    ),
+    totalDescuentos: calcularVariacion(
+      actual.totalDescuentos,
+      comparado.totalDescuentos
+    ),
+  };
+}
+
+async function getPeriodoComparado(actualRange, compararRange) {
+  const [actual, comparado] = await Promise.all([
+    getPeriodoStats(actualRange.inicio, actualRange.fin),
+    getPeriodoStats(compararRange.inicio, compararRange.fin),
+  ]);
+
+  return {
+    actual,
+    comparado,
+    variacion: getComparativa(actual, comparado),
+  };
+}
+
+function getVentasPorHora(fecha) {
   return new Promise((resolve, reject) => {
     db.all(
       `SELECT
@@ -218,10 +332,10 @@ function getVentasPorHora() {
         COUNT(*) as ventas,
         IFNULL(SUM(total), 0) as total
        FROM ventas
-       WHERE DATE(fecha) = DATE('now','localtime')
+       WHERE fecha = ?
        GROUP BY SUBSTR(hora, 1, 2)
        ORDER BY hora ASC`,
-      [],
+      [fecha],
       (err, rows) => {
         if (err) {
           return reject(err);
@@ -264,48 +378,101 @@ function getVentasPorHora() {
   });
 }
 
-async function getDashboardStats() {
-  const hoy = await getPeriodoStats("date('now','localtime')", "date('now','localtime')");
-  const semanaActual = await getPeriodoStats(
-    "date('now','-6 days','localtime')",
-    "date('now','localtime')"
-  );
-  const semanaAnterior = await getPeriodoStats(
-    "date('now','-13 days','localtime')",
-    "date('now','-7 days','localtime')"
-  );
-  const mesActual = await getPeriodoStats(
-    "date('now','start of month','localtime')",
-    "date('now','localtime')"
-  );
-  const mesAnterior = await getPeriodoStats(
-    "date('now','start of month','-1 month','localtime')",
-    "date('now','start of month','-1 day','localtime')"
-  );
-  const ventasPorHora = await getVentasPorHora();
+function getProductosPorMonto(desde, hasta, limite = 8) {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT
+        p.id_producto as id,
+        p.nombre_producto as nombre,
+        IFNULL(SUM(dv.cantidad * dv.precio_unitario), 0) as monto,
+        IFNULL(SUM(dv.cantidad), 0) as cantidad
+       FROM detalle_venta dv
+       JOIN ventas v ON v.id_venta = dv.id_venta
+       JOIN productos p ON p.id_producto = dv.id_producto
+       WHERE v.fecha >= ? AND v.fecha <= ?
+       GROUP BY p.id_producto, p.nombre_producto
+       ORDER BY monto DESC
+       LIMIT ?`,
+      [desde, hasta, limite],
+      (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(
+          rows.map((row) => ({
+            id: row.id,
+            nombre: row.nombre,
+            monto: Number(row.monto || 0),
+            cantidad: Number(row.cantidad || 0),
+          }))
+        );
+      }
+    );
+  });
+}
+
+async function getDashboardStats(options = {}) {
+  const hoy = getFechaLocal();
+  const dia = normalizarFecha(options.dia, hoy);
+  const diaComparar = normalizarFecha(options.diaComparar, addDays(dia, -1));
+  const semana = normalizarFecha(options.semana, hoy);
+  const semanaComparar = normalizarFecha(options.semanaComparar, addDays(semana, -7));
+  const mes = normalizarMes(options.mes, hoy);
+  const mesComparar = normalizarMes(options.mesComparar, getPreviousMonth(mes));
+  const horaDia = normalizarFecha(options.horaDia, dia);
+  const horaComparar = normalizarFecha(options.horaComparar, diaComparar);
+
+  const diaRange = { inicio: dia, fin: dia };
+  const diaCompararRange = { inicio: diaComparar, fin: diaComparar };
+  const semanaRange = getWeekRange(semana);
+  const semanaCompararRange = getWeekRange(semanaComparar);
+  const mesRange = getMonthRange(mes);
+  const mesCompararRange = getMonthRange(mesComparar);
+
+  const [
+    diaStats,
+    semanaStats,
+    mesStats,
+    ventasHoraActual,
+    ventasHoraComparada,
+    productosPorMonto,
+  ] = await Promise.all([
+    getPeriodoComparado(diaRange, diaCompararRange),
+    getPeriodoComparado(semanaRange, semanaCompararRange),
+    getPeriodoComparado(mesRange, mesCompararRange),
+    getVentasPorHora(horaDia),
+    getVentasPorHora(horaComparar),
+    getProductosPorMonto(mesRange.inicio, mesRange.fin),
+  ]);
 
   return {
-    hoy,
-    semanaActual,
-    semanaAnterior,
-    mesActual,
-    mesAnterior,
-    ventasPorHora,
-    comparativas: {
-      clientesSemana: calcularVariacion(
-        semanaActual.clientes,
-        semanaAnterior.clientes
-      ),
-      ticketPromedioSemana: calcularVariacion(
-        semanaActual.ticketPromedio,
-        semanaAnterior.ticketPromedio
-      ),
-      clientesMes: calcularVariacion(mesActual.clientes, mesAnterior.clientes),
-      ticketPromedioMes: calcularVariacion(
-        mesActual.ticketPromedio,
-        mesAnterior.ticketPromedio
-      ),
+    filtros: {
+      dia,
+      diaComparar,
+      semana,
+      semanaComparar,
+      mes,
+      mesComparar,
+      horaDia,
+      horaComparar,
+      rangos: {
+        dia: diaRange,
+        diaComparar: diaCompararRange,
+        semana: semanaRange,
+        semanaComparar: semanaCompararRange,
+        mes: mesRange,
+        mesComparar: mesCompararRange,
+      },
     },
+    dia: diaStats,
+    semana: semanaStats,
+    mes: mesStats,
+    ventasPorHora: {
+      actual: ventasHoraActual,
+      comparada: ventasHoraComparada,
+    },
+    productosPorMonto,
   };
 }
 

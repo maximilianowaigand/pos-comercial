@@ -1,11 +1,14 @@
      PANADERIA TRES SABORES
-TICKET Nro 00264
 ------------------------------
-Fecha: 30/4/2026, 02:19:49
+Ticket interno: 00299
+Fecha: 18/05/2026 16:11
 Pago: EFECTIVO
 ------------------------------
+------------------------------
+FACTURA ELECTRONICA PENDIENTE
+Se emitira automaticamente.
 Medialunas
-1 x $2800
+1 x $2800.00 = $2800.00
 ------------------------------
 TOTAL: $2800.00
 ------------------------------

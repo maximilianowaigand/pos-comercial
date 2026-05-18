@@ -181,6 +181,22 @@ db.serialize(() => {
     }
   );
 
+  [
+    "ALTER TABLE ventas ADD COLUMN facturacion_requerida INTEGER DEFAULT 0",
+    "ALTER TABLE ventas ADD COLUMN facturacion_estado TEXT DEFAULT 'NO_REQUIERE'",
+    "ALTER TABLE ventas ADD COLUMN factura_cae TEXT",
+    "ALTER TABLE ventas ADD COLUMN factura_vencimiento TEXT",
+    "ALTER TABLE ventas ADD COLUMN factura_numero TEXT",
+    "ALTER TABLE ventas ADD COLUMN factura_error TEXT",
+    "ALTER TABLE ventas ADD COLUMN factura_respuesta TEXT",
+  ].forEach((sql) => {
+    db.run(sql, (err) => {
+      if (err && !err.message.includes("duplicate column")) {
+        console.error("Error agregando campos de facturacion:", err.message);
+      }
+    });
+  });
+
   db.run(`
     CREATE TABLE IF NOT EXISTS detalle_venta (
       id_detalle INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -206,8 +222,24 @@ db.serialize(() => {
     )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS facturacion_queue (
+      id_job INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_venta INTEGER NOT NULL UNIQUE,
+      estado TEXT NOT NULL DEFAULT 'PENDIENTE',
+      intentos INTEGER NOT NULL DEFAULT 0,
+      proximo_intento_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      payload_json TEXT,
+      ultimo_error TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
+    )
+  `);
+
   db.run(`CREATE INDEX IF NOT EXISTS idx_ventas_fecha ON ventas(fecha)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_detalle_venta_id ON detalle_venta(id_venta)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_facturacion_queue_estado ON facturacion_queue(estado, proximo_intento_at)`);
 
   db.run(`
     CREATE TRIGGER IF NOT EXISTS after_insert_detalle

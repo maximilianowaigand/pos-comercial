@@ -7,25 +7,26 @@ import { paymentOptions } from "../utils/paymentOptions";
 export default function POS() {
   const {
     venta,
-    total,
     totales,
     metodoPago,
     mostrarCliente,
+    facturarVenta,
     agregar,
     handleMetodoPagoChange,
+    handleFacturarVentaChange,
     setDatosCliente,
   } = useVentas();
 
-  const { categorias, productosFiltrados, categoria, setCategoria, busqueda } =
+  const { categorias, productosFiltrados, categoria, setCategoria } =
     useProductos();
 
   return (
     <POSContent
       venta={venta}
-      total={total}
       totales={totales} 
       metodoPago={metodoPago}
       mostrarCliente={mostrarCliente}
+      facturarVenta={facturarVenta}
       categorias={categorias}
       productosFiltrados={productosFiltrados}
       categoria={categoria}
@@ -33,6 +34,7 @@ export default function POS() {
       onAgregar={agregar}
       onCategoriaChange={setCategoria}
       onMetodoPagoChange={handleMetodoPagoChange}
+      onFacturarVentaChange={handleFacturarVentaChange}
       onDatosClienteChange={setDatosCliente}
     />
   );

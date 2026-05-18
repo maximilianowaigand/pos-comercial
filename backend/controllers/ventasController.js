@@ -1,10 +1,10 @@
 const { registrarVenta, getTotales, getTotalMes } = require("../services/ventasService");
+const { reintentarFacturacionVenta } = require("../services/facturacionQueueService");
 const db = require('../db/index');
 
 // Registrar venta
 exports.registrarVenta = async (req, res) => {
   const data = req.body;
-  console.log("BODY RECIBIDO EN BACKEND:", data);
 
   if (!data.items || data.items.length === 0) {
     return res.json({ success: false, error: "No hay productos en la venta" });
@@ -25,7 +25,7 @@ exports.totalDia = async (req, res) => {
     res.json({ totalDia: totales.totalDia, efectivo: totales.efectivo, transferencia: totales.transferencia, tarjeta: totales.tarjeta });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ success: false, error: "..." });;
+    return res.status(400).json({ success: false, error: "..." });
   }
 };
 
@@ -47,6 +47,7 @@ exports.getVentaById = (req, res) => {
 
     db.all(
           `SELECT 
+            d.id_producto,
             p.nombre_producto AS nombre,
             d.cantidad,
             d.precio_unitario AS precio
@@ -77,28 +78,76 @@ exports.getVentaById = (req, res) => {
   );
 };
 
+exports.reintentarFacturacion = async (req, res) => {
+  try {
+    const result = await reintentarFacturacionVenta(req.params.id);
+    res.json({ success: true, facturacion: result });
+  } catch (error) {
+    console.error("Error reintentando facturacion:", error.message);
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
 // Listar ventas
 exports.listarVentas = (req, res) => {
   const sql = `
     SELECT 
       v.id_venta, 
-      v.fecha, 
-      v.hora, 
-      v.medio_pago, 
-      v.total, 
-      v.descuento_porcentaje,
-      v.descuento_monto,
-      v.estado,
-      GROUP_CONCAT(p.nombre_producto || ' x' || dv.cantidad, ', ') AS productos
+      COALESCE(v.fecha, '') AS fecha, 
+      COALESCE(v.hora, '') AS hora, 
+      COALESCE(v.medio_pago, '') AS medio_pago, 
+      COALESCE(v.total, 0) AS total, 
+      COALESCE(v.descuento_porcentaje, 0) AS descuento_porcentaje,
+      COALESCE(v.descuento_monto, 0) AS descuento_monto,
+      v.facturacion_requerida,
+      COALESCE(v.facturacion_estado, 'NO_REQUIERE') AS facturacion_estado,
+      v.factura_cae,
+      v.factura_vencimiento,
+      v.factura_numero,
+      v.factura_error,
+      COALESCE(v.estado, '') AS estado
     FROM ventas v
-    LEFT JOIN detalle_venta dv ON v.id_venta = dv.id_venta
-    LEFT JOIN productos p ON dv.id_producto = p.id_producto
-    GROUP BY v.id_venta
-    ORDER BY v.fecha DESC, v.hora DESC
+    ORDER BY v.id_venta DESC
+    LIMIT 200
   `;
   db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
+
+    if (!rows.length) {
+      return res.json([]);
+    }
+
+    const ids = rows.map((row) => row.id_venta);
+    const placeholders = ids.map(() => "?").join(", ");
+
+    db.all(
+      `SELECT
+         dv.id_venta,
+         COALESCE(p.nombre_producto, 'Producto') AS nombre,
+         COALESCE(dv.cantidad, 0) AS cantidad
+       FROM detalle_venta dv
+       LEFT JOIN productos p ON dv.id_producto = p.id_producto
+       WHERE dv.id_venta IN (${placeholders})
+       ORDER BY dv.id_detalle ASC`,
+      ids,
+      (detalleErr, detalles) => {
+        if (detalleErr) return res.status(500).json({ error: detalleErr.message });
+
+        const productosPorVenta = detalles.reduce((acc, detalle) => {
+          const key = detalle.id_venta;
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(`${detalle.nombre} x${detalle.cantidad}`);
+          return acc;
+        }, {});
+
+        res.json(
+          rows.map((row) => ({
+            ...row,
+            productos: (productosPorVenta[row.id_venta] || []).join(", "),
+          }))
+        );
+      }
+    );
   });
 };
 

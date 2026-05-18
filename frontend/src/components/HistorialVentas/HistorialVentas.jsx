@@ -6,14 +6,16 @@ import styles from "./HistorialVentas.module.css";
 import API from "../../config/api";
 
 export default function HistorialVentas() {
-  const { ventas } = useVentas();
+  const { ventas, obtenerVentas, ventasError, loading } = useVentas();
   const [filtroMetodo, setFiltroMetodo] = useState("");
   const [soloHoy, setSoloHoy] = useState(false);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
 
   const hoy = new Date().toISOString().slice(0, 10);
 
-  const ventasFiltradas = ventas.filter((v) => {
+  const ventasLista = Array.isArray(ventas) ? ventas : [];
+
+  const ventasFiltradas = ventasLista.filter((v) => {
     const fechaVenta = v.fecha?.slice(0, 10);
 
     const coincideMetodo = !filtroMetodo || v.medio_pago === filtroMetodo;
@@ -23,14 +25,59 @@ export default function HistorialVentas() {
     return coincideMetodo && coincideHoy && coincideFecha;
   });
 
-  const ventasFinal = [...ventasFiltradas]
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-    .slice(0, 20);
+  const ventasOrdenadas = [...ventasFiltradas].sort(
+    (a, b) => Number(b.id_venta || 0) - Number(a.id_venta || 0)
+  );
+  const ventasFinal =
+    soloHoy || fechaSeleccionada ? ventasOrdenadas : ventasOrdenadas.slice(0, 20);
 
   const totalFiltrado = ventasFiltradas.reduce(
     (acc, v) => acc + Number(v.total),
     0
   );
+
+  const getFacturacionLabel = (venta) => {
+    const estado = venta.facturacion_estado || "NO_REQUIERE";
+
+    if (estado === "NO_REQUIERE") return "No requiere";
+    if (estado === "PENDIENTE") return "Pendiente";
+    if (estado === "PROCESANDO") return "Procesando";
+    if (estado === "FACTURADA") return venta.factura_numero
+      ? `Facturada #${venta.factura_numero}`
+      : "Facturada";
+    if (estado === "ERROR") return "Error";
+    return estado;
+  };
+
+  const reintentarFacturacion = async (venta) => {
+    const confirmar = window.confirm(
+      `Reintentar facturacion de la venta #${venta.id_venta}?`
+    );
+    restoreFocusAfterNativeDialog();
+    if (!confirmar) return;
+
+    try {
+      const res = await fetch(
+        `${API}/api/ventas/${venta.id_venta}/reintentar-facturacion`,
+        { method: "POST" }
+      );
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        alert(data.error || "No se pudo reintentar la facturacion");
+        restoreFocusAfterNativeDialog();
+        return;
+      }
+
+      await obtenerVentas();
+      alert("Facturacion encolada para reintento");
+      restoreFocusAfterNativeDialog();
+    } catch (error) {
+      console.error(error);
+      alert("Error reintentando facturacion");
+      restoreFocusAfterNativeDialog();
+    }
+  };
 
   const imprimirVenta = async (venta) => {
   const confirmar = window.confirm(
@@ -132,7 +179,11 @@ export default function HistorialVentas() {
 
       <h3 className={styles.total}>Total filtrado: ${totalFiltrado}</h3>
 
-      {ventas.length === 0 ? (
+      {ventasError ? (
+        <p className={styles.empty}>No se pudo cargar el historial: {ventasError}</p>
+      ) : loading ? (
+        <p className={styles.empty}>Cargando ventas...</p>
+      ) : ventasLista.length === 0 ? (
         <p className={styles.empty}>No hay ventas registradas.</p>
       ) : (
         <div className={styles.tableWrapper}>
@@ -145,6 +196,7 @@ export default function HistorialVentas() {
                 <th>Metodo de Pago</th>
                 <th>Total</th>
                 <th>Estado</th>
+                <th>Facturacion</th>
                 <th>Imprimir</th>
                 <th>Productos</th>
               </tr>
@@ -159,6 +211,35 @@ export default function HistorialVentas() {
                   <td>{v.medio_pago}</td>
                   <td>${v.total}</td>
                   <td>{v.estado}</td>
+                  <td>
+                    <div className={styles.billingCell}>
+                      <span
+                        className={`${styles.billingBadge} ${
+                          styles[`billing_${v.facturacion_estado || "NO_REQUIERE"}`]
+                        }`}
+                        title={v.factura_error || ""}
+                      >
+                        {getFacturacionLabel(v)}
+                      </span>
+
+                      {v.facturacion_estado === "ERROR" && (
+                        <>
+                          {v.factura_error && (
+                            <small className={styles.billingError}>
+                              {v.factura_error}
+                            </small>
+                          )}
+                          <button
+                            type="button"
+                            className={styles.retryButton}
+                            onClick={() => reintentarFacturacion(v)}
+                          >
+                            Reintentar
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
                   <td>
                       <button className={styles.printButton}
                       onClick={() => imprimirVenta(v)}> 🖨️

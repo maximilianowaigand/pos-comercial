@@ -89,3 +89,69 @@
 .printButton:hover {
   background: #1b6edc;
 }
+
+.billingCell {
+  display: grid;
+  gap: 6px;
+  min-width: 130px;
+}
+
+.billingBadge {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  background: #eceff3;
+  color: #2f3a45;
+}
+
+.billing_NO_REQUIERE {
+  background: #edf0f2;
+  color: #54616c;
+}
+
+.billing_PENDIENTE {
+  background: #fff1c9;
+  color: #765200;
+}
+
+.billing_PROCESANDO {
+  background: #dcecff;
+  color: #15508d;
+}
+
+.billing_FACTURADA {
+  background: #dff3e5;
+  color: #1f6b35;
+}
+
+.billing_ERROR {
+  background: #fde2e2;
+  color: #9d2323;
+}
+
+.billingError {
+  max-width: 220px;
+  color: #9d2323;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.retryButton {
+  width: fit-content;
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: #3b2d20;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  background: #241a12;
+}

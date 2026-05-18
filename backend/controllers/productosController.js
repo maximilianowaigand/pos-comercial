@@ -24,7 +24,6 @@ exports.crear = async (req, res) => {
 // DELETE
 exports.eliminar = async (req, res) => {
   try {
-    console.log("Eliminando id:", req.params.id);
     await productosService.eliminarProducto(req.params.id);
     res.json({ success: true });
   } catch (err) {

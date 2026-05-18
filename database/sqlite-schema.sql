@@ -25,6 +25,15 @@ CREATE TABLE IF NOT EXISTS ventas (
   hora TEXT NOT NULL,                         -- Hora (HH:MM:SS)
   medio_pago TEXT NOT NULL,                   -- Método de pago (efectivo, tarjeta, etc.)
   total REAL DEFAULT 0,                       -- Total de la venta (calculado automáticamente)
+  descuento_porcentaje REAL DEFAULT 0,
+  descuento_monto REAL DEFAULT 0,
+  facturacion_requerida INTEGER DEFAULT 0,
+  facturacion_estado TEXT DEFAULT 'NO_REQUIERE',
+  factura_cae TEXT,
+  factura_vencimiento TEXT,
+  factura_numero TEXT,
+  factura_error TEXT,
+  factura_respuesta TEXT,
   estado TEXT DEFAULT 'ABIERTA'               -- Estado de la venta (ABIERTA / CERRADA)
 );
 
@@ -124,3 +133,19 @@ BEGIN
   )
   WHERE id_venta = OLD.id_venta;
 END;
+
+CREATE TABLE IF NOT EXISTS facturacion_queue (
+  id_job INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_venta INTEGER NOT NULL UNIQUE,
+  estado TEXT NOT NULL DEFAULT 'PENDIENTE',
+  intentos INTEGER NOT NULL DEFAULT 0,
+  proximo_intento_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  payload_json TEXT,
+  ultimo_error TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
+);
+
+CREATE INDEX IF NOT EXISTS idx_facturacion_queue_estado
+ON facturacion_queue(estado, proximo_intento_at);

@@ -10,10 +10,10 @@ import styles from "./POS.module.css";
 
 export default function POSContent({
   venta,
-  total,
   totales,
   metodoPago,
   mostrarCliente,
+  facturarVenta,
   categorias,
   productosFiltrados,
   categoria,
@@ -21,6 +21,7 @@ export default function POSContent({
   onAgregar,
   onCategoriaChange,
   onMetodoPagoChange,
+  onFacturarVentaChange,
   onDatosClienteChange,
 }) {
   return (
@@ -102,6 +103,21 @@ export default function POSContent({
               </option>
             ))}
           </select>
+
+            {metodoPago === "efectivo" && (
+              <label className={styles.invoiceToggle}>
+                <input
+                  type="checkbox"
+                  checked={facturarVenta}
+                  onChange={(event) => onFacturarVentaChange(event.target.checked)}
+                />
+                Facturar esta venta
+              </label>
+            )}
+
+            {(metodoPago === "transferencia" || metodoPago === "tarjeta") && (
+              <p className={styles.invoiceNotice}>Facturacion automatica</p>
+            )}
 
             {mostrarCliente && <FacturacionForm onChange={onDatosClienteChange} />}
           </section>

@@ -59,7 +59,9 @@ export function ProductosProvider({ children }) {
     );
   }
 
-  return lista.slice(0, 50); // ⚡ evita lag
+  const limite = categoria === "Todos" && busqueda.trim().length === 0 ? 20 : 50;
+
+  return lista.slice(0, limite); // evita lag
 }, [productos, categoria, busqueda]);  
 
   return (
