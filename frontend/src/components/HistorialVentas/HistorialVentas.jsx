@@ -8,6 +8,7 @@ import API from "../../config/api";
 export default function HistorialVentas() {
   const { ventas, obtenerVentas, ventasError, loading } = useVentas();
   const [filtroMetodo, setFiltroMetodo] = useState("");
+  const [filtroFacturacion, setFiltroFacturacion] = useState("");
   const [soloHoy, setSoloHoy] = useState(false);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
 
@@ -19,10 +20,15 @@ export default function HistorialVentas() {
     const fechaVenta = v.fecha?.slice(0, 10);
 
     const coincideMetodo = !filtroMetodo || v.medio_pago === filtroMetodo;
+    const estadoFacturacion = v.facturacion_estado || "NO_REQUIERE";
+    const coincideFacturacion =
+      !filtroFacturacion ||
+      estadoFacturacion === filtroFacturacion ||
+      (filtroFacturacion === "PENDIENTE" && estadoFacturacion === "PROCESANDO");
     const coincideHoy = !soloHoy || fechaVenta === hoy;
     const coincideFecha = !fechaSeleccionada || fechaVenta === fechaSeleccionada;
 
-    return coincideMetodo && coincideHoy && coincideFecha;
+    return coincideMetodo && coincideFacturacion && coincideHoy && coincideFecha;
   });
 
   const ventasOrdenadas = [...ventasFiltradas].sort(
@@ -146,6 +152,18 @@ export default function HistorialVentas() {
           <option value="transferencia">Transferencia</option>
         </select>
 
+        <select
+          className={styles.control}
+          value={filtroFacturacion}
+          onChange={(e) => setFiltroFacturacion(e.target.value)}
+        >
+          <option value="">Toda facturacion</option>
+          <option value="FACTURADA">Facturadas</option>
+          <option value="NO_REQUIERE">No requiere facturacion</option>
+          <option value="PENDIENTE">Pendientes</option>
+          <option value="ERROR">Con error</option>
+        </select>
+
         <div className={styles.dateGroup}>
           <input
             className={styles.control}
@@ -169,6 +187,7 @@ export default function HistorialVentas() {
           className={styles.clearButton}
           onClick={() => {
             setFiltroMetodo("");
+            setFiltroFacturacion("");
             setSoloHoy(false);
             setFechaSeleccionada("");
           }}
