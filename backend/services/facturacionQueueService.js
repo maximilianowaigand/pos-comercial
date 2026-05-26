@@ -27,6 +27,10 @@ function requiereFacturacion(metodoPago) {
 }
 
 function debeFacturarVenta(ventaData = {}) {
+  if (ventaData.perfil_facturacion === "solo_ventas") {
+    return false;
+  }
+
   return requiereFacturacion(ventaData.metodo_pago) || ventaData.facturar_venta === true || ventaData.facturar_venta === "true";
 }
 
@@ -69,11 +73,18 @@ function all(sql, params = []) {
 function getDefaultCliente(cliente = {}) {
   const data = cliente || {};
   const nroDoc = String(data.nro_doc || "").replace(/\D/g, "");
+  const consumidorFinal = !nroDoc;
+  const tipoDoc = String(data.tipo_doc || "")
+    .trim()
+    .toUpperCase();
+  const tipoDocId = tipoDoc === "CUIT" || tipoDoc === "CUIL" || tipoDoc === "80"
+    ? 80
+    : 96;
 
   return {
     razon_social: data.razon_social || "Consumidor Final",
-    tipo_doc: nroDoc ? data.tipo_doc || "DNI" : "CF",
-    nro_doc: nroDoc,
+    tipo_doc: consumidorFinal ? 99 : tipoDocId,
+    nro_doc: consumidorFinal ? 0 : Number(nroDoc),
     domicilio: data.domicilio || "S/D",
     condicion_iva: data.condicion_iva || "Consumidor Final",
   };
@@ -353,6 +364,8 @@ async function processNextFacturacionJob() {
         items,
       });
 
+      console.log("[FACTURACION] Cliente enviado ARCA:", getDefaultCliente(payload.datosCliente));
+
       const respuesta = await emitirFacturaArca({
         items,
         total: venta.total,
@@ -364,6 +377,8 @@ async function processNextFacturacionJob() {
       if (!respuesta) {
         throw new Error("El proveedor de facturacion no devolvio respuesta");
       }
+
+
 
       await marcarJobFacturado(job, respuesta);
     } catch (error) {

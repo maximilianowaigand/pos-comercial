@@ -9,30 +9,45 @@ function hasProfileConfig(prefix) {
   );
 }
 
-function buildProfile({ id, label, prefix, fallback = false }) {
+function buildProfile({ id, label, prefix, fallback = false, basePrefix = "ARCA" }) {
   const get = (key) => process.env[`${prefix}_${key}`];
+  const getBase = (key) => process.env[`${basePrefix}_${key}`];
+  const hasOwnPoint = Boolean(get("PUNTO_VENTA"));
+  const useBaseFiscalData = !get("CUIT") && hasOwnPoint;
 
   return {
     id,
     label,
-    available: fallback || hasProfileConfig(prefix),
-    cuit: fallback ? process.env.ARCA_CUIT : get("CUIT"),
-    puntoVenta: fallback ? process.env.ARCA_PUNTO_VENTA : get("PUNTO_VENTA"),
+    available: fallback || hasProfileConfig(prefix) || useBaseFiscalData,
+    cuit: fallback || useBaseFiscalData ? getBase("CUIT") : get("CUIT"),
+    puntoVenta: fallback ? getBase("PUNTO_VENTA") : get("PUNTO_VENTA"),
     comprobanteTipo: fallback
-      ? process.env.ARCA_COMPROBANTE_TIPO || "11"
+      ? getBase("COMPROBANTE_TIPO") || "11"
       : get("COMPROBANTE_TIPO") || "11",
-    certPath: fallback ? process.env.ARCA_CERT_PATH : get("CERT_PATH"),
-    keyPath: fallback ? process.env.ARCA_KEY_PATH : get("KEY_PATH"),
+    certPath: fallback || useBaseFiscalData ? getBase("CERT_PATH") : get("CERT_PATH"),
+    keyPath: fallback || useBaseFiscalData ? getBase("KEY_PATH") : get("KEY_PATH"),
+    fiscal: true,
   };
 }
 
 function getArcaProfiles() {
   return [
+    {
+      id: "solo_ventas",
+      label: "Solo ventas",
+      available: true,
+      fiscal: false,
+    },
     buildProfile({
       id: "maximiliano",
       label: process.env.ARCA_PROFILE_NAME || "Maximiliano",
       prefix: "ARCA",
       fallback: true,
+    }),
+    buildProfile({
+      id: "segundo_punto",
+      label: process.env.ARCA_SEGUNDO_PROFILE_NAME || "Segundo punto",
+      prefix: "ARCA_SEGUNDO",
     }),
     buildProfile({
       id: "pareja",

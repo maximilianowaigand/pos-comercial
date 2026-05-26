@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import { addItem, decreaseItem, removeItem, calcularTotal } from "../utils/cartFuncions";
 import { fetchTotales } from "../utils/api";
@@ -41,6 +42,14 @@ function ventasSonIguales(actual, anterior) {
       item.precio_unitario === anteriorItem.precio_unitario
     );
   });
+}
+
+function getFechaLocal() {
+  const ahora = new Date();
+  const year = ahora.getFullYear();
+  const month = String(ahora.getMonth() + 1).padStart(2, "0");
+  const day = String(ahora.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 async function leerJsonSeguro(res) {
@@ -107,6 +116,20 @@ export function VentasProvider({ children }) {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const guardado = JSON.parse(
+        localStorage.getItem("perfilFacturacionDia") || "null"
+      );
+
+      if (guardado?.fecha && guardado.fecha !== getFechaLocal()) {
+        setPerfilFacturacion("");
+      }
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   async function obtenerVentas() {
     try {
       const res = await fetchConTimeout(`${API}/api/ventas`);
@@ -139,7 +162,7 @@ export function VentasProvider({ children }) {
       const res = await fetch("/api/arca/perfiles");
       const data = await res.json();
       const perfiles = Array.isArray(data.profiles) ? data.profiles : [];
-      const fecha = new Date().toISOString().slice(0, 10);
+      const fecha = getFechaLocal();
       const guardado = JSON.parse(
         localStorage.getItem("perfilFacturacionDia") || "null"
       );
@@ -261,7 +284,7 @@ export function VentasProvider({ children }) {
   }
 
   function seleccionarPerfilFacturacion(profileId) {
-    const fecha = new Date().toISOString().slice(0, 10);
+    const fecha = getFechaLocal();
     setPerfilFacturacion(profileId);
     localStorage.setItem(
       "perfilFacturacionDia",

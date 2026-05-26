@@ -4,11 +4,11 @@ import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./ListaProductos.module.css";
 import API from "../../config/api";
 
-const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc","Cereales"];
+const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc","Cereales","Yerba"];
 const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
 
 export default function ListaProductos() {
-  const { productosFiltrados, busqueda, setBusqueda, productos, setProductos } = useProductos();
+  const { productosFiltrados, busqueda, setBusqueda, setProductos } = useProductos();
   const [expandido, setExpandido] = useState(null);
   const [form, setForm] = useState(FORM_VACIO);
   const [mensaje, setMensaje] = useState("");

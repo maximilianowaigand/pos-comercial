@@ -4,7 +4,7 @@ const fs = require("fs");
 const https = require("https");
 const os = require("os");
 const path = require("path");
-const { spawn } = require("child_process");
+const { spawn, spawnSync } = require("child_process");
 
 require("../config/env");
 const { getArcaProfile } = require("../config/arcaProfiles");
@@ -21,9 +21,65 @@ const WSFE_URLS = {
 
 const cachedTickets = new Map();
 
-const arcaHttpsAgent = new https.Agent({
-  ciphers: "DEFAULT@SECLEVEL=1",
-});
+const arcaHttpsAgentOptions = process.versions.electron
+  ? {}
+  : { ciphers: "DEFAULT@SECLEVEL=1" };
+
+const arcaHttpsAgent = new https.Agent(arcaHttpsAgentOptions);
+
+const OPENSSL_CANDIDATES = [
+  process.env.OPENSSL_PATH,
+  "C:\\Program Files\\Git\\usr\\bin\\openssl.exe",
+  "C:\\Program Files\\OpenSSL-Win64\\bin\\openssl.exe",
+  "C:\\Program Files\\OpenSSL-Win32\\bin\\openssl.exe",
+].filter(Boolean);
+
+function testOpenSsl(command) {
+  if (!fs.existsSync(command)) {
+    return { ok: false, error: "no existe" };
+  }
+
+  const binDir = path.dirname(command);
+  const result = spawnSync(command, ["version"], {
+    cwd: binDir,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      PATH: `${binDir}${path.delimiter}${process.env.PATH || ""}`,
+    },
+    windowsHide: true,
+  });
+
+  if (result.status === 0) {
+    return { ok: true };
+  }
+
+  return {
+    ok: false,
+    error:
+      result.error?.message ||
+      result.stderr ||
+      `OpenSSL no pudo iniciar. Codigo: ${result.status}`,
+  };
+}
+
+function resolveOpenSslPath() {
+  const errors = [];
+
+  for (const candidate of OPENSSL_CANDIDATES) {
+    const result = testOpenSsl(candidate);
+
+    if (result.ok) {
+      return candidate;
+    }
+
+    errors.push(`${candidate}: ${result.error}`);
+  }
+
+  throw new Error(
+    `No se encontro una instalacion funcional de OpenSSL. Revisar OPENSSL_PATH. Intentos: ${errors.join(" | ")}`
+  );
+}
 
 function getArcaConfig(profileId) {
   const env = process.env.ARCA_ENV === "testing" ? "testing" : "production";
@@ -39,9 +95,7 @@ function getArcaConfig(profileId) {
     keyPath: profile.keyPath,
     wsaaUrl: WSAA_URLS[env],
     wsfeUrl: WSFE_URLS[env],
-    opensslPath:
-      process.env.OPENSSL_PATH ||
-      "C:\\Program Files\\Git\\usr\\bin\\openssl.exe",
+    opensslPath: resolveOpenSslPath(),
   };
 
   const missing = Object.entries({
@@ -110,11 +164,39 @@ function formatAmount(value) {
   return Number(value || 0).toFixed(2);
 }
 
+function getCondicionIvaReceptorId(condicion) {
+  const value = String(condicion || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  switch (value) {
+
+    case "responsable inscripto":
+      return 1;
+
+    case "exento":
+    case "iva sujeto exento":
+      return 4;
+
+    case "consumidor final":
+      return 5;
+
+    case "monotributo":
+    case "monotributista":
+      return 6;
+
+    default:
+      return 5;
+  }
+}
+
 function getDocumentoConsumidorFinal(cliente = {}) {
   const numero = String(cliente.nro_doc || "").replace(/\D/g, "");
   const tipoDoc = String(cliente.tipo_doc || "").toUpperCase();
 
-  if (numero && ["CUIT", "CUIL"].includes(tipoDoc)) {
+  if (numero && ["CUIT", "CUIL", "80"].includes(tipoDoc)) {
     return {
       docTipo: 80,
       docNro: numero,
@@ -152,7 +234,15 @@ function buildLoginTicketRequest(service = "wsfe") {
 
 function execFileAsync(command, args) {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { windowsHide: true });
+    const binDir = path.dirname(command);
+    const child = spawn(command, args, {
+      cwd: binDir,
+      env: {
+        ...process.env,
+        PATH: `${binDir}${path.delimiter}${process.env.PATH || ""}`,
+      },
+      windowsHide: true,
+    });
     const stdout = [];
     const stderr = [];
 
@@ -280,8 +370,8 @@ function buildWsfeEnvelope(operation, body) {
 </soap:Envelope>`;
 }
 
-async function callWsfe(operation, body) {
-  const config = getArcaConfig();
+async function callWsfe(operation, body,profileId) {
+  const config = getArcaConfig(profileId);
   const envelope = buildWsfeEnvelope(operation, body);
 
   const response = await axios.post(config.wsfeUrl, envelope, {
@@ -307,7 +397,8 @@ async function consultarUltimoComprobante(profileId) {
         <Cuit>${config.cuit}</Cuit>
       </Auth>
       <PtoVta>${config.puntoVenta}</PtoVta>
-      <CbteTipo>${config.comprobanteTipo}</CbteTipo>`
+      <CbteTipo>${config.comprobanteTipo}</CbteTipo>`,
+      profileId
   );
 
   const errorsXml = extractSection(xml, "Errors");
@@ -343,7 +434,8 @@ async function consultarComprobante(numero, profileId) {
         <CbteTipo>${config.comprobanteTipo}</CbteTipo>
         <CbteNro>${Number(numero)}</CbteNro>
         <PtoVta>${config.puntoVenta}</PtoVta>
-      </FeCompConsReq>`
+      </FeCompConsReq>`,
+      profileId
   );
 
   const errorsXml = extractSection(xml, "Errors");
@@ -395,87 +487,132 @@ function getObservaciones(xml) {
   return matches.map((match) => decodeXmlEntities(match[1].trim()));
 }
 
+
+
 async function emitirFacturaArca({ total, cliente = {}, profileId }) {
-  const config = getArcaConfig(profileId);
-  const ticket = await getWsaaTicket(profileId);
-  const ultimo = await consultarUltimoComprobante(profileId);
-  const numero = ultimo.ultimoNumero + 1;
-  const fecha = formatArcaDate();
-  const importe = formatAmount(total);
-  const { docTipo, docNro } = getDocumentoConsumidorFinal(cliente);
 
-  const xml = await callWsfe(
-    "FECAESolicitar",
-    `<Auth>
-        <Token>${escapeXml(ticket.token)}</Token>
-        <Sign>${escapeXml(ticket.sign)}</Sign>
-        <Cuit>${config.cuit}</Cuit>
-      </Auth>
-      <FeCAEReq>
-        <FeCabReq>
-          <CantReg>1</CantReg>
-          <PtoVta>${config.puntoVenta}</PtoVta>
-          <CbteTipo>${config.comprobanteTipo}</CbteTipo>
-        </FeCabReq>
-        <FeDetReq>
-          <FECAEDetRequest>
-            <Concepto>1</Concepto>
-            <DocTipo>${docTipo}</DocTipo>
-            <DocNro>${docNro}</DocNro>
-            <CbteDesde>${numero}</CbteDesde>
-            <CbteHasta>${numero}</CbteHasta>
-            <CbteFch>${fecha}</CbteFch>
-            <ImpTotal>${importe}</ImpTotal>
-            <ImpTotConc>0.00</ImpTotConc>
-            <ImpNeto>${importe}</ImpNeto>
-            <ImpOpEx>0.00</ImpOpEx>
-            <ImpTrib>0.00</ImpTrib>
-            <ImpIVA>0.00</ImpIVA>
-            <MonId>PES</MonId>
-            <MonCotiz>1.000000</MonCotiz>
-          </FECAEDetRequest>
-        </FeDetReq>
-      </FeCAEReq>`
-  );
+  try {
 
-  const errorsXml = extractSection(xml, "Errors");
-  const errorCode = extractTag(errorsXml, "Code");
-  const errorMessage = extractTag(errorsXml, "Msg");
+    console.log("[ARCA] Iniciando emitirFacturaArca");
+    console.log("[ARCA] profileId:", profileId);
 
-  if (errorCode && errorMessage) {
-    throw new Error(`WSFE error ${errorCode}: ${decodeXmlEntities(errorMessage)}`);
+    const config = getArcaConfig(profileId);
+
+    console.log("[ARCA] Config:", config);
+
+    const ticket = await getWsaaTicket(profileId);
+
+    console.log("[ARCA] Ticket WSAA obtenido");
+    console.log(ticket);
+
+    const ultimo = await consultarUltimoComprobante(profileId);
+
+    console.log("[ARCA] Ultimo comprobante:", ultimo);
+
+    const numero = ultimo.ultimoNumero + 1;
+    const fecha = formatArcaDate();
+    const importe = formatAmount(total);
+    const { docTipo, docNro } = getDocumentoConsumidorFinal(cliente);
+    const condicionIvaId = getCondicionIvaReceptorId(
+      cliente.condicion_iva
+    );
+
+    console.log("[ARCA] Enviando FECAESolicitar...");
+
+    const xml = await callWsfe(
+  "FECAESolicitar",
+  `<Auth>
+      <Token>${escapeXml(ticket.token)}</Token>
+      <Sign>${escapeXml(ticket.sign)}</Sign>
+      <Cuit>${config.cuit}</Cuit>
+    </Auth>
+    <FeCAEReq>
+      <FeCabReq>
+        <CantReg>1</CantReg>
+        <PtoVta>${config.puntoVenta}</PtoVta>
+        <CbteTipo>${config.comprobanteTipo}</CbteTipo>
+      </FeCabReq>
+      <FeDetReq>
+        <FECAEDetRequest>
+          <Concepto>1</Concepto>
+          <DocTipo>${docTipo}</DocTipo>
+          <DocNro>${docNro}</DocNro>
+          <CondicionIVAReceptorId>${condicionIvaId}</CondicionIVAReceptorId>
+          <CbteDesde>${numero}</CbteDesde>
+          <CbteHasta>${numero}</CbteHasta>
+          <CbteFch>${fecha}</CbteFch>
+          <ImpTotal>${importe}</ImpTotal>
+          <ImpTotConc>0.00</ImpTotConc>
+          <ImpNeto>${importe}</ImpNeto>
+          <ImpOpEx>0.00</ImpOpEx>
+          <ImpTrib>0.00</ImpTrib>
+          <ImpIVA>0.00</ImpIVA>
+          <MonId>PES</MonId>
+          <MonCotiz>1.000000</MonCotiz>
+        </FECAEDetRequest>
+      </FeDetReq>
+    </FeCAEReq>`,
+  profileId
+);
+
+    console.log("[ARCA] XML RESPUESTA:");
+    console.log(xml);
+
+    const errorsXml = extractSection(xml, "Errors");
+    const errorCode = extractTag(errorsXml, "Code");
+    const errorMessage = extractTag(errorsXml, "Msg");
+
+    if (errorCode && errorMessage) {
+      throw new Error(`WSFE error ${errorCode}: ${decodeXmlEntities(errorMessage)}`);
+    }
+
+    const detailXml = extractSection(xml, "FECAEDetResponse");
+    const resultado = extractTag(detailXml, "Resultado") || extractTag(xml, "Resultado");
+    const cae = extractTag(detailXml, "CAE");
+    const vencimientoCae = extractTag(detailXml, "CAEFchVto");
+    const observaciones = getObservaciones(detailXml);
+
+    if (resultado !== "A" || !cae) {
+      const detalle = observaciones.length
+        ? ` Observaciones: ${observaciones.join(" | ")}`
+        : "";
+
+      throw new Error(
+        `Factura rechazada por ARCA. Resultado: ${resultado || "sin resultado"}.${detalle}`
+      );
+    }
+
+    return {
+      proveedor: "ARCA",
+      profile_id: config.profileId,
+      profile_label: config.profileLabel,
+      cuit: config.cuit,
+      resultado,
+      cae,
+      vencimiento_cae: vencimientoCae,
+      numero_comprobante: numero,
+      punto_venta: config.puntoVenta,
+      tipo_comprobante: config.comprobanteTipo,
+      fecha,
+      total: Number(importe),
+      doc_tipo: docTipo,
+      doc_nro: docNro,
+      observaciones,
+      raw: xml,
+    };
+
+  } catch (error) {
+
+    console.error("=========== ERROR ARCA ===========");
+    console.error(error);
+    console.error("MESSAGE:", error?.message);
+    console.error("STACK:", error?.stack);
+    console.error("RESPONSE:", error?.response?.data);
+
+    throw error;
   }
-
-  const detailXml = extractSection(xml, "FECAEDetResponse");
-  const resultado = extractTag(detailXml, "Resultado") || extractTag(xml, "Resultado");
-  const cae = extractTag(detailXml, "CAE");
-  const vencimientoCae = extractTag(detailXml, "CAEFchVto");
-  const observaciones = getObservaciones(detailXml);
-
-  if (resultado !== "A" || !cae) {
-    const detalle = observaciones.length ? ` Observaciones: ${observaciones.join(" | ")}` : "";
-    throw new Error(`Factura rechazada por ARCA. Resultado: ${resultado || "sin resultado"}.${detalle}`);
-  }
-
-  return {
-    proveedor: "ARCA",
-    profile_id: config.profileId,
-    profile_label: config.profileLabel,
-    cuit: config.cuit,
-    resultado,
-    cae,
-    vencimiento_cae: vencimientoCae,
-    numero_comprobante: numero,
-    punto_venta: config.puntoVenta,
-    tipo_comprobante: config.comprobanteTipo,
-    fecha,
-    total: Number(importe),
-    doc_tipo: docTipo,
-    doc_nro: docNro,
-    observaciones,
-    raw: xml,
-  };
 }
+
 
 async function probarConexionArca() {
   const config = getArcaConfig();

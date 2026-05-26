@@ -6,7 +6,7 @@ Sistema de punto de venta para panaderia, desarrollado como aplicacion de escrit
 
 POS Panaderia centraliza la operacion diaria de caja en una sola aplicacion. El frontend esta construido con React y Vite, el backend expone una API REST con Express y los datos se guardan localmente en SQLite.
 
-El proyecto tambien incluye integracion para impresora termica, exportacion de ventas a Excel, dashboard de estadisticas y una base preparada para analisis SQL.
+El proyecto tambien incluye facturacion electronica por ARCA, impresion de tickets, exportacion de ventas a Excel, dashboard de estadisticas y una base preparada para analisis SQL.
 
 ## Funcionalidades
 
@@ -17,6 +17,7 @@ El proyecto tambien incluye integracion para impresora termica, exportacion de v
 - Dashboard con totales, clientes, ticket promedio, comparativas y ventas por hora.
 - Exportacion de ventas a Excel.
 - Impresion de tickets mediante impresora termica.
+- Facturacion electronica directa con ARCA, perfiles de emisor y cola de reintentos.
 - Persistencia local con SQLite.
 - Empaquetado como aplicacion de escritorio con Electron.
 
@@ -28,7 +29,6 @@ El proyecto tambien incluye integracion para impresora termica, exportacion de v
 - Express
 - SQLite
 - Electron
-- node-thermal-printer
 - ExcelJS
 
 ## Estructura del proyecto
@@ -110,6 +110,8 @@ Algunas rutas disponibles:
 - `GET /api/stats/dashboard`
 - `GET /api/export-excel`
 - `POST /api/print`
+- `GET /api/arca/perfiles`
+- `GET /api/arca/test`
 
 ## Base de datos
 
@@ -124,7 +126,8 @@ Tablas principales:
 - `productos`
 - `ventas`
 - `detalle_venta`
-- `clima`
+- `facturacion_queue`
+- `clima_diario`
 
 ## Autor
 

@@ -5,3 +5,15 @@ export function requiereFacturacionAutomatica(metodoPago) {
     String(metodoPago || "").trim().toLowerCase()
   );
 }
+
+export function esPerfilSoloVentas(perfilFacturacion) {
+  return perfilFacturacion === "solo_ventas";
+}
+
+export function debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion) {
+  if (esPerfilSoloVentas(perfilFacturacion)) {
+    return false;
+  }
+
+  return requiereFacturacionAutomatica(metodoPago) || facturarVenta;
+}

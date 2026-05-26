@@ -8,6 +8,7 @@ const TICKET_WIDTH = 32;
 
 const PROFILE_ENV_PREFIX = {
   maximiliano: "ARCA",
+  segundo_punto: "ARCA_SEGUNDO",
   pareja: "ARCA_PAREJA",
 };
 
@@ -181,7 +182,7 @@ function buildArcaQrUrl(facturaRespuesta = {}, datosFiscales = {}, total = 0) {
     codAut: Number(datosFiscales.factura_cae),
   };
 
-  if (docTipo !== 99 && docNro > 0) {
+  if (docTipo === 99 || docNro > 0) {
     qrData.tipoDocRec = docTipo;
     qrData.nroDocRec = docNro;
   }
@@ -267,7 +268,6 @@ exports.printTicket = async (req, res) => {
       text += `Nro: ${formatFacturaNumero(puntoVenta, datosFiscales.factura_numero)}\r\n`;
       text += `Emision: ${formatArcaEmissionDate(facturaRespuesta.fecha)}\r\n`;
       text += separator();
-      text += `${emisor.nombreFantasia}\r\n`;
       text += `Razon Soc.: ${emisor.razonSocial}\r\n`;
       text += `CUIT: ${emisor.cuit}\r\n`;
       text += `IVA: ${emisor.condicionIva}\r\n`;

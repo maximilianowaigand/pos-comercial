@@ -2,6 +2,27 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const http = require("http");
 
+const fs = require("fs");
+
+function log(msg) {
+  fs.appendFileSync(
+    "C:/apppanaderia/log.txt",
+    `[${new Date().toISOString()}] ${msg}\n`
+  );
+}
+
+process.on("uncaughtException", (err) => {
+  log("UNCAUGHT EXCEPTION:");
+  log(err.stack || err.message);
+});
+
+process.on("unhandledRejection", (err) => {
+  log("UNHANDLED REJECTION:");
+  log(String(err));
+});
+
+log("=== INICIO ELECTRON ===");
+
 function waitForBackend(timeout = 15000) {
   return new Promise((resolve, reject) => {
     const start = Date.now();
@@ -56,11 +77,22 @@ function createWindow() {
 app.whenReady().then(async () => {
   const isDev = !app.isPackaged;
 
-  const dbDir = isDev
-    ? path.join(__dirname, "../backend/db")
-    : app.getPath("userData");
+  const dbDir = path.join("C:", "apppanaderia", "data");
+  const fs = require("fs");
+
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+
+  log(`APP_DATA_DIR: ${dbDir}`);
+  log(`IS_DEV: ${isDev}`);
+  log(`IS_PACKAGED: ${app.isPackaged}`);
+  console.log("IS_DEV:", isDev);
+  console.log("IS_PACKAGED:", app.isPackaged);
 
   process.env.APP_DATA_DIR = dbDir;
+
+  
 
   if (isDev) {
     // En dev el backend ya corre con nodemon
@@ -79,17 +111,28 @@ app.whenReady().then(async () => {
       "frontend",
       "dist"
     );
+    log("Cargando backend...");
+    log(backendEntry);
 
     try {
       require(backendEntry);
+      log("Backend cargado OK");
     } catch (err) {
-      console.error("Error al cargar backend:", err);
-      app.quit();
-      return;
-    }
+      log("ERROR AL CARGAR BACKEND");
+      log(err.message || String(err));
 
+      if (err.stack) {
+      log(err.stack);
+      }
+
+    app.quit();
+    return;
+    }
+    log("Esperando backend...");
     try {
       await waitForBackend();
+      log("Backend respondió OK");
+      log("Creando ventana...");
       createWindow();
     } catch (err) {
       console.error("Backend no respondió:", err);

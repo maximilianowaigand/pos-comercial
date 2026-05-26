@@ -1,6 +1,6 @@
 import { useVentas } from "../../context/VentasContext";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
-import { requiereFacturacionAutomatica } from "../../utils/facturacion";
+import { debeFacturarVenta } from "../../utils/facturacion";
 import styles from "./BotonImprimir.module.css";
 import API from "../../config/api"
 
@@ -58,7 +58,7 @@ export default function BotonImprimir() {
       metodo_pago: metodoPago,
       descuento_porcentaje: descuentoPct,
       datosCliente: datosCliente || {},
-      facturar_venta: requiereFacturacionAutomatica(metodoPago) || facturarVenta,
+      facturar_venta: debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion),
       perfil_facturacion: perfilFacturacion,
     };
 

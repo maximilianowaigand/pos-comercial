@@ -1,29 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { emitirFacturaTusFacturas } = require("../controllers/facturaController");
 const {
   consultarComprobante,
   consultarComprobantesHastaUltimo,
   probarConexionArca,
 } = require("../services/arcaService");
 const { getArcaProfiles } = require("../config/arcaProfiles");
-
-router.post("/facturar", async (req, res) => {
-  const { items, total, datosCliente, metodoPago } = req.body;
-
-  try {
-    const factura = await emitirFacturaTusFacturas(items, total, datosCliente, metodoPago);
-
-    if (!factura) {
-      return res.status(400).json({ error: "Error al generar factura" });
-    }
-
-    res.json(factura);
-  } catch (error) {
-    console.error("Error en /api/facturar:", error);
-    res.status(500).json({ error: "Error interno al generar factura" });
-  }
-});
 
 router.get("/arca/test", async (req, res) => {
   try {
@@ -43,6 +25,7 @@ router.get("/arca/perfiles", (req, res) => {
     id: profile.id,
     label: profile.label,
     available: profile.available,
+    fiscal: profile.fiscal !== false,
     cuit: profile.cuit,
     puntoVenta: profile.puntoVenta,
   }));

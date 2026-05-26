@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useVentas } from "../../context/VentasContext";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
-import { requiereFacturacionAutomatica } from "../../utils/facturacion";
+import { debeFacturarVenta } from "../../utils/facturacion";
 import styles from "./BotonGuardar.module.css";
 
 export default function BotonGuardar({ venta, metodoPago }) {
@@ -36,7 +36,7 @@ export default function BotonGuardar({ venta, metodoPago }) {
       metodo_pago: metodoPago,
       descuento_porcentaje: descuentoPct,
       datosCliente: datosCliente || {},
-      facturar_venta: requiereFacturacionAutomatica(metodoPago) || facturarVenta,
+      facturar_venta: debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion),
       perfil_facturacion: perfilFacturacion,
     };
 

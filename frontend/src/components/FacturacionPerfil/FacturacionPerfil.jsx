@@ -32,7 +32,11 @@ export default function FacturacionPerfil() {
               disabled={!perfil.available}
             >
               {perfil.label}
-              {perfil.available ? ` - CUIT ${perfil.cuit}` : " - falta configurar"}
+              {perfil.fiscal === false
+                ? " - sin facturacion fiscal"
+                : perfil.available
+                  ? ` - CUIT ${perfil.cuit}`
+                  : " - falta configurar"}
             </option>
           ))}
         </select>
@@ -42,6 +46,9 @@ export default function FacturacionPerfil() {
         <div className={styles.overlay}>
           <div className={styles.modal}>
             <h2>Elegir quien factura hoy</h2>
+            <p className={styles.helpText}>
+              Esta seleccion se pide una vez por dia para evitar facturar con otra persona.
+            </p>
             <div className={styles.options}>
               {perfilesFacturacion.map((perfil) => (
                 <button
@@ -53,7 +60,9 @@ export default function FacturacionPerfil() {
                 >
                   <strong>{perfil.label}</strong>
                   <span>
-                    {perfil.available
+                    {perfil.fiscal === false
+                      ? "Solo registra ventas, no emite factura fiscal"
+                      : perfil.available
                       ? `CUIT ${perfil.cuit} - PV ${perfil.puntoVenta}`
                       : "Falta configurar certificado y punto de venta"}
                   </span>

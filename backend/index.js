@@ -1,8 +1,8 @@
-require("./config/env");
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config();
+
 
 const app = express();
 const frontendDistPath = process.env.FRONTEND_DIST_PATH
@@ -39,3 +39,8 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
   startFacturacionWorker();
 });
+
+
+console.log("CWD:", process.cwd());
+console.log("__dirname:", __dirname);
+console.log("ENV:", process.env.NODE_ENV);
