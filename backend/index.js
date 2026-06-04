@@ -44,8 +44,3 @@ server.on("error", (error) => {
   console.error("Error iniciando backend:", error);
   process.emit("backend-start-error", error);
 });
-
-
-console.log("CWD:", process.cwd());
-console.log("__dirname:", __dirname);
-console.log("ENV:", process.env.NODE_ENV);

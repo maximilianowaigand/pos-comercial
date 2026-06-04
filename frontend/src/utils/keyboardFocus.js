@@ -1,5 +1,7 @@
 export function restoreKeyboardFocus(selector = "[data-keyboard-primary]") {
   window.requestAnimationFrame(() => {
+    window.focus();
+
     const target =
       document.querySelector(selector) ||
       document.querySelector("input:not([disabled]), textarea:not([disabled]), select:not([disabled])");
@@ -19,4 +21,6 @@ export function restoreKeyboardFocus(selector = "[data-keyboard-primary]") {
 export function restoreFocusAfterNativeDialog(selector) {
   window.setTimeout(() => restoreKeyboardFocus(selector), 0);
   window.setTimeout(() => restoreKeyboardFocus(selector), 120);
+  window.setTimeout(() => restoreKeyboardFocus(selector), 500);
+  window.setTimeout(() => restoreKeyboardFocus(selector), 1200);
 }

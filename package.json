@@ -13,18 +13,11 @@
     "electron": "wait-on http://localhost:3000 && electron .",
     "dist": "npm run build && electron-builder"
   },
-  "dependencies": {
-    "dotenv": "^17.4.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-router-dom": "6.30.3"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.0.0",
     "concurrently": "^9.2.1",
     "electron": "^41.3.0",
     "electron-builder": "^26.8.1",
-    "vite": "^5.0.0",
     "wait-on": "^9.0.5"
   },
   "build": {

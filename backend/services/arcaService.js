@@ -20,6 +20,34 @@ const WSFE_URLS = {
 };
 
 const cachedTickets = new Map();
+const ARCA_DEBUG = process.env.ARCA_DEBUG === "true";
+
+function logArcaDebug(message, data) {
+  if (!ARCA_DEBUG) {
+    return;
+  }
+
+  if (data === undefined) {
+    console.log(message);
+    return;
+  }
+
+  console.log(message, data);
+}
+
+function getSafeArcaConfig(config) {
+  return {
+    env: config.env,
+    profileId: config.profileId,
+    profileLabel: config.profileLabel,
+    cuit: config.cuit,
+    puntoVenta: config.puntoVenta,
+    comprobanteTipo: config.comprobanteTipo,
+    wsaaUrl: config.wsaaUrl,
+    wsfeUrl: config.wsfeUrl,
+    opensslPath: config.opensslPath,
+  };
+}
 
 const arcaHttpsAgentOptions = process.versions.electron
   ? {}
@@ -493,21 +521,27 @@ async function emitirFacturaArca({ total, cliente = {}, profileId }) {
 
   try {
 
-    console.log("[ARCA] Iniciando emitirFacturaArca");
-    console.log("[ARCA] profileId:", profileId);
+    logArcaDebug("[ARCA] Iniciando emitirFacturaArca", { profileId });
 
     const config = getArcaConfig(profileId);
 
-    console.log("[ARCA] Config:", config);
+    logArcaDebug("[ARCA] Config:", getSafeArcaConfig(config));
 
     const ticket = await getWsaaTicket(profileId);
 
-    console.log("[ARCA] Ticket WSAA obtenido");
-    console.log(ticket);
+    logArcaDebug("[ARCA] Ticket WSAA obtenido", {
+      expirationTime: ticket.expirationTime,
+      generationTime: ticket.generationTime,
+    });
 
     const ultimo = await consultarUltimoComprobante(profileId);
 
-    console.log("[ARCA] Ultimo comprobante:", ultimo);
+    logArcaDebug("[ARCA] Ultimo comprobante:", {
+      puntoVenta: ultimo.puntoVenta,
+      comprobanteTipo: ultimo.comprobanteTipo,
+      ultimoNumero: ultimo.ultimoNumero,
+      evento: ultimo.evento,
+    });
 
     const numero = ultimo.ultimoNumero + 1;
     const fecha = formatArcaDate();
@@ -517,7 +551,7 @@ async function emitirFacturaArca({ total, cliente = {}, profileId }) {
       cliente.condicion_iva
     );
 
-    console.log("[ARCA] Enviando FECAESolicitar...");
+    logArcaDebug("[ARCA] Enviando FECAESolicitar...");
 
     const xml = await callWsfe(
   "FECAESolicitar",
@@ -555,8 +589,7 @@ async function emitirFacturaArca({ total, cliente = {}, profileId }) {
   profileId
 );
 
-    console.log("[ARCA] XML RESPUESTA:");
-    console.log(xml);
+    logArcaDebug("[ARCA] Respuesta WSFE recibida");
 
     const errorsXml = extractSection(xml, "Errors");
     const errorCode = extractTag(errorsXml, "Code");
@@ -604,10 +637,11 @@ async function emitirFacturaArca({ total, cliente = {}, profileId }) {
   } catch (error) {
 
     console.error("=========== ERROR ARCA ===========");
-    console.error(error);
     console.error("MESSAGE:", error?.message);
-    console.error("STACK:", error?.stack);
-    console.error("RESPONSE:", error?.response?.data);
+    if (ARCA_DEBUG) {
+      console.error("STACK:", error?.stack);
+      console.error("RESPONSE:", error?.response?.data);
+    }
 
     throw error;
   }

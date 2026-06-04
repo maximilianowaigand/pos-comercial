@@ -124,7 +124,34 @@ function PeriodPanel({ title, actualLabel, compareLabel, data, children }) {
   );
 }
 
-export default function Dashboard() {
+function DashboardAccess({ onSubmit, error }) {
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit(password);
+  };
+
+  return (
+    <div className={styles.accessPage}>
+      <form className={styles.accessBox} onSubmit={handleSubmit}>
+        <h1>Dashboard</h1>
+        <p>Ingresá la contraseña para ver las métricas.</p>
+        <input
+          type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          placeholder="Contraseña"
+          autoFocus
+        />
+        {error && <span className={styles.accessError}>{error}</span>}
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  );
+}
+
+function DashboardContent({ dashboardPassword, onUnauthorized }) {
   const today = useMemo(() => getLocalDate(), []);
   const currentMonth = today.slice(0, 7);
 
@@ -148,8 +175,22 @@ export default function Dashboard() {
       setLoading(true);
 
       try {
-        const res = await fetch(`/api/stats/dashboard?${params.toString()}`);
+        const res = await fetch(`/api/stats/dashboard?${params.toString()}`, {
+          headers: {
+            "x-dashboard-password": dashboardPassword,
+          },
+        });
         const data = await res.json();
+
+        if (res.status === 401) {
+          onUnauthorized(data?.error || "Contraseña incorrecta");
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error(data?.error || "Error cargando dashboard");
+        }
+
         setStats(data);
       } catch (error) {
         console.error("Error cargando dashboard:", error);
@@ -159,7 +200,7 @@ export default function Dashboard() {
     };
 
     fetchStats();
-  }, [filters]);
+  }, [dashboardPassword, filters, onUnauthorized]);
 
   const updateFilter = (name, value) => {
     setFilters((current) => ({ ...current, [name]: value }));
@@ -425,5 +466,37 @@ export default function Dashboard() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  const [dashboardPassword, setDashboardPassword] = useState("");
+  const [accessError, setAccessError] = useState("");
+
+  const handleSubmitPassword = (password) => {
+    const cleanPassword = password.trim();
+    if (!cleanPassword) {
+      setAccessError("Ingresá una contraseña");
+      return;
+    }
+
+    setDashboardPassword(cleanPassword);
+    setAccessError("");
+  };
+
+  const handleUnauthorized = (message) => {
+    setDashboardPassword("");
+    setAccessError(message);
+  };
+
+  if (!dashboardPassword) {
+    return <DashboardAccess onSubmit={handleSubmitPassword} error={accessError} />;
+  }
+
+  return (
+    <DashboardContent
+      dashboardPassword={dashboardPassword}
+      onUnauthorized={handleUnauthorized}
+    />
   );
 }

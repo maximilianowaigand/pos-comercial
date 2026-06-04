@@ -197,8 +197,6 @@ export function VentasProvider({ children }) {
 
   async function agregarVenta(body) {
     try {
-      console.log("[VENTA] Enviando venta al backend:", body);
-
       const res = await fetch("/api/ventas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

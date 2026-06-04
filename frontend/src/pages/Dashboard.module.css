@@ -3,6 +3,61 @@
   gap: 18px;
 }
 
+.accessPage {
+  min-height: min(520px, 70vh);
+  display: grid;
+  place-items: center;
+}
+
+.accessBox {
+  width: min(100%, 360px);
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+  background: #fffaf3;
+  border: 1px solid #ecdcc8;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(92, 64, 39, 0.07);
+}
+
+.accessBox h1,
+.accessBox p {
+  margin: 0;
+}
+
+.accessBox h1 {
+  color: #2a2118;
+  font-size: 1.5rem;
+}
+
+.accessBox p {
+  color: #6e5b49;
+}
+
+.accessBox input {
+  min-height: 42px;
+  border: 1px solid #d9c3aa;
+  border-radius: 6px;
+  padding: 0 12px;
+  background: #fff;
+  color: #2a2118;
+}
+
+.accessBox button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 6px;
+  background: #2f5d50;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.accessError {
+  color: #b23b2b;
+  font-size: 0.88rem;
+}
+
 .hero {
   display: flex;
   justify-content: space-between;

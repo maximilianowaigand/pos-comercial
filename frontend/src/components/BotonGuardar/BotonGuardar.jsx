@@ -83,7 +83,7 @@ export default function BotonGuardar({ venta, metodoPago }) {
 
             {modal === "sinMetodo" && (
               <>
-                <p className={styles.modalText}>⚠️ Seleccioná un método de pago</p>
+                <p className={styles.modalText}>Seleccioná un método de pago</p>
                 <button
                   type="button"
                   className={`${styles.button} ${styles.secondary}`}
@@ -117,12 +117,12 @@ export default function BotonGuardar({ venta, metodoPago }) {
             )}
 
             {modal === "exito" && (
-              <p className={styles.modalText}>✅ Venta guardada</p>
+              <p className={styles.modalText}>Venta guardada</p>
             )}
 
             {modal === "error" && (
               <>
-                <p className={styles.modalText}>❌ Error al guardar la venta</p>
+                <p className={styles.modalText}>Error al guardar la venta</p>
                 <button
                   type="button"
                   className={`${styles.button} ${styles.secondary}`}

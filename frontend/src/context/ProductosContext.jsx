@@ -15,7 +15,7 @@ export function ProductosProvider({ children }) {
   const [busqueda, setBusqueda] = useState("");
 
 
-  // 🔄 Cargar productos
+  // Cargar productos
   useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -33,7 +33,7 @@ export function ProductosProvider({ children }) {
     fetchProductos();
   }, []);
 
-  // 🧠 Categorías (SIEMPRE ARRAY)
+  // Categorías siempre como array.
   const categorias = [
     "Todos",
     ...new Set(productos.map(p => p.categoria || "Sin categoría"))
@@ -51,7 +51,7 @@ export function ProductosProvider({ children }) {
           p => (p.categoria || "Sin categoría") === categoria
         );
 
-  // 🔍 búsqueda en tiempo real
+  // Búsqueda en tiempo real.
   if (busqueda.trim().length > 0) {
     const q = normalizar(busqueda);
 

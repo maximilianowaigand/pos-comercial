@@ -5,8 +5,7 @@ export default function Totales({ totales = {} }) {
     efectivo = 0,
     transferencia = 0,
     tarjeta = 0,
-    totalDia = 0,
-    totalMes = 0
+    totalDia = 0
   } = totales;
 
   return (
@@ -34,7 +33,6 @@ export default function Totales({ totales = {} }) {
 
       <div className={styles.totals}>
         <h3>Total Dia: ${totalDia}</h3>
-        <h3>Total Mes: ${totalMes}</h3>
       </div>
     </section>
   );

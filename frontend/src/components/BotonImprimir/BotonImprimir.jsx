@@ -44,9 +44,14 @@ export default function BotonImprimir() {
 
   const imprimir = async () => {
     if (venta.length === 0) return;
+    if (!metodoPago) {
+      alert("Seleccioná un método de pago");
+      restoreFocusAfterNativeDialog("[data-keyboard-primary]");
+      return;
+    }
 
     const confirmar = window.confirm("¿Confirmar venta e imprimir?");
-    restoreFocusAfterNativeDialog();
+    restoreFocusAfterNativeDialog("[data-keyboard-primary]");
     if (!confirmar) return;
 
     const body = {
@@ -64,13 +69,12 @@ export default function BotonImprimir() {
 
     try {
       const confirmarRepetida = await confirmarVentaRepetida(body);
-      restoreFocusAfterNativeDialog();
+      restoreFocusAfterNativeDialog("[data-keyboard-primary]");
       if (!confirmarRepetida) {
         return;
       }
 
-      console.log("[VENTA + IMPRESION] Enviando venta al backend:", body);
-      // ✅ 1. Guardar venta
+      // 1. Guardar venta
       const res = await fetch(`${API}/api/ventas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -81,20 +85,20 @@ export default function BotonImprimir() {
         const text = await res.text();
         console.error(text);
         alert("Error guardando venta");
-        restoreFocusAfterNativeDialog();
+        restoreFocusAfterNativeDialog("[data-keyboard-primary]");
         return;
       }
 
-      // ✅ 2. Obtener respuesta
+      // 2. Obtener respuesta
       const data = await res.json();
 
       if (!data.id_venta) {
         alert(`Error guardando venta: ${data.error}`);
-        restoreFocusAfterNativeDialog();
+        restoreFocusAfterNativeDialog("[data-keyboard-primary]");
         return;
       }
 
-      // ✅ 3. Imprimir ticket
+      // 3. Imprimir ticket
       let ventaParaImprimir = data;
 
       if (data.facturacion?.queued) {
@@ -122,21 +126,22 @@ export default function BotonImprimir() {
 
       if (!resPrint.ok || printData.ok === false) {
         alert(printData.error || printData.warning || "Error al imprimir");
-        restoreFocusAfterNativeDialog();
+        restoreFocusAfterNativeDialog("[data-keyboard-primary]");
         return;
       }
 
-      // ✅ 4. Limpiar estado
+      // 4. Limpiar estado
       alert("Venta guardada e impresa");
-      restoreFocusAfterNativeDialog();
       limpiarVenta();
       obtenerTotales();
-      restoreKeyboardFocus();
+      window.dispatchEvent(new Event("pos:restore-search-focus"));
+      restoreFocusAfterNativeDialog("[data-keyboard-primary]");
+      restoreKeyboardFocus("[data-keyboard-primary]");
 
     } catch (error) {
       console.error(error);
       alert("Error en la operación");
-      restoreFocusAfterNativeDialog();
+      restoreFocusAfterNativeDialog("[data-keyboard-primary]");
     }
   };
 

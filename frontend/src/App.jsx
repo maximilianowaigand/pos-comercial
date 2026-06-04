@@ -7,7 +7,7 @@ import FacturacionPerfil from "./components/FacturacionPerfil/FacturacionPerfil"
 import HistorialVentas from "./components/HistorialVentas/HistorialVentas";
 import CrearProducto from "./components/CrearProducto/CrearProducto";
 import Dashboard from "./pages/Dashboard";
-import POS from "./pages/pos";
+import POS from "./pages/Pos";
 
 
 

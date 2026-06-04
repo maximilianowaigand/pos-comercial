@@ -16,7 +16,23 @@ export default function Categorias({ categorias, categoriaActual, onSelect }) {
     };
 
     window.addEventListener("pos:restore-search-focus", handleRestoreSearchFocus);
-    return () => window.removeEventListener("pos:restore-search-focus", handleRestoreSearchFocus);
+    window.addEventListener("focus", handleRestoreSearchFocus);
+    window.addEventListener("pageshow", handleRestoreSearchFocus);
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        handleRestoreSearchFocus();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pos:restore-search-focus", handleRestoreSearchFocus);
+      window.removeEventListener("focus", handleRestoreSearchFocus);
+      window.removeEventListener("pageshow", handleRestoreSearchFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   useEffect(() => {

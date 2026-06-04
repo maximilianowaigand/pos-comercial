@@ -12,9 +12,23 @@ const METODOS_FACTURABLES = new Set([
 ]);
 const MAX_INTENTOS = 8;
 const WORKER_INTERVAL_MS = Number(process.env.FACTURACION_WORKER_INTERVAL_MS) || 30000;
+const FACTURACION_DEBUG = process.env.FACTURACION_DEBUG === "true";
 
 let workerStarted = false;
 let processing = false;
+
+function logFacturacionDebug(message, data) {
+  if (!FACTURACION_DEBUG) {
+    return;
+  }
+
+  if (data === undefined) {
+    console.log(message);
+    return;
+  }
+
+  console.log(message, data);
+}
 
 function requiereFacturacion(metodoPago) {
   const normalizado = String(metodoPago || "")
@@ -96,10 +110,9 @@ function getProximoIntento(intentos) {
 }
 
 async function encolarFacturacionVenta(idVenta, ventaData = {}) {
-  console.log("[FACTURACION] Evaluando venta:", {
+  logFacturacionDebug("[FACTURACION] Evaluando venta:", {
     idVenta,
     metodoPago: ventaData.metodo_pago,
-    datosCliente: ventaData.datosCliente,
     requiereFacturacion: debeFacturarVenta(ventaData),
   });
 
@@ -122,9 +135,10 @@ async function encolarFacturacionVenta(idVenta, ventaData = {}) {
     perfilFacturacion: ventaData.perfil_facturacion || "maximiliano",
   };
 
-  console.log("[FACTURACION] Encolando payload:", {
+  logFacturacionDebug("[FACTURACION] Encolando payload:", {
     idVenta,
-    payload,
+    metodoPago: payload.metodoPago,
+    perfilFacturacion: payload.perfilFacturacion,
   });
 
   await run(
@@ -355,16 +369,13 @@ async function processNextFacturacionJob() {
     try {
       const payload = JSON.parse(job.payload_json || "{}");
       const { venta, items } = await getVentaParaFacturar(job.id_venta);
-      console.log("[FACTURACION] Procesando job:", {
+      logFacturacionDebug("[FACTURACION] Procesando job:", {
         idJob: job.id_job,
         idVenta: job.id_venta,
         metodoPago: venta.medio_pago,
         total: venta.total,
-        datosCliente: getDefaultCliente(payload.datosCliente),
-        items,
+        items: items.length,
       });
-
-      console.log("[FACTURACION] Cliente enviado ARCA:", getDefaultCliente(payload.datosCliente));
 
       const respuesta = await emitirFacturaArca({
         items,
