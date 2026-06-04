@@ -101,7 +101,7 @@ export default function BotonImprimir() {
         ventaParaImprimir = (await esperarFactura(data.id_venta)) || data;
       }
 
-      await fetch("/api/print", {
+      const resPrint = await fetch("/api/print", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -118,6 +118,13 @@ export default function BotonImprimir() {
           },
         }),
       });
+      const printData = await resPrint.json().catch(() => ({}));
+
+      if (!resPrint.ok || printData.ok === false) {
+        alert(printData.error || printData.warning || "Error al imprimir");
+        restoreFocusAfterNativeDialog();
+        return;
+      }
 
       // ✅ 4. Limpiar estado
       alert("Venta guardada e impresa");

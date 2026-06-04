@@ -34,10 +34,15 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
-const PORT = 3001;
-app.listen(PORT, () => {
+const PORT = Number(process.env.PORT) || 3001;
+const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
   startFacturacionWorker();
+});
+
+server.on("error", (error) => {
+  console.error("Error iniciando backend:", error);
+  process.emit("backend-start-error", error);
 });
 
 

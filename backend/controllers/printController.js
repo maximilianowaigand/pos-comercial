@@ -1,10 +1,11 @@
 const fs = require("fs");
-const { exec } = require("child_process");
+const { execFile } = require("child_process");
 const path = require("path");
 const db = require("../db");
 require("../config/env");
 
 const TICKET_WIDTH = 32;
+const DEFAULT_PRINTER_SHARE = "\\\\localhost\\POS58_Printer";
 
 const PROFILE_ENV_PREFIX = {
   maximiliano: "ARCA",
@@ -213,6 +214,34 @@ function buildEscPosQr(data) {
   ]);
 }
 
+function getPrinterShare() {
+  return process.env.PRINTER_SHARE || process.env.THERMAL_PRINTER_SHARE || DEFAULT_PRINTER_SHARE;
+}
+
+function sendToPrinter(filePath) {
+  return new Promise((resolve, reject) => {
+    const printerShare = getPrinterShare();
+
+    execFile(
+      "cmd.exe",
+      ["/d", "/s", "/c", "copy", "/b", filePath, printerShare],
+      { windowsHide: true },
+      (err, stdout, stderr) => {
+        if (err) {
+          reject(
+            new Error(
+              `No se pudo imprimir en ${printerShare}. ${stderr || stdout || err.message}`
+            )
+          );
+          return;
+        }
+
+        resolve({ printerShare, stdout });
+      }
+    );
+  });
+}
+
 exports.printTicket = async (req, res) => {
   try {
     const {
@@ -331,15 +360,10 @@ exports.printTicket = async (req, res) => {
     const filePath = path.join(ticketDir, "ticket.txt");
     fs.writeFileSync(filePath, Buffer.concat(output));
 
-    exec(`copy /b "${filePath}" \\\\localhost\\POS58_Printer`, (err) => {
-      if (err) {
-        return res.json({ ok: true, warning: "No se imprimio", facturacion });
-      }
-
-      res.json({ ok: true, facturacion });
-    });
+    const printResult = await sendToPrinter(filePath);
+    res.json({ ok: true, facturacion, printer: printResult.printerShare });
   } catch (err) {
     console.error("Error printTicket:", err);
-    res.status(500).json({ error: "Error interno" });
+    res.status(500).json({ error: err.message || "Error interno" });
   }
 };

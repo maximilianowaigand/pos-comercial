@@ -118,9 +118,10 @@ export default function HistorialVentas() {
         id_venta: data.id_venta,
       }),
     });
+    const printData = await resPrint.json().catch(() => ({}));
 
-    if (!resPrint.ok) {
-      alert("Error al imprimir");
+    if (!resPrint.ok || printData.ok === false) {
+      alert(printData.error || printData.warning || "Error al imprimir");
       restoreFocusAfterNativeDialog();
       return;
     }

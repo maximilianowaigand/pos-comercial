@@ -1,24 +1,43 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const http = require("http");
-
 const fs = require("fs");
 
+const appDir = path.join("C:", "apppanaderia");
+const logPath = path.join(appDir, "log.txt");
+let backendStartError = null;
+
+function escapeHtml(value) {
+  return String(value || "").replace(/[<>&]/g, (char) => ({
+    "<": "&lt;",
+    ">": "&gt;",
+    "&": "&amp;",
+  }[char]));
+}
+
 function log(msg) {
-  fs.appendFileSync(
-    "C:/apppanaderia/log.txt",
-    `[${new Date().toISOString()}] ${msg}\n`
-  );
+  try {
+    fs.mkdirSync(appDir, { recursive: true });
+    fs.appendFileSync(logPath, `[${new Date().toISOString()}] ${msg}\n`);
+  } catch (err) {
+    console.error("No se pudo escribir log:", err);
+  }
 }
 
 process.on("uncaughtException", (err) => {
   log("UNCAUGHT EXCEPTION:");
-  log(err.stack || err.message);
+  log(err.stack || err.message || String(err));
 });
 
 process.on("unhandledRejection", (err) => {
   log("UNHANDLED REJECTION:");
-  log(String(err));
+  log(err.stack || err.message || String(err));
+});
+
+process.on("backend-start-error", (err) => {
+  backendStartError = err;
+  log("BACKEND START ERROR:");
+  log(err.stack || err.message || String(err));
 });
 
 log("=== INICIO ELECTRON ===");
@@ -31,14 +50,42 @@ function waitForBackend(timeout = 15000) {
         resolve();
       }).on("error", () => {
         if (Date.now() - start > timeout) {
-          reject(new Error("Backend no respondió a tiempo"));
-        } else {
-          setTimeout(check, 300);
+          reject(backendStartError || new Error("Backend no respondio a tiempo"));
+          return;
         }
+
+        setTimeout(check, 300);
       });
     };
+
     check();
   });
+}
+
+function createErrorWindow(message) {
+  const win = new BrowserWindow({
+    width: 760,
+    height: 460,
+    icon: path.join(__dirname, "icon.ico"),
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  });
+
+  const html = `
+    <html>
+      <body style="font-family: Arial, sans-serif; padding: 28px; color: #241a12;">
+        <h1>No se pudo iniciar POS Panaderia</h1>
+        <p>El programa no pudo levantar el servidor interno.</p>
+        <pre style="white-space: pre-wrap; background: #f4eadf; padding: 16px; border-radius: 8px;">${escapeHtml(message)}</pre>
+        <p>Revisa el log para mas detalle:</p>
+        <strong>${escapeHtml(logPath)}</strong>
+      </body>
+    </html>
+  `;
+
+  win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 }
 
 function createWindow() {
@@ -66,23 +113,18 @@ function createWindow() {
     if (!win.webContents.isFocused()) win.webContents.focus();
   });
 
-  // Ambos usan HTTP — React Router funciona bien
-  if (app.isPackaged) {
-    win.loadURL("http://localhost:3001");
-  } else {
-    win.loadURL("http://localhost:3000");
-  }
+  const url = app.isPackaged ? "http://localhost:3001" : "http://localhost:3000";
+  win.loadURL(url).catch((err) => {
+    log(`ERROR CARGANDO FRONTEND: ${err.message}`);
+    createErrorWindow(err.stack || err.message);
+  });
 }
 
 app.whenReady().then(async () => {
   const isDev = !app.isPackaged;
+  const dbDir = path.join(appDir, "data");
 
-  const dbDir = path.join("C:", "apppanaderia", "data");
-  const fs = require("fs");
-
-  if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-  }
+  fs.mkdirSync(dbDir, { recursive: true });
 
   log(`APP_DATA_DIR: ${dbDir}`);
   log(`IS_DEV: ${isDev}`);
@@ -92,52 +134,50 @@ app.whenReady().then(async () => {
 
   process.env.APP_DATA_DIR = dbDir;
 
-  
-
   if (isDev) {
-    // En dev el backend ya corre con nodemon
     createWindow();
-  } else {
-    const backendEntry = path.join(
-      process.resourcesPath,
-      "app.asar.unpacked",
-      "backend",
-      "index.js"
-    );
-
-    process.env.FRONTEND_DIST_PATH = path.join(
-      process.resourcesPath,
-      "app.asar.unpacked",
-      "frontend",
-      "dist"
-    );
-    log("Cargando backend...");
-    log(backendEntry);
-
-    try {
-      require(backendEntry);
-      log("Backend cargado OK");
-    } catch (err) {
-      log("ERROR AL CARGAR BACKEND");
-      log(err.message || String(err));
-
-      if (err.stack) {
-      log(err.stack);
-      }
-
-    app.quit();
     return;
-    }
-    log("Esperando backend...");
-    try {
-      await waitForBackend();
-      log("Backend respondió OK");
-      log("Creando ventana...");
-      createWindow();
-    } catch (err) {
-      console.error("Backend no respondió:", err);
-      app.quit();
-    }
+  }
+
+  const backendEntry = path.join(
+    process.resourcesPath,
+    "app.asar.unpacked",
+    "backend",
+    "index.js"
+  );
+
+  process.env.FRONTEND_DIST_PATH = path.join(
+    process.resourcesPath,
+    "app.asar.unpacked",
+    "frontend",
+    "dist"
+  );
+
+  log("Cargando backend...");
+  log(backendEntry);
+
+  try {
+    require(backendEntry);
+    log("Backend cargado OK");
+  } catch (err) {
+    log("ERROR AL CARGAR BACKEND");
+    log(err.stack || err.message || String(err));
+    createErrorWindow(err.stack || err.message || String(err));
+    return;
+  }
+
+  log("Esperando backend...");
+
+  try {
+    await waitForBackend();
+    log("Backend respondio OK");
+    log("Creando ventana...");
+    createWindow();
+  } catch (err) {
+    console.error("Backend no respondio:", err);
+    log("Backend no respondio:");
+    log(err.stack || err.message || String(err));
+    createErrorWindow(err.stack || err.message || String(err));
   }
 });
 
