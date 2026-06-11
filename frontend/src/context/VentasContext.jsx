@@ -130,32 +130,30 @@ export function VentasProvider({ children }) {
     return () => clearInterval(interval);
   }, []);
 
-  async function obtenerVentas() {
+    const obtenerVentas = async (fecha = "") => {
     try {
-      const res = await fetchConTimeout(`${API}/api/ventas`);
-      const data = await leerJsonSeguro(res);
+      setLoading(true);
+      setVentasError("");
+
+      const url = fecha
+        ? `${API}/api/ventas?fecha=${fecha}`
+        : `${API}/api/ventas`;
+
+      const res = await fetchConTimeout(url);
 
       if (!res.ok) {
-        throw new Error(data?.error || "Error cargando ventas");
+        throw new Error(`HTTP ${res.status}`);
       }
 
-      if (!data) {
-        throw new Error("El servidor no devolvio ventas");
-      }
-
-      const lista = Array.isArray(data) ? data : data.ventas;
-      setVentas(lista ?? []);
-      setVentasError("");
+      const data = await res.json();
+      setVentas(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Error cargando ventas:", error);
-      setVentas([]);
-      setVentasError(
-        error.name === "AbortError"
-          ? "El servidor tardo demasiado en responder"
-          : error.message || "Error cargando ventas"
-      );
+      console.error("Error obteniendo ventas:", error);
+      setVentasError(error.message || "Error obteniendo ventas");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   async function obtenerPerfilesFacturacion() {
     try {

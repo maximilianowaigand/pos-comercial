@@ -89,30 +89,66 @@ exports.reintentarFacturacion = async (req, res) => {
 };
 
 // Listar ventas
-exports.listarVentas = (req, res) => {
-  const sql = `
-    SELECT 
-      v.id_venta, 
-      COALESCE(v.fecha, '') AS fecha, 
-      COALESCE(v.hora, '') AS hora, 
-      COALESCE(v.medio_pago, '') AS medio_pago, 
-      COALESCE(v.total, 0) AS total, 
-      COALESCE(v.descuento_porcentaje, 0) AS descuento_porcentaje,
-      COALESCE(v.descuento_monto, 0) AS descuento_monto,
-      v.facturacion_requerida,
-      COALESCE(v.facturacion_estado, 'NO_REQUIERE') AS facturacion_estado,
-      v.factura_cae,
-      v.factura_vencimiento,
-      v.factura_numero,
-      v.factura_error,
-      COALESCE(v.estado, '') AS estado
-    FROM ventas v
-    ORDER BY v.id_venta DESC
-    LIMIT 200
-  `;
-  db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
+  exports.listarVentas = (req, res) => {
+    const { fecha } = req.query;
 
+    let sql;
+    let params = [];
+
+    if (fecha) {
+      sql = `
+        SELECT
+          v.id_venta,
+          COALESCE(v.fecha, '') AS fecha,
+          COALESCE(v.hora, '') AS hora,
+          COALESCE(v.medio_pago, '') AS medio_pago,
+          COALESCE(v.total, 0) AS total,
+          COALESCE(v.descuento_porcentaje, 0) AS descuento_porcentaje,
+          COALESCE(v.descuento_monto, 0) AS descuento_monto,
+          v.facturacion_requerida,
+          COALESCE(v.facturacion_estado, 'NO_REQUIERE') AS facturacion_estado,
+          v.factura_cae,
+          v.factura_vencimiento,
+          v.factura_numero,
+          v.factura_error,
+          COALESCE(v.estado, '') AS estado
+        FROM ventas v
+        WHERE v.fecha = ?
+        ORDER BY v.id_venta DESC
+      `;
+
+      params = [fecha];
+    } else {
+      sql = `
+        SELECT
+          v.id_venta,
+          COALESCE(v.fecha, '') AS fecha,
+          COALESCE(v.hora, '') AS hora,
+          COALESCE(v.medio_pago, '') AS medio_pago,
+          COALESCE(v.total, 0) AS total,
+          COALESCE(v.descuento_porcentaje, 0) AS descuento_porcentaje,
+          COALESCE(v.descuento_monto, 0) AS descuento_monto,
+          v.facturacion_requerida,
+          COALESCE(v.facturacion_estado, 'NO_REQUIERE') AS facturacion_estado,
+          v.factura_cae,
+          v.factura_vencimiento,
+          v.factura_numero,
+          v.factura_error,
+          COALESCE(v.estado, '') AS estado
+        FROM ventas v
+        ORDER BY v.id_venta DESC
+        LIMIT 100
+      `;
+    }
+
+  db.all(sql, params, (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    console.log("Cantidad ventas:", rows.length);
+
+    if (rows.length) {
+      console.log("Venta más nueva:", rows[0].fecha);
+      console.log("Venta más vieja:", rows[rows.length - 1].fecha);
+     };
     if (!rows.length) {
       return res.json([]);
     }

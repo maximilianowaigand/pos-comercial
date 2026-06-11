@@ -170,7 +170,11 @@ export default function HistorialVentas() {
             className={styles.control}
             type="date"
             value={fechaSeleccionada}
-            onChange={(e) => setFechaSeleccionada(e.target.value)}
+            onChange={(e) => {
+                              const fecha = e.target.value;
+                              setFechaSeleccionada(fecha);
+                              obtenerVentas(fecha);
+                              }}
           />
 
           <label className={styles.checkboxLabel}>
@@ -191,6 +195,7 @@ export default function HistorialVentas() {
             setFiltroFacturacion("");
             setSoloHoy(false);
             setFechaSeleccionada("");
+            obtenerVentas();
           }}
         >
           Limpiar filtros
