@@ -17,6 +17,12 @@ function formatDate(value) {
   return `${day}/${month}/${year}`;
 }
 
+function formatMonth(value) {
+  if (!value) return "";
+  const [year, month] = value.split("-");
+  return `${month}/${year}`;
+}
+
 function getLocalDate() {
   const now = new Date();
   const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
@@ -121,6 +127,143 @@ function PeriodPanel({ title, actualLabel, compareLabel, data, children }) {
         />
       </div>
     </article>
+  );
+}
+
+function PatronesConsumo({ data }) {
+  if (!data) return null;
+
+  return (
+    <section className={styles.panel}>
+      <div className={styles.panelHeader}>
+        <div>
+          <h2>Patrones de consumo</h2>
+          <p>Analisis local de los ultimos 90 dias de ventas.</p>
+        </div>
+        {data.suficientes && (
+          <strong className={styles.panelTotal}>{data.dias} dias analizados</strong>
+        )}
+      </div>
+
+      {!data.suficientes ? (
+        <p className={styles.status}>{data.mensaje}</p>
+      ) : (
+        <div className={styles.patternGrid}>
+          {data.hallazgos.map((hallazgo) => (
+            <article key={hallazgo.tipo} className={styles.patternCard}>
+              <h3>{hallazgo.titulo}</h3>
+              <p>{hallazgo.detalle}</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function ComparacionMensual({ data }) {
+  if (!data) return null;
+
+  const maxTotal = Math.max(1, ...data.meses.map((mes) => Number(mes.total || 0)));
+  const getVariationClass = (variation) => (
+    variation > 0
+      ? styles.deltaPositive
+      : variation < 0
+        ? styles.deltaNegative
+        : styles.deltaNeutral
+  );
+
+  return (
+    <section className={styles.panel}>
+      <div className={styles.panelHeader}>
+        <div>
+          <h2>Comparacion de meses</h2>
+          <p>Ultimos 12 meses hasta {formatMonth(data.hasta)}. Los meses sin ventas no se usan para identificar el mes mas bajo.</p>
+        </div>
+      </div>
+
+      {data.mesesConVentas === 0 ? (
+        <p className={styles.status}>Todavia no hay ventas para comparar meses.</p>
+      ) : (
+        <>
+          <div className={styles.monthSummaryGrid}>
+            <article className={styles.monthSummaryCard}>
+              <span>Mes mas fuerte</span>
+              <strong>{formatMonth(data.mesMasFuerte?.mes)}</strong>
+              <em>{formatMoney(data.mesMasFuerte?.total)}</em>
+            </article>
+            <article className={styles.monthSummaryCard}>
+              <span>Mes mas bajo</span>
+              <strong>{formatMonth(data.mesMasBajo?.mes)}</strong>
+              <em>{formatMoney(data.mesMasBajo?.total)}</em>
+            </article>
+            <article className={styles.monthSummaryCard}>
+              <span>Mayor suba mensual</span>
+              <strong>{data.mayorSuba ? formatMonth(data.mayorSuba.mes) : "Sin base"}</strong>
+              <em className={getVariationClass(data.mayorSuba?.variacion || 0)}>
+                {data.mayorSuba ? formatPercent(data.mayorSuba.variacion) : "-"}
+              </em>
+            </article>
+            <article className={styles.monthSummaryCard}>
+              <span>Mayor caida mensual</span>
+              <strong>{data.mayorCaida ? formatMonth(data.mayorCaida.mes) : "Sin base"}</strong>
+              <em className={getVariationClass(data.mayorCaida?.variacion || 0)}>
+                {data.mayorCaida ? formatPercent(data.mayorCaida.variacion) : "-"}
+              </em>
+            </article>
+          </div>
+
+          <div className={styles.monthList}>
+            {data.meses.map((mes) => (
+              <div key={mes.mes} className={styles.monthRow}>
+                <strong>{formatMonth(mes.mes)}</strong>
+                <div><i style={{ width: `${(Number(mes.total || 0) / maxTotal) * 100}%` }} /></div>
+                <span>{formatMoney(mes.total)}</span>
+                <em className={getVariationClass(mes.variacion || 0)}>
+                  {mes.variacion === null ? "Sin base" : formatPercent(mes.variacion)}
+                </em>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+function ImpactoClima({ data }) {
+  if (!data) return null;
+
+  return (
+    <section className={styles.panel}>
+      <div className={styles.panelHeader}>
+        <div>
+          <h2>Impacto del clima</h2>
+          <p>Compara la facturacion diaria segun el pronostico registrado para cada fecha.</p>
+        </div>
+      </div>
+
+      {!data.suficientes ? (
+        <p className={styles.status}>{data.mensaje}</p>
+      ) : (
+        <div className={styles.patternGrid}>
+          <article className={styles.patternCard}>
+            <h3>Dias con lluvia</h3>
+            <p>{data.lluvia.dias} dias registrados, con {formatMoney(data.lluvia.promedioDiario)} de facturacion diaria promedio.</p>
+          </article>
+          <article className={styles.patternCard}>
+            <h3>Dias secos</h3>
+            <p>{data.seco.dias} dias registrados, con {formatMoney(data.seco.promedioDiario)} de facturacion diaria promedio.</p>
+          </article>
+          <article className={styles.patternCard}>
+            <h3>Efecto estimado de la lluvia</h3>
+            <p className={data.variacionLluvia >= 0 ? styles.deltaPositive : styles.deltaNegative}>
+              En dias con lluvia, la facturacion diaria {data.variacionLluvia >= 0 ? "sube" : "baja"} {Math.abs(data.variacionLluvia).toFixed(1)}% frente a dias secos.
+            </p>
+          </article>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -295,6 +438,12 @@ function DashboardContent({ dashboardPassword, onUnauthorized }) {
       </section>
 
       {loading && <p className={styles.status}>Cargando metricas...</p>}
+
+      <PatronesConsumo data={stats?.patronesConsumo} />
+
+      <ComparacionMensual data={stats?.comparacionMensual} />
+
+      <ImpactoClima data={stats?.impactoClima} />
 
       <section className={styles.panel}>
         <div className={styles.panelHeader}>

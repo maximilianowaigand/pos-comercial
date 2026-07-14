@@ -4,6 +4,8 @@ const db = require("../db");
 // Coordenadas
 const LAT = -31.73197;
 const LON = -60.5238;
+const CLIMA_SYNC_INTERVAL_MS = Number(process.env.CLIMA_SYNC_INTERVAL_MS) || 6 * 60 * 60 * 1000;
+let climaSyncStarted = false;
 
 async function obtenerForecast() {
   try {
@@ -78,4 +80,19 @@ function guardarClima() {
   });
 }
 
-module.exports = { guardarClima };
+function startClimateSync() {
+  if (climaSyncStarted) return;
+
+  climaSyncStarted = true;
+
+  const actualizar = () => {
+    guardarClima().catch((error) => {
+      console.error("No se pudo actualizar el clima:", error.message);
+    });
+  };
+
+  actualizar();
+  setInterval(actualizar, CLIMA_SYNC_INTERVAL_MS);
+}
+
+module.exports = { guardarClima, startClimateSync };

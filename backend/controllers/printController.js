@@ -9,8 +9,7 @@ const DEFAULT_PRINTER_SHARE = "\\\\localhost\\POS58_Printer";
 
 const PROFILE_ENV_PREFIX = {
   maximiliano: "ARCA",
-  segundo_punto: "ARCA_SEGUNDO",
-  pareja: "ARCA_PAREJA",
+  yohanna: "ARCA_SEGUNDO",
 };
 
 function getVentaFiscal(idVenta) {
@@ -297,7 +296,7 @@ exports.printTicket = async (req, res) => {
       text += `Nro: ${formatFacturaNumero(puntoVenta, datosFiscales.factura_numero)}\r\n`;
       text += `Emision: ${formatArcaEmissionDate(facturaRespuesta.fecha)}\r\n`;
       text += separator();
-      text += `Razon Soc.: ${emisor.razonSocial}\r\n`;
+      text += `Razon Soc.:\r\n${emisor.razonSocial}\r\n`;
       text += `CUIT: ${emisor.cuit}\r\n`;
       text += `IVA: ${emisor.condicionIva}\r\n`;
       text += `Domicilio fiscal: ${emisor.domicilio || "S/D"}\r\n`;
@@ -310,7 +309,6 @@ exports.printTicket = async (req, res) => {
       text += `Cliente: ${receptor.razonSocial}\r\n`;
       text += `${receptor.docLabel}: ${receptor.docNro}\r\n`;
       text += `IVA cliente: ${receptor.condicionIva}\r\n`;
-      text += `Domicilio: ${receptor.domicilio}\r\n`;
       text += separator();
       text += `CAE: ${datosFiscales.factura_cae}\r\n`;
       text += `Vto CAE: ${formatArcaDate(datosFiscales.factura_vencimiento)}\r\n`;

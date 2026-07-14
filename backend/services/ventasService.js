@@ -3,7 +3,7 @@ const { encolarFacturacionVenta } = require("./facturacionQueueService");
 
 function registrarVenta(data) {
   return new Promise((resolve, reject) => {
-    const { items, metodo_pago } = data;
+    const { items, metodo_pago,perfil_facturacion } = data;
     const descuentoPorcentaje = Math.min(
       100,
       Math.max(0, Number(data.descuento_porcentaje) || 0)
@@ -37,16 +37,28 @@ function registrarVenta(data) {
           }
 
           db.run(
-            `INSERT INTO ventas (
-              fecha,
-              hora,
-              medio_pago,
-              total,
-              descuento_porcentaje,
-              descuento_monto,
-              estado
-            ) VALUES (DATE('now','localtime'), TIME('now','localtime'), ?, 0, 0, 0, 'CERRADA')`,
-            [metodo_pago],
+                `INSERT INTO ventas (
+                  fecha,
+                  hora,
+                  medio_pago,
+                  total,
+                  descuento_porcentaje,
+                  descuento_monto,
+                  estado,
+                  perfil_facturacion
+                ) VALUES (
+                  DATE('now','localtime'),
+                  TIME('now','localtime'),
+                  ?,
+                  0,
+                  0,
+                  0,
+                  'CERRADA',
+                  ?
+                )`,
+                [metodo_pago, perfil_facturacion || null],
+            
+            
             function onVentaInsert(insertErr) {
               if (insertErr) {
                 return db.run("ROLLBACK", () => reject(insertErr));
@@ -292,6 +304,12 @@ function getPreviousMonth(month) {
   return date.toISOString().slice(0, 7);
 }
 
+function addMonths(month, amount) {
+  const date = new Date(`${month}-01T12:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() + amount);
+  return date.toISOString().slice(0, 7);
+}
+
 function getComparativa(actual, comparado) {
   return {
     clientes: calcularVariacion(actual.clientes, comparado.clientes),
@@ -412,6 +430,277 @@ function getProductosPorMonto(desde, hasta, limite = 8) {
   });
 }
 
+function getRows(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(rows);
+    });
+  });
+}
+
+function porcentaje(valor, total) {
+  if (!total) return 0;
+  return (Number(valor || 0) / Number(total)) * 100;
+}
+
+async function getPatronesConsumo(hasta) {
+  const desde = addDays(hasta, -89);
+  const [cobertura] = await getRows(
+    `SELECT COUNT(DISTINCT fecha) as dias, COUNT(*) as ventas, IFNULL(SUM(total), 0) as monto
+     FROM ventas
+     WHERE fecha >= ? AND fecha <= ?`,
+    [desde, hasta]
+  );
+
+  const dias = Number(cobertura?.dias || 0);
+  const ventas = Number(cobertura?.ventas || 0);
+
+  if (dias < 14 || ventas < 20) {
+    return {
+      suficientes: false,
+      dias,
+      ventas,
+      desde,
+      hasta,
+      mensaje: "Se necesitan al menos 14 dias con ventas y 20 tickets para detectar patrones confiables.",
+      hallazgos: [],
+    };
+  }
+
+  const actualDesde = addDays(hasta, -29);
+  const anteriorHasta = addDays(actualDesde, -1);
+  const anteriorDesde = addDays(anteriorHasta, -29);
+  const [
+    productos,
+    diasSemana,
+    horas,
+    mediosPago,
+    periodoActual,
+    periodoAnterior,
+  ] = await Promise.all([
+    getRows(
+      `SELECT p.nombre_producto as nombre, SUM(dv.cantidad) as cantidad,
+              SUM(dv.cantidad * dv.precio_unitario) as monto
+       FROM detalle_venta dv
+       JOIN ventas v ON v.id_venta = dv.id_venta
+       JOIN productos p ON p.id_producto = dv.id_producto
+       WHERE v.fecha >= ? AND v.fecha <= ?
+       GROUP BY p.id_producto, p.nombre_producto
+       ORDER BY cantidad DESC, monto DESC
+       LIMIT 1`,
+      [desde, hasta]
+    ),
+    getRows(
+      `SELECT strftime('%w', fecha) as dia, COUNT(*) as ventas, SUM(total) as monto
+       FROM ventas
+       WHERE fecha >= ? AND fecha <= ?
+       GROUP BY strftime('%w', fecha)
+       ORDER BY monto DESC
+       LIMIT 1`,
+      [desde, hasta]
+    ),
+    getRows(
+      `SELECT SUBSTR(hora, 1, 2) as hora, COUNT(*) as ventas, SUM(total) as monto
+       FROM ventas
+       WHERE fecha >= ? AND fecha <= ?
+       GROUP BY SUBSTR(hora, 1, 2)
+       ORDER BY ventas DESC, monto DESC
+       LIMIT 1`,
+      [desde, hasta]
+    ),
+    getRows(
+      `SELECT medio_pago as medioPago, COUNT(*) as ventas, SUM(total) as monto
+       FROM ventas
+       WHERE fecha >= ? AND fecha <= ?
+       GROUP BY medio_pago
+       ORDER BY ventas DESC, monto DESC
+       LIMIT 1`,
+      [desde, hasta]
+    ),
+    getPeriodoStats(actualDesde, hasta),
+    getPeriodoStats(anteriorDesde, anteriorHasta),
+  ]);
+
+  const nombresDias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  const producto = productos[0];
+  const diaSemana = diasSemana[0];
+  const hora = horas[0];
+  const medioPago = mediosPago[0];
+  const hallazgos = [];
+
+  if (producto) {
+    hallazgos.push({
+      tipo: "producto",
+      titulo: "Producto con mayor salida",
+      detalle: `${producto.nombre}: ${Number(producto.cantidad || 0)} unidades vendidas en los ultimos 90 dias.`,
+    });
+  }
+
+  if (diaSemana) {
+    hallazgos.push({
+      tipo: "dia",
+      titulo: "Dia mas fuerte",
+      detalle: `${nombresDias[Number(diaSemana.dia)]}: concentra el ${porcentaje(diaSemana.monto, cobertura.monto).toFixed(1)}% de la facturacion de los ultimos 90 dias.`,
+    });
+  }
+
+  if (hora) {
+    hallazgos.push({
+      tipo: "hora",
+      titulo: "Horario con mas tickets",
+      detalle: `Entre las ${hora.hora}:00 y las ${hora.hora}:59 se registran mas compras (${Number(hora.ventas || 0)} tickets).`,
+    });
+  }
+
+  if (medioPago) {
+    hallazgos.push({
+      tipo: "pago",
+      titulo: "Medio de pago preferido",
+      detalle: `${medioPago.medioPago}: ${porcentaje(medioPago.ventas, ventas).toFixed(1)}% de los tickets del periodo.`,
+    });
+  }
+
+  if (periodoAnterior.total > 0) {
+    const variacion = ((periodoActual.total - periodoAnterior.total) / periodoAnterior.total) * 100;
+    hallazgos.push({
+      tipo: "tendencia",
+      titulo: "Tendencia reciente",
+      detalle: `Los ultimos 30 dias ${variacion >= 0 ? "subieron" : "bajaron"} ${Math.abs(variacion).toFixed(1)}% frente a los 30 dias anteriores.`,
+    });
+  }
+
+  return {
+    suficientes: true,
+    dias,
+    ventas,
+    desde,
+    hasta,
+    hallazgos,
+  };
+}
+
+async function getComparacionMensual(mesHasta) {
+  const mesesEsperados = Array.from({ length: 12 }, (_, index) =>
+    addMonths(mesHasta, index - 11)
+  );
+  const desde = mesesEsperados[0];
+  const hasta = `${mesHasta}-31`;
+  const rows = await getRows(
+    `SELECT SUBSTR(fecha, 1, 7) as mes, COUNT(*) as tickets, IFNULL(SUM(total), 0) as total
+     FROM ventas
+     WHERE fecha >= ? AND fecha <= ?
+     GROUP BY SUBSTR(fecha, 1, 7)
+     ORDER BY mes ASC`,
+    [`${desde}-01`, hasta]
+  );
+  const datosPorMes = new Map(
+    rows.map((row) => [
+      row.mes,
+      { mes: row.mes, tickets: Number(row.tickets || 0), total: Number(row.total || 0) },
+    ])
+  );
+  const meses = mesesEsperados.map((mes, index) => {
+    const actual = datosPorMes.get(mes) || { mes, tickets: 0, total: 0 };
+    const anterior = index > 0 ? datosPorMes.get(mesesEsperados[index - 1]) : null;
+    const variacion = anterior?.total > 0
+      ? ((actual.total - anterior.total) / anterior.total) * 100
+      : null;
+
+    return { ...actual, variacion };
+  });
+  const mesesConVentas = meses.filter((mes) => mes.tickets > 0);
+  const cambios = meses.filter((mes) => mes.tickets > 0 && mes.variacion !== null);
+
+  return {
+    desde,
+    hasta: mesHasta,
+    meses,
+    mesesConVentas: mesesConVentas.length,
+    mesMasFuerte: mesesConVentas.reduce(
+      (mejor, mes) => (!mejor || mes.total > mejor.total ? mes : mejor),
+      null
+    ),
+    mesMasBajo: mesesConVentas.reduce(
+      (menor, mes) => (!menor || mes.total < menor.total ? mes : menor),
+      null
+    ),
+    mayorSuba: cambios.reduce(
+      (mejor, mes) => (!mejor || mes.variacion > mejor.variacion ? mes : mejor),
+      null
+    ),
+    mayorCaida: cambios.reduce(
+      (peor, mes) => (!peor || mes.variacion < peor.variacion ? mes : peor),
+      null
+    ),
+  };
+}
+
+async function getImpactoClima(desde, hasta) {
+  const [cobertura] = await getRows(
+    `SELECT COUNT(DISTINCT v.fecha) as dias
+     FROM ventas v
+     JOIN clima_diario c ON c.fecha = v.fecha
+     WHERE v.fecha >= ? AND v.fecha <= ?`,
+    [desde, hasta]
+  );
+  const dias = Number(cobertura?.dias || 0);
+
+  if (dias < 14) {
+    return {
+      suficientes: false,
+      dias,
+      mensaje: "Se necesitan al menos 14 dias con clima y ventas registrados para medir su impacto.",
+    };
+  }
+
+  const condiciones = await getRows(
+    `SELECT
+       CASE WHEN COALESCE(c.lluvia_mm, 0) > 0 OR COALESCE(c.prob_lluvia, 0) >= 50
+         THEN 'lluvia' ELSE 'seco' END as condicion,
+       COUNT(DISTINCT v.fecha) as dias,
+       IFNULL(SUM(v.total), 0) as total,
+       AVG((COALESCE(c.temp_min, 0) + COALESCE(c.temp_max, 0)) / 2.0) as temperaturaPromedio
+     FROM ventas v
+     JOIN clima_diario c ON c.fecha = v.fecha
+     WHERE v.fecha >= ? AND v.fecha <= ?
+     GROUP BY condicion`,
+    [desde, hasta]
+  );
+  const porCondicion = new Map(
+    condiciones.map((row) => [
+      row.condicion,
+      {
+        dias: Number(row.dias || 0),
+        total: Number(row.total || 0),
+        promedioDiario: Number(row.total || 0) / Math.max(1, Number(row.dias || 0)),
+        temperaturaPromedio: Number(row.temperaturaPromedio || 0),
+      },
+    ])
+  );
+  const lluvia = porCondicion.get("lluvia") || null;
+  const seco = porCondicion.get("seco") || null;
+  const comparable = lluvia?.dias >= 3 && seco?.dias >= 3 && seco.promedioDiario > 0;
+  const variacionLluvia = comparable
+    ? ((lluvia.promedioDiario - seco.promedioDiario) / seco.promedioDiario) * 100
+    : null;
+
+  return {
+    suficientes: comparable,
+    dias,
+    lluvia,
+    seco,
+    variacionLluvia,
+    mensaje: comparable
+      ? null
+      : "Aun faltan suficientes dias de lluvia y dias secos para una comparacion confiable.",
+  };
+}
+
 async function getDashboardStats(options = {}) {
   const hoy = getFechaLocal();
   const dia = normalizarFecha(options.dia, hoy);
@@ -429,6 +718,8 @@ async function getDashboardStats(options = {}) {
   const semanaCompararRange = getWeekRange(semanaComparar);
   const mesRange = getMonthRange(mes);
   const mesCompararRange = getMonthRange(mesComparar);
+  const hastaAnalisis = mesRange.fin < hoy ? mesRange.fin : hoy;
+  const desdeAnalisis = addDays(hastaAnalisis, -89);
 
   const [
     diaStats,
@@ -437,6 +728,9 @@ async function getDashboardStats(options = {}) {
     ventasHoraActual,
     ventasHoraComparada,
     productosPorMonto,
+    patronesConsumo,
+    comparacionMensual,
+    impactoClima,
   ] = await Promise.all([
     getPeriodoComparado(diaRange, diaCompararRange),
     getPeriodoComparado(semanaRange, semanaCompararRange),
@@ -444,6 +738,9 @@ async function getDashboardStats(options = {}) {
     getVentasPorHora(horaDia),
     getVentasPorHora(horaComparar),
     getProductosPorMonto(mesRange.inicio, mesRange.fin),
+    getPatronesConsumo(hastaAnalisis),
+    getComparacionMensual(mes),
+    getImpactoClima(desdeAnalisis, hastaAnalisis),
   ]);
 
   return {
@@ -473,6 +770,9 @@ async function getDashboardStats(options = {}) {
       comparada: ventasHoraComparada,
     },
     productosPorMonto,
+    patronesConsumo,
+    comparacionMensual,
+    impactoClima,
   };
 }
 

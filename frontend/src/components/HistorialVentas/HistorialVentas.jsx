@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useVentas } from "../../context/VentasContext";
 import BackButton from "../BackButton/BackButton";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
@@ -6,11 +6,29 @@ import styles from "./HistorialVentas.module.css";
 import API from "../../config/api";
 
 export default function HistorialVentas() {
-  const { ventas, obtenerVentas, ventasError, loading } = useVentas();
+
+
+
+  const {
+  ventas,
+  obtenerVentas,
+  ventasError,
+  loading,
+  paginaActual,
+  setPaginaActual,
+  totalPages,
+} = useVentas();
+
+ 
   const [filtroMetodo, setFiltroMetodo] = useState("");
   const [filtroFacturacion, setFiltroFacturacion] = useState("");
   const [soloHoy, setSoloHoy] = useState(false);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
+  const [filtroPerfil, setFiltroPerfil] = useState("");
+
+  useEffect(() => {
+      obtenerVentas(fechaSeleccionada, paginaActual);
+      }, [obtenerVentas, paginaActual, fechaSeleccionada]);
 
   const hoy = new Date().toISOString().slice(0, 10);
 
@@ -18,7 +36,7 @@ export default function HistorialVentas() {
 
   const ventasFiltradas = ventasLista.filter((v) => {
     const fechaVenta = v.fecha?.slice(0, 10);
-
+    const coincidePerfil = !filtroPerfil || v.perfil_facturacion === filtroPerfil;
     const coincideMetodo = !filtroMetodo || v.medio_pago === filtroMetodo;
     const estadoFacturacion = v.facturacion_estado || "NO_REQUIERE";
     const coincideFacturacion =
@@ -28,14 +46,20 @@ export default function HistorialVentas() {
     const coincideHoy = !soloHoy || fechaVenta === hoy;
     const coincideFecha = !fechaSeleccionada || fechaVenta === fechaSeleccionada;
 
-    return coincideMetodo && coincideFacturacion && coincideHoy && coincideFecha;
+    return (
+    coincideMetodo &&
+    coincideFacturacion &&
+    coincideHoy &&
+    coincideFecha &&
+    coincidePerfil
+    );
   });
 
   const ventasOrdenadas = [...ventasFiltradas].sort(
     (a, b) => Number(b.id_venta || 0) - Number(a.id_venta || 0)
   );
-  const ventasFinal =
-    soloHoy || fechaSeleccionada ? ventasOrdenadas : ventasOrdenadas.slice(0, 20);
+
+  const ventasFinal = ventasOrdenadas;
 
   const totalFiltrado = ventasFiltradas.reduce(
     (acc, v) => acc + Number(v.total),
@@ -145,7 +169,10 @@ export default function HistorialVentas() {
         <select
           className={styles.control}
           value={filtroMetodo}
-          onChange={(e) => setFiltroMetodo(e.target.value)}
+          onChange={(e) => {
+            setFiltroMetodo(e.target.value);
+            setPaginaActual(1);
+          }}
         >
           <option value="">Todos</option>
           <option value="efectivo">Efectivo</option>
@@ -156,7 +183,10 @@ export default function HistorialVentas() {
         <select
           className={styles.control}
           value={filtroFacturacion}
-          onChange={(e) => setFiltroFacturacion(e.target.value)}
+          onChange={(e) => {
+            setFiltroFacturacion(e.target.value);
+            setPaginaActual(1);
+          }}
         >
           <option value="">Toda facturacion</option>
           <option value="FACTURADA">Facturadas</option>
@@ -165,23 +195,40 @@ export default function HistorialVentas() {
           <option value="ERROR">Con error</option>
         </select>
 
+      <select
+        className={styles.control}
+        value={filtroPerfil}
+        onChange={(e) => {
+          setFiltroPerfil(e.target.value);
+          setPaginaActual(1);
+        }}
+      >
+        <option value="">Todos los perfiles</option>
+        <option value="maximiliano">Maximiliano</option>
+        <option value="yohanna">Yohanna</option>
+        <option value="solo_ventas">Sin facturación</option>
+      </select>
+
+
         <div className={styles.dateGroup}>
           <input
             className={styles.control}
             type="date"
             value={fechaSeleccionada}
             onChange={(e) => {
-                              const fecha = e.target.value;
-                              setFechaSeleccionada(fecha);
-                              obtenerVentas(fecha);
-                              }}
+                              setFechaSeleccionada(e.target.value);
+                              setPaginaActual(1);
+                            }}
           />
 
           <label className={styles.checkboxLabel}>
             <input
               type="checkbox"
               checked={soloHoy}
-              onChange={() => setSoloHoy(!soloHoy)}
+              onChange={() => {
+                setSoloHoy(!soloHoy);
+                setPaginaActual(1);
+              }}
             />
             Hoy
           </label>
@@ -192,17 +239,43 @@ export default function HistorialVentas() {
           className={styles.clearButton}
           onClick={() => {
             setFiltroMetodo("");
+            setFiltroPerfil("");
             setFiltroFacturacion("");
             setSoloHoy(false);
             setFechaSeleccionada("");
-            obtenerVentas();
+            setPaginaActual(1);
+            
           }}
         >
           Limpiar filtros
         </button>
       </div>
 
-      <h3 className={styles.total}>Total filtrado: ${totalFiltrado}</h3>
+      <div className={styles.summaryBar}>
+        <p className={styles.total}>
+          Total filtrado: ${totalFiltrado.toFixed(2)}
+        </p>
+
+        <div className={styles.pagination}>
+          <button
+            disabled={paginaActual === 1}
+            onClick={() => setPaginaActual((p) => p - 1)}
+          >
+            ← Anterior
+          </button>
+
+          <span>
+            Página {paginaActual} de {totalPages}
+          </span>
+
+          <button
+            disabled={paginaActual >= totalPages}
+            onClick={() => setPaginaActual((p) => p + 1)}
+          >
+            Siguiente →
+          </button>
+        </div>
+      </div>
 
       {ventasError ? (
         <p className={styles.empty}>No se pudo cargar el historial: {ventasError}</p>
@@ -222,6 +295,7 @@ export default function HistorialVentas() {
                 <th>Total</th>
                 <th>Estado</th>
                 <th>Facturacion</th>
+                <th>Perfil</th>
                 <th>Imprimir</th>
                 <th>Productos</th>
               </tr>
@@ -265,6 +339,7 @@ export default function HistorialVentas() {
                       )}
                     </div>
                   </td>
+                  <td>{v.perfil_facturacion || "Sin facturación"}</td>
                   <td>
                       <button className={styles.printButton}
                       onClick={() => imprimirVenta(v)}> 🖨️

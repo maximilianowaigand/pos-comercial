@@ -39,7 +39,6 @@ export default function BotonGuardar({ venta, metodoPago }) {
       facturar_venta: debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion),
       perfil_facturacion: perfilFacturacion,
     };
-
     try {
       const confirmarRepetida = await confirmarVentaRepetida(body);
       restoreFocusAfterNativeDialog("[data-keyboard-primary]");

@@ -189,6 +189,7 @@ db.serialize(() => {
     "ALTER TABLE ventas ADD COLUMN factura_numero TEXT",
     "ALTER TABLE ventas ADD COLUMN factura_error TEXT",
     "ALTER TABLE ventas ADD COLUMN factura_respuesta TEXT",
+    "ALTER TABLE ventas ADD COLUMN perfil_facturacion TEXT",
   ].forEach((sql) => {
     db.run(sql, (err) => {
       if (err && !err.message.includes("duplicate column")) {

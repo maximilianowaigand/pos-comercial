@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { addItem, decreaseItem, removeItem, calcularTotal } from "../utils/cartFuncions";
 import { fetchTotales } from "../utils/api";
 import { requiereFacturacionAutomatica } from "../utils/facturacion";
@@ -52,20 +52,6 @@ function getFechaLocal() {
   return `${year}-${month}-${day}`;
 }
 
-async function leerJsonSeguro(res) {
-  const text = await res.text();
-
-  if (!text) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    throw new Error(`Respuesta invalida del servidor: ${text.slice(0, 120)}`);
-  }
-}
-
 async function fetchConTimeout(url, options = {}, timeoutMs = 10000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -99,22 +85,9 @@ export function VentasProvider({ children }) {
   });
   const [loading, setLoading] = useState(true);
   const [ventasError, setVentasError] = useState("");
-
-  useEffect(() => {
-    const init = async () => {
-      await obtenerTotales();
-      await obtenerVentas();
-      await obtenerPerfilesFacturacion();
-      setLoading(false);
-    };
-    init();
-
-    const interval = setInterval(() => {
-      obtenerVentas();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const [totalVentas, setTotalVentas] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [paginaActual, setPaginaActual] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -130,30 +103,46 @@ export function VentasProvider({ children }) {
     return () => clearInterval(interval);
   }, []);
 
-    const obtenerVentas = async (fecha = "") => {
-    try {
-      setLoading(true);
-      setVentasError("");
+  const obtenerVentas = useCallback(async (fecha = "", page = 1) => {
+      try {
+        setLoading(true);
+        setVentasError("");
 
-      const url = fecha
-        ? `${API}/api/ventas?fecha=${fecha}`
-        : `${API}/api/ventas`;
+        const url = fecha
+          ? `${API}/api/ventas?fecha=${fecha}&page=${page}`
+          : `${API}/api/ventas?page=${page}`;
 
-      const res = await fetchConTimeout(url);
+        const res = await fetchConTimeout(url);
 
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        setVentas(data.ventas || []);
+        setTotalVentas(data.total || 0);
+        setTotalPages(data.totalPages || 1);
+        setPaginaActual(data.page || 1);
+
+      } catch (error) {
+        console.error("Error obteniendo ventas:", error);
+        setVentasError(error.message || "Error obteniendo ventas");
+      } finally {
+        setLoading(false);
       }
+  }, []);
 
-      const data = await res.json();
-      setVentas(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error obteniendo ventas:", error);
-      setVentasError(error.message || "Error obteniendo ventas");
-    } finally {
+  useEffect(() => {
+    const init = async () => {
+      await obtenerTotales();
+      await obtenerVentas();
+      await obtenerPerfilesFacturacion();
       setLoading(false);
-    }
-  };
+    };
+
+    init();
+  }, [obtenerVentas]);
 
   async function obtenerPerfilesFacturacion() {
     try {
@@ -304,6 +293,10 @@ export function VentasProvider({ children }) {
   return (
     <VentasContext.Provider
       value={{
+        paginaActual,
+        setPaginaActual,
+        totalPages,
+        totalVentas,
         venta,
         subtotal,
         descuentoPct,

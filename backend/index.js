@@ -20,6 +20,7 @@ const productosRoutes = require("./routes/productosRoutes");
 const climaRoutes = require("./routes/clima");
 const statsRoutes = require("./routes/statsRoute");
 const { startFacturacionWorker } = require("./services/facturacionQueueService");
+const { startClimateSync } = require("./services/climaService");
 
 app.use("/api/ventas", ventasRoutes);
 app.use("/api", printRoutes);
@@ -38,6 +39,7 @@ const PORT = Number(process.env.PORT) || 3001;
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
   startFacturacionWorker();
+  startClimateSync();
 });
 
 server.on("error", (error) => {

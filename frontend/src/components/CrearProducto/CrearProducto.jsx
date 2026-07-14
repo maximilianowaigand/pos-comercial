@@ -9,7 +9,7 @@ const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin 
 
 const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
 
-export default function CrearProducto({ onGuardado }) {
+export default function CrearProducto() {
   const [form, setForm] = useState(FORM_VACIO);
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
@@ -67,7 +67,6 @@ export default function CrearProducto({ onGuardado }) {
     if (res.ok) {
       setMensaje("✓ Producto creado");
       setForm(FORM_VACIO);
-      onGuardado?.();
       restoreKeyboardFocus();
     } else {
       setMensaje(data.error || "Error al guardar");

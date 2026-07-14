@@ -45,14 +45,9 @@ function getArcaProfiles() {
       fallback: true,
     }),
     buildProfile({
-      id: "segundo_punto",
-      label: process.env.ARCA_SEGUNDO_PROFILE_NAME || "Segundo punto",
+      id: "yohanna",
+      label: process.env.ARCA_SEGUNDO_PROFILE_NAME || "Yohanna",
       prefix: "ARCA_SEGUNDO",
-    }),
-    buildProfile({
-      id: "pareja",
-      label: process.env.ARCA_PAREJA_PROFILE_NAME || "Pareja",
-      prefix: "ARCA_PAREJA",
     }),
   ];
 }

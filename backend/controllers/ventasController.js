@@ -41,7 +41,6 @@ exports.totalMes = async (req, res) => {
 };
 
 exports.getVentaById = (req, res) => {
-  const db = require("../db");
   const { id } = req.params;
 
 
@@ -90,7 +89,11 @@ exports.reintentarFacturacion = async (req, res) => {
 
 // Listar ventas
   exports.listarVentas = (req, res) => {
+
     const { fecha } = req.query;
+    const page = Number(req.query.page || 1);
+    const limit = Number(req.query.limit || 50);
+    const offset = (page - 1) * limit;
 
     let sql;
     let params = [];
@@ -107,6 +110,7 @@ exports.reintentarFacturacion = async (req, res) => {
           COALESCE(v.descuento_monto, 0) AS descuento_monto,
           v.facturacion_requerida,
           COALESCE(v.facturacion_estado, 'NO_REQUIERE') AS facturacion_estado,
+          v.perfil_facturacion,
           v.factura_cae,
           v.factura_vencimiento,
           v.factura_numero,
@@ -115,10 +119,12 @@ exports.reintentarFacturacion = async (req, res) => {
         FROM ventas v
         WHERE v.fecha = ?
         ORDER BY v.id_venta DESC
+        LIMIT ? OFFSET ?
       `;
 
-      params = [fecha];
+      params = [fecha, limit, offset];
     } else {
+      params = [limit, offset];
       sql = `
         SELECT
           v.id_venta,
@@ -130,6 +136,7 @@ exports.reintentarFacturacion = async (req, res) => {
           COALESCE(v.descuento_monto, 0) AS descuento_monto,
           v.facturacion_requerida,
           COALESCE(v.facturacion_estado, 'NO_REQUIERE') AS facturacion_estado,
+          v.perfil_facturacion,
           v.factura_cae,
           v.factura_vencimiento,
           v.factura_numero,
@@ -137,18 +144,19 @@ exports.reintentarFacturacion = async (req, res) => {
           COALESCE(v.estado, '') AS estado
         FROM ventas v
         ORDER BY v.id_venta DESC
-        LIMIT 100
+        LIMIT ? OFFSET ?
       `;
     }
+    const countSql = fecha
+    ? "SELECT COUNT(*) as total FROM ventas WHERE fecha = ?"
+    : "SELECT COUNT(*) as total FROM ventas";
+
+    const countParams = fecha ? [fecha] : [];
+
 
   db.all(sql, params, (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
-    console.log("Cantidad ventas:", rows.length);
-
-    if (rows.length) {
-      console.log("Venta más nueva:", rows[0].fecha);
-      console.log("Venta más vieja:", rows[rows.length - 1].fecha);
-     };
+  
     if (!rows.length) {
       return res.json([]);
     }
@@ -156,34 +164,46 @@ exports.reintentarFacturacion = async (req, res) => {
     const ids = rows.map((row) => row.id_venta);
     const placeholders = ids.map(() => "?").join(", ");
 
-    db.all(
-      `SELECT
-         dv.id_venta,
-         COALESCE(p.nombre_producto, 'Producto') AS nombre,
-         COALESCE(dv.cantidad, 0) AS cantidad
-       FROM detalle_venta dv
-       LEFT JOIN productos p ON dv.id_producto = p.id_producto
-       WHERE dv.id_venta IN (${placeholders})
-       ORDER BY dv.id_detalle ASC`,
-      ids,
-      (detalleErr, detalles) => {
-        if (detalleErr) return res.status(500).json({ error: detalleErr.message });
+ db.get(countSql, countParams, (countErr, countRow) => {
+  if (countErr) {
+    return res.status(500).json({ error: countErr.message });
+  }
 
-        const productosPorVenta = detalles.reduce((acc, detalle) => {
-          const key = detalle.id_venta;
-          if (!acc[key]) acc[key] = [];
-          acc[key].push(`${detalle.nombre} x${detalle.cantidad}`);
-          return acc;
-        }, {});
+  const totalRegistros = countRow.total;
 
-        res.json(
-          rows.map((row) => ({
-            ...row,
-            productos: (productosPorVenta[row.id_venta] || []).join(", "),
-          }))
-        );
+  db.all(
+    `SELECT
+       dv.id_venta,
+       COALESCE(p.nombre_producto, 'Producto') AS nombre,
+       COALESCE(dv.cantidad, 0) AS cantidad
+     FROM detalle_venta dv
+     LEFT JOIN productos p ON dv.id_producto = p.id_producto
+     WHERE dv.id_venta IN (${placeholders})
+     ORDER BY dv.id_detalle ASC`,
+    ids,
+    (detalleErr, detalles) => {
+      if (detalleErr) {
+        return res.status(500).json({ error: detalleErr.message });
       }
-    );
-  });
-};
 
+      const productosPorVenta = detalles.reduce((acc, detalle) => {
+        const key = detalle.id_venta;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(`${detalle.nombre} x${detalle.cantidad}`);
+        return acc;
+      }, {});
+
+      res.json({
+            ventas: rows.map((row) => ({
+              ...row,
+              productos: (productosPorVenta[row.id_venta] || []).join(", "),
+            })),
+            total: totalRegistros,
+            page,
+            totalPages: Math.ceil(totalRegistros / limit),
+          });
+        }
+      );
+    });
+  });
+  };
