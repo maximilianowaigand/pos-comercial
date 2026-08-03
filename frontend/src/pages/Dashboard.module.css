@@ -469,42 +469,51 @@
   font-weight: 800;
 }
 
-.monthList {
+.monthLineCharts {
   display: grid;
-  gap: 9px;
+  gap: 18px;
 }
 
-.monthRow {
-  display: grid;
-  grid-template-columns: 65px minmax(110px, 1fr) minmax(90px, auto) minmax(76px, auto);
-  align-items: center;
-  gap: 10px;
-  color: #4a3726;
+.monthLineChart {
+  padding: 16px;
+  border: 1px solid #ecdcc8;
+  border-radius: 12px;
+  background: #fffaf4;
 }
 
-.monthRow div {
-  height: 10px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #ecdcc8;
+.monthLineChart h3,
+.monthLineChart p {
+  margin: 0;
 }
 
-.monthRow i {
+.monthLineChart h3 {
+  color: #2a2118;
+  font-size: 1rem;
+}
+
+.monthLineChart p {
+  margin-top: 5px;
+  color: #7a6654;
+  font-size: .86rem;
+}
+
+.lineChartScroll {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.lineChart {
   display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #2f5d50, #c86b34);
+  min-width: 680px;
+  width: 100%;
 }
 
-.monthRow span,
-.monthRow em {
-  justify-self: end;
-}
-
-.monthRow em {
-  font-style: normal;
-  font-weight: 800;
-}
+.lineGrid { stroke: #ecdcc8; stroke-dasharray: 4 5; }
+.lineAxis { stroke: #bfa98f; }
+.monthLine { fill: none; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+.linePoint { fill: #fffaf4; stroke-width: 3; }
+.lineAxisLabel { fill: #7a6654; font-size: 12px; }
+.lineAxisTitle { fill: #5d4938; font-size: 13px; font-weight: 700; }
 
 @media (max-width: 1100px) {
   .filters,
@@ -546,14 +555,6 @@
 
   .monthSummaryGrid {
     grid-template-columns: 1fr;
-  }
-
-  .monthRow {
-    grid-template-columns: 58px 1fr auto;
-  }
-
-  .monthRow em {
-    grid-column: 2 / -1;
   }
 
   .productRow div {

@@ -67,10 +67,14 @@ exports.getVentaById = (req, res) => {
             return res.status(404).json({ error: "Venta no encontrada" });
           }
 
-          res.json({
-            ...venta,
-            items,
-          });
+          db.all(
+            `SELECT medio_pago, monto FROM pagos_venta WHERE id_venta = ? ORDER BY id_pago ASC`,
+            [id],
+            (pagosErr, pagos) => {
+              if (pagosErr) return res.status(500).json({ error: pagosErr.message });
+              res.json({ ...venta, items, pagos });
+            }
+          );
         }
       );
     }
@@ -113,9 +117,10 @@ exports.reintentarFacturacion = async (req, res) => {
           v.perfil_facturacion,
           v.factura_cae,
           v.factura_vencimiento,
-          v.factura_numero,
-          v.factura_error,
-          COALESCE(v.estado, '') AS estado
+           v.factura_numero,
+           v.factura_error,
+           v.factura_respuesta,
+           COALESCE(v.estado, '') AS estado
         FROM ventas v
         WHERE v.fecha = ?
         ORDER BY v.id_venta DESC
@@ -139,9 +144,10 @@ exports.reintentarFacturacion = async (req, res) => {
           v.perfil_facturacion,
           v.factura_cae,
           v.factura_vencimiento,
-          v.factura_numero,
-          v.factura_error,
-          COALESCE(v.estado, '') AS estado
+           v.factura_numero,
+           v.factura_error,
+           v.factura_respuesta,
+           COALESCE(v.estado, '') AS estado
         FROM ventas v
         ORDER BY v.id_venta DESC
         LIMIT ? OFFSET ?

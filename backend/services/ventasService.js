@@ -3,7 +3,7 @@ const { encolarFacturacionVenta } = require("./facturacionQueueService");
 
 function registrarVenta(data) {
   return new Promise((resolve, reject) => {
-    const { items, metodo_pago,perfil_facturacion } = data;
+    const { items, perfil_facturacion } = data;
     const descuentoPorcentaje = Math.min(
       100,
       Math.max(0, Number(data.descuento_porcentaje) || 0)
@@ -13,7 +13,7 @@ function registrarVenta(data) {
     const placeholders = ids.map(() => "?").join(", ");
 
     db.all(
-      `SELECT id_producto, precio_base FROM productos WHERE id_producto IN (${placeholders})`,
+      `SELECT id_producto, precio_base, costo_base FROM productos WHERE id_producto IN (${placeholders})`,
       ids,
       (err, productos) => {
         if (err) {
@@ -21,8 +21,10 @@ function registrarVenta(data) {
         }
 
         const precios = {};
+        const costos = {};
         productos.forEach((p) => {
           precios[p.id_producto] = p.precio_base;
+          costos[p.id_producto] = Number(p.costo_base || 0);
         });
 
         for (const item of items) {
@@ -56,7 +58,7 @@ function registrarVenta(data) {
                   'CERRADA',
                   ?
                 )`,
-                [metodo_pago, perfil_facturacion || null],
+                [data.medio_pago || "mixto", perfil_facturacion || null],
             
             
             function onVentaInsert(insertErr) {
@@ -74,17 +76,40 @@ function registrarVenta(data) {
                   );
                   const totalFinal = Number((subtotal - descuentoMonto).toFixed(2));
 
+                  const pagos = Array.isArray(data.pagos) && data.pagos.length
+                    ? data.pagos
+                    : [{ medio_pago: data.medio_pago, monto: totalFinal }];
+                  const pagosNormalizados = pagos.map((pago) => ({
+                    medio_pago: String(pago.medio_pago || "").trim().toLowerCase(),
+                    monto: Number(pago.monto),
+                  }));
+                  const metodosValidos = new Set(["efectivo", "tarjeta", "transferencia"]);
+                  const pagosInvalidos = pagosNormalizados.some(
+                    (pago) => !metodosValidos.has(pago.medio_pago) || !Number.isFinite(pago.monto) || pago.monto <= 0
+                  );
+                  const totalPagos = Number(pagosNormalizados.reduce((acc, pago) => acc + pago.monto, 0).toFixed(2));
+
+                  if (pagosInvalidos || totalPagos !== totalFinal) {
+                    return db.run("ROLLBACK", () => reject(new Error("Los pagos deben ser positivos y sumar el total de la venta")));
+                  }
+
+                  const medioPago = pagosNormalizados.length === 1
+                    ? pagosNormalizados[0].medio_pago
+                    : "mixto";
+
                   return db.run(
                     `UPDATE ventas
-                     SET total = ?, descuento_porcentaje = ?, descuento_monto = ?
+                     SET total = ?, descuento_porcentaje = ?, descuento_monto = ?, medio_pago = ?
                      WHERE id_venta = ?`,
-                    [totalFinal, descuentoPorcentaje, descuentoMonto, id_venta],
+                    [totalFinal, descuentoPorcentaje, descuentoMonto, medioPago, id_venta],
                     (updateErr) => {
                       if (updateErr) {
                         return db.run("ROLLBACK", () => reject(updateErr));
                       }
 
-                      db.run("COMMIT", (commitErr) => {
+                      const insertarPagos = (index) => {
+                        if (index >= pagosNormalizados.length) {
+                          return db.run("COMMIT", (commitErr) => {
                         if (commitErr) {
                           return db.run("ROLLBACK", () => reject(commitErr));
                         }
@@ -98,7 +123,11 @@ function registrarVenta(data) {
                           precios,
                         };
 
-                        encolarFacturacionVenta(id_venta, data)
+                        encolarFacturacionVenta(id_venta, {
+                          ...data,
+                          metodo_pago: medioPago,
+                          medios_pago: pagosNormalizados.map((pago) => pago.medio_pago),
+                        })
                           .then((facturacion) => {
                             resolve({
                               ...ventaRegistrada,
@@ -120,7 +149,21 @@ function registrarVenta(data) {
                               },
                             });
                           });
-                      });
+                          });
+                        }
+
+                        const pago = pagosNormalizados[index];
+                        db.run(
+                          `INSERT INTO pagos_venta (id_venta, medio_pago, monto) VALUES (?, ?, ?)`,
+                          [id_venta, pago.medio_pago, pago.monto],
+                          (pagoErr) => {
+                            if (pagoErr) return db.run("ROLLBACK", () => reject(pagoErr));
+                            insertarPagos(index + 1);
+                          }
+                        );
+                      };
+
+                      insertarPagos(0);
                     }
                   );
                 }
@@ -134,9 +177,9 @@ function registrarVenta(data) {
                 subtotal += precioUnitario * cantidad;
 
                 db.run(
-                  `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
-                   VALUES (?, ?, ?, ?)`,
-                  [id_venta, item.producto_id, cantidad, precioUnitario],
+                  `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario, costo_unitario)
+                   VALUES (?, ?, ?, ?, ?)`,
+                  [id_venta, item.producto_id, cantidad, precioUnitario, costos[item.producto_id]],
                   (itemErr) => {
                     if (itemErr) {
                       return db.run("ROLLBACK", () => reject(itemErr));
@@ -158,9 +201,18 @@ function registrarVenta(data) {
 function getTotales() {
   return new Promise((resolve, reject) => {
     db.all(
-      `SELECT medio_pago, SUM(total) as totalDia
-       FROM ventas
-       WHERE DATE(fecha) = DATE('now')
+      `SELECT medio_pago, SUM(monto) as totalDia
+       FROM (
+         SELECT pv.medio_pago, pv.monto
+         FROM pagos_venta pv
+         JOIN ventas v ON v.id_venta = pv.id_venta
+         WHERE DATE(v.fecha) = DATE('now')
+         UNION ALL
+         SELECT v.medio_pago, v.total as monto
+         FROM ventas v
+         WHERE DATE(v.fecha) = DATE('now')
+           AND NOT EXISTS (SELECT 1 FROM pagos_venta pv WHERE pv.id_venta = v.id_venta)
+       )
        GROUP BY medio_pago`,
       [],
       (err, rows) => {
@@ -601,11 +653,16 @@ async function getComparacionMensual(mesHasta) {
   const datosPorMes = new Map(
     rows.map((row) => [
       row.mes,
-      { mes: row.mes, tickets: Number(row.tickets || 0), total: Number(row.total || 0) },
+      {
+        mes: row.mes,
+        tickets: Number(row.tickets || 0),
+        clientes: Number(row.tickets || 0),
+        total: Number(row.total || 0),
+      },
     ])
   );
   const meses = mesesEsperados.map((mes, index) => {
-    const actual = datosPorMes.get(mes) || { mes, tickets: 0, total: 0 };
+    const actual = datosPorMes.get(mes) || { mes, tickets: 0, clientes: 0, total: 0 };
     const anterior = index > 0 ? datosPorMes.get(mesesEsperados[index - 1]) : null;
     const variacion = anterior?.total > 0
       ? ((actual.total - anterior.total) / anterior.total) * 100

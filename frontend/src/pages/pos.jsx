@@ -8,12 +8,16 @@ export default function POS() {
   const {
     venta,
     totales,
-    metodoPago,
+    pagos,
+    total,
+    totalPagos,
     mostrarCliente,
-    facturarVenta,
+    incluirEfectivoFactura,
     agregar,
-    handleMetodoPagoChange,
-    handleFacturarVentaChange,
+    actualizarPago,
+    agregarPago,
+    eliminarPago,
+    actualizarIncluirEfectivoFactura,
     setDatosCliente,
   } = useVentas();
 
@@ -24,17 +28,21 @@ export default function POS() {
     <POSContent
       venta={venta}
       totales={totales} 
-      metodoPago={metodoPago}
+      pagos={pagos}
+      total={total}
+      totalPagos={totalPagos}
       mostrarCliente={mostrarCliente}
-      facturarVenta={facturarVenta}
+      incluirEfectivoFactura={incluirEfectivoFactura}
       categorias={categorias}
       productosFiltrados={productosFiltrados}
       categoria={categoria}
       paymentOptions={paymentOptions}
       onAgregar={agregar}
       onCategoriaChange={setCategoria}
-      onMetodoPagoChange={handleMetodoPagoChange}
-      onFacturarVentaChange={handleFacturarVentaChange}
+      onPagoChange={actualizarPago}
+      onAgregarPago={agregarPago}
+      onEliminarPago={eliminarPago}
+      onIncluirEfectivoFacturaChange={actualizarIncluirEfectivoFactura}
       onDatosClienteChange={setDatosCliente}
     />
   );

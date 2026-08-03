@@ -157,6 +157,13 @@
   min-width: 130px;
 }
 
+.billingTotal {
+  display: block;
+  margin-top: 4px;
+  color: #3b2d20;
+  font-weight: 700;
+}
+
 .billingBadge {
   display: inline-flex;
   width: fit-content;

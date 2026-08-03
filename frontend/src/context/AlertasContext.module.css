@@ -1,0 +1,4 @@
+.overlay { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(36, 26, 18, .48); }
+.dialog { width: min(440px, 100%); padding: 26px; border-radius: 16px; background: #fffaf3; box-shadow: 0 20px 60px rgba(36, 26, 18, .3); }
+.dialog h2 { margin: 10px 0; color: #2f2118; }.dialog p { color: #6e5b49; line-height: 1.5; }.tag { display: inline-block; padding: 4px 9px; border-radius: 99px; background: #fff0bf; color: #8a5b00; font-size: .8rem; font-weight: 700; }
+.actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }.actions button { border: 0; border-radius: 10px; padding: 10px 14px; background: #d96b2b; color: white; font-weight: 700; cursor: pointer; }.actions button:disabled { opacity: .6; cursor: wait; }.actions .secondary { background: #ead8c4; color: #503b2a; }

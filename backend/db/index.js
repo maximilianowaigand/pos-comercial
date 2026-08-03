@@ -23,7 +23,12 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 
 function bootstrapLegacyDataIfNeeded() {
-  if (!process.env.APP_DATA_DIR || dbPath === legacyDbPath || !fs.existsSync(legacyDbPath)) {
+  if (
+    process.env.SKIP_LEGACY_DATA_BOOTSTRAP === "true" ||
+    !process.env.APP_DATA_DIR ||
+    dbPath === legacyDbPath ||
+    !fs.existsSync(legacyDbPath)
+  ) {
     return;
   }
 
@@ -212,6 +217,93 @@ db.serialize(() => {
   `);
 
   db.run(`
+    CREATE TABLE IF NOT EXISTS pagos_venta (
+      id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_venta INTEGER NOT NULL,
+      medio_pago TEXT NOT NULL,
+      monto REAL NOT NULL,
+      FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS movimientos_caja (
+      id_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
+      tipo TEXT NOT NULL CHECK(tipo IN ('INGRESO', 'EGRESO')),
+      categoria TEXT NOT NULL,
+      descripcion TEXT,
+      proveedor TEXT,
+      monto REAL NOT NULL CHECK(monto > 0),
+      medio_pago TEXT NOT NULL CHECK(medio_pago IN ('efectivo', 'transferencia', 'tarjeta')),
+      estado TEXT NOT NULL DEFAULT 'PAGADO' CHECK(estado IN ('PAGADO', 'PENDIENTE')),
+      origen TEXT NOT NULL DEFAULT 'MANUAL',
+      fecha TEXT NOT NULL DEFAULT (DATE('now','localtime')),
+      fecha_vencimiento TEXT,
+      id_recurrencia INTEGER,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  [
+    "ALTER TABLE movimientos_caja ADD COLUMN fecha_vencimiento TEXT",
+    "ALTER TABLE movimientos_caja ADD COLUMN id_recurrencia INTEGER",
+    "ALTER TABLE movimientos_caja ADD COLUMN proveedor TEXT",
+  ].forEach((sql) => {
+    db.run(sql, (err) => {
+      if (err && !err.message.includes("duplicate column")) {
+        console.error("Error agregando campos de caja:", err.message);
+      }
+    });
+  });
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS movimientos_recurrentes (
+      id_recurrencia INTEGER PRIMARY KEY AUTOINCREMENT,
+      tipo TEXT NOT NULL CHECK(tipo IN ('INGRESO', 'EGRESO')),
+      categoria TEXT NOT NULL,
+      descripcion TEXT,
+      proveedor TEXT,
+      monto REAL NOT NULL CHECK(monto > 0),
+      medio_pago TEXT NOT NULL CHECK(medio_pago IN ('efectivo', 'transferencia', 'tarjeta')),
+      dia_vencimiento INTEGER NOT NULL CHECK(dia_vencimiento BETWEEN 1 AND 31),
+      activo INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  db.run("ALTER TABLE movimientos_recurrentes ADD COLUMN proveedor TEXT", (err) => {
+    if (err && !err.message.includes("duplicate column")) {
+      console.error("Error agregando proveedor recurrente:", err.message);
+    }
+  });
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS pagos_movimiento (
+      id_pago_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_movimiento INTEGER NOT NULL,
+      medio_pago TEXT NOT NULL CHECK(medio_pago IN ('efectivo', 'transferencia', 'tarjeta')),
+      monto REAL NOT NULL CHECK(monto > 0),
+      FOREIGN KEY (id_movimiento) REFERENCES movimientos_caja(id_movimiento)
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS cierres_balance_mensual (
+      mes TEXT PRIMARY KEY,
+      closed_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS cierres_caja_diaria (
+      fecha TEXT PRIMARY KEY,
+      monto_apertura REAL NOT NULL DEFAULT 0,
+      monto_contado REAL,
+      closed_at TEXT
+    )
+  `);
+
+  db.run(`
     CREATE TABLE IF NOT EXISTS clima_diario (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       fecha TEXT UNIQUE,
@@ -240,6 +332,10 @@ db.serialize(() => {
 
   db.run(`CREATE INDEX IF NOT EXISTS idx_ventas_fecha ON ventas(fecha)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_detalle_venta_id ON detalle_venta(id_venta)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_pagos_venta_id ON pagos_venta(id_venta)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_movimientos_caja_fecha ON movimientos_caja(fecha)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_movimientos_caja_recurrencia ON movimientos_caja(id_recurrencia, fecha)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_pagos_movimiento_id ON pagos_movimiento(id_movimiento)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_facturacion_queue_estado ON facturacion_queue(estado, proximo_intento_at)`);
 
   db.run(`

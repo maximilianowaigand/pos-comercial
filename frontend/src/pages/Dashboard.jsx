@@ -161,10 +161,51 @@ function PatronesConsumo({ data }) {
   );
 }
 
+function GraficoLineaMensual({ meses, campo, titulo, descripcion, color, money = false }) {
+  const ancho = 900;
+  const alto = 310;
+  const margen = { superior: 24, derecho: 24, inferior: 52, izquierdo: 78 };
+  const anchoGrafico = ancho - margen.izquierdo - margen.derecho;
+  const altoGrafico = alto - margen.superior - margen.inferior;
+  const valores = meses.map((mes) => Number(mes[campo] || 0));
+  const maximo = Math.max(1, ...valores);
+  const x = (indice) => margen.izquierdo + (indice * anchoGrafico) / Math.max(1, meses.length - 1);
+  const y = (valor) => margen.superior + altoGrafico - (valor / maximo) * altoGrafico;
+  const puntos = valores.map((valor, indice) => `${x(indice)},${y(valor)}`).join(" ");
+  const etiquetasEjeY = [0, 0.25, 0.5, 0.75, 1].map((proporcion) => maximo * proporcion);
+  const formatoValor = (valor) => money ? formatMoney(valor) : Math.round(valor).toLocaleString("es-AR");
+
+  return (
+    <article className={styles.monthLineChart}>
+      <div>
+        <h3>{titulo}</h3>
+        <p>{descripcion}</p>
+      </div>
+      <div className={styles.lineChartScroll}>
+        <svg viewBox={`0 0 ${ancho} ${alto}`} className={styles.lineChart} role="img" aria-label={titulo}>
+          {etiquetasEjeY.map((valor) => <g key={valor}>
+            <line x1={margen.izquierdo} x2={ancho - margen.derecho} y1={y(valor)} y2={y(valor)} className={styles.lineGrid} />
+            <text x={margen.izquierdo - 10} y={y(valor) + 4} textAnchor="end" className={styles.lineAxisLabel}>{formatoValor(valor)}</text>
+          </g>)}
+          <line x1={margen.izquierdo} x2={ancho - margen.derecho} y1={y(0)} y2={y(0)} className={styles.lineAxis} />
+          <polyline points={puntos} className={styles.monthLine} style={{ stroke: color }} />
+          {meses.map((mes, indice) => <g key={mes.mes}>
+            <circle cx={x(indice)} cy={y(valores[indice])} r="5" className={styles.linePoint} style={{ stroke: color }}>
+              <title>{`${formatMonth(mes.mes)}: ${formatoValor(valores[indice])}`}</title>
+            </circle>
+            <text x={x(indice)} y={alto - 18} textAnchor="middle" className={styles.lineAxisLabel}>{formatMonth(mes.mes)}</text>
+          </g>)}
+          <text x={ancho / 2} y={alto - 1} textAnchor="middle" className={styles.lineAxisTitle}>Meses</text>
+          <text x="18" y={alto / 2} textAnchor="middle" className={styles.lineAxisTitle} transform={`rotate(-90 18 ${alto / 2})`}>{money ? "Monto vendido" : "Cantidad de clientes"}</text>
+        </svg>
+      </div>
+    </article>
+  );
+}
+
 function ComparacionMensual({ data }) {
   if (!data) return null;
 
-  const maxTotal = Math.max(1, ...data.meses.map((mes) => Number(mes.total || 0)));
   const getVariationClass = (variation) => (
     variation > 0
       ? styles.deltaPositive
@@ -213,17 +254,22 @@ function ComparacionMensual({ data }) {
             </article>
           </div>
 
-          <div className={styles.monthList}>
-            {data.meses.map((mes) => (
-              <div key={mes.mes} className={styles.monthRow}>
-                <strong>{formatMonth(mes.mes)}</strong>
-                <div><i style={{ width: `${(Number(mes.total || 0) / maxTotal) * 100}%` }} /></div>
-                <span>{formatMoney(mes.total)}</span>
-                <em className={getVariationClass(mes.variacion || 0)}>
-                  {mes.variacion === null ? "Sin base" : formatPercent(mes.variacion)}
-                </em>
-              </div>
-            ))}
+          <div className={styles.monthLineCharts}>
+            <GraficoLineaMensual
+              meses={data.meses}
+              campo="total"
+              titulo="Demanda por monto vendido"
+              descripcion="La curva muestra los meses de mayor y menor facturación."
+              color="#2f5d50"
+              money
+            />
+            <GraficoLineaMensual
+              meses={data.meses}
+              campo="clientes"
+              titulo="Clientes por mes"
+              descripcion="Cada cliente representa un ticket registrado en el mes."
+              color="#c86b34"
+            />
           </div>
         </>
       )}

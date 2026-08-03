@@ -94,6 +94,18 @@ Para generar la aplicacion de escritorio portable:
 npm run dist
 ```
 
+## Tests automatizados
+
+Las pruebas del backend usan una base SQLite temporal, por lo que no modifican
+los productos ni ventas de la aplicacion.
+
+```bash
+npm --prefix backend test
+```
+
+Actualmente verifican el registro de ventas con descuento, la validacion de
+pagos, los pagos mixtos y los movimientos manuales de caja.
+
 ## API principal
 
 Algunas rutas disponibles:

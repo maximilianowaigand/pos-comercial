@@ -11,17 +11,21 @@ import styles from "./POS.module.css";
 export default function POSContent({
   venta,
   totales,
-  metodoPago,
+  pagos,
+  total,
+  totalPagos,
   mostrarCliente,
-  facturarVenta,
+  incluirEfectivoFactura,
   categorias,
   productosFiltrados,
   categoria,
   paymentOptions,
   onAgregar,
   onCategoriaChange,
-  onMetodoPagoChange,
-  onFacturarVentaChange,
+  onPagoChange,
+  onAgregarPago,
+  onEliminarPago,
+  onIncluirEfectivoFacturaChange,
   onDatosClienteChange,
 }) {
   return (
@@ -91,32 +95,32 @@ export default function POSContent({
               <h2>Metodo de pago</h2>
             </div>
 
-            <select
-            className={styles.paymentSelect}
-            value={metodoPago}
-            onChange={(event) => onMetodoPagoChange(event.target.value)}
-          >
-            <option value="">Seleccionar método de pago</option>
-            {paymentOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            <div className={styles.paymentList}>
+              {pagos.map((pago, index) => (
+                <div className={styles.paymentRow} key={index}>
+                  <select className={styles.paymentSelect} value={pago.medio_pago} onChange={(event) => onPagoChange(index, "medio_pago", event.target.value)}>
+                    <option value="">Método</option>
+                    {paymentOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                  </select>
+                  {pagos.length > 1 && <input className={styles.paymentAmount} type="number" min="0" step="0.01" placeholder="Importe" value={pago.monto} readOnly={index === 0} title={index === 0 ? "Se calcula automáticamente" : ""} onChange={(event) => onPagoChange(index, "monto", event.target.value)} />}
+                  {pagos.length > 1 && <button type="button" className={styles.removePayment} onClick={() => onEliminarPago(index)} aria-label="Quitar pago">×</button>}
+                </div>
+              ))}
+            </div>
+            <button type="button" className={styles.addPayment} onClick={onAgregarPago} disabled={pagos.length >= 3}>
+              {pagos.length === 1 ? "+ Agregar segundo medio" : "+ Agregar tercer medio"}
+            </button>
+            {pagos.length > 1 && <p className={totalPagos === total ? styles.paymentOk : styles.paymentPending}>Pagado: ${totalPagos.toFixed(2)} de ${total.toFixed(2)}</p>}
 
-            {metodoPago === "efectivo" && (
-              <label className={styles.invoiceToggle}>
-                <input
-                  type="checkbox"
-                  checked={facturarVenta}
-                  onChange={(event) => onFacturarVentaChange(event.target.checked)}
-                />
-                Facturar esta venta
-              </label>
+            {pagos.some((pago) => pago.medio_pago === "transferencia" || pago.medio_pago === "tarjeta") && (
+              <p className={styles.invoiceNotice}>Se factura solo la parte abonada con tarjeta o transferencia</p>
             )}
 
-            {(metodoPago === "transferencia" || metodoPago === "tarjeta") && (
-              <p className={styles.invoiceNotice}>Facturacion automatica</p>
+            {pagos.some((pago) => pago.medio_pago === "efectivo") && (
+              <label className={styles.invoiceToggle}>
+                <input type="checkbox" checked={incluirEfectivoFactura} onChange={(event) => onIncluirEfectivoFacturaChange(event.target.checked)} />
+                Incluir efectivo en la factura
+              </label>
             )}
 
             {mostrarCliente && <FacturacionForm onChange={onDatosClienteChange} />}
@@ -126,7 +130,7 @@ export default function POSContent({
             <div className={styles.actionsCard}>
               <BotonGuardar
                 venta={venta}
-                metodoPago={metodoPago}
+                pagos={pagos}
               />
               <BotonImprimir />
               <BotonExportar />

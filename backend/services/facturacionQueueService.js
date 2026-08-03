@@ -45,7 +45,20 @@ function debeFacturarVenta(ventaData = {}) {
     return false;
   }
 
-  return requiereFacturacion(ventaData.metodo_pago) || ventaData.facturar_venta === true || ventaData.facturar_venta === "true";
+  const mediosPago = Array.isArray(ventaData.medios_pago)
+    ? ventaData.medios_pago
+    : [ventaData.metodo_pago];
+
+  return mediosPago.some(requiereFacturacion) || ventaData.incluir_efectivo_factura === true;
+}
+
+function getTotalFacturable(pagos = [], incluirEfectivo = false) {
+  return Number(
+    pagos
+      .filter((pago) => incluirEfectivo || requiereFacturacion(pago.medio_pago))
+      .reduce((total, pago) => total + (Number(pago.monto) || 0), 0)
+      .toFixed(2)
+  );
 }
 
 function run(sql, params = []) {
@@ -133,6 +146,7 @@ async function encolarFacturacionVenta(idVenta, ventaData = {}) {
     datosCliente: getDefaultCliente(ventaData.datosCliente),
     metodoPago: ventaData.metodo_pago,
     perfilFacturacion: ventaData.perfil_facturacion || "maximiliano",
+    totalFacturable: getTotalFacturable(ventaData.pagos || [], ventaData.incluir_efectivo_factura === true),
   };
 
   logFacturacionDebug("[FACTURACION] Encolando payload:", {
@@ -373,13 +387,13 @@ async function processNextFacturacionJob() {
         idJob: job.id_job,
         idVenta: job.id_venta,
         metodoPago: venta.medio_pago,
-        total: venta.total,
+        total: payload.totalFacturable || venta.total,
         items: items.length,
       });
 
       const respuesta = await emitirFacturaArca({
         items,
-        total: venta.total,
+        total: payload.totalFacturable || venta.total,
         cliente: getDefaultCliente(payload.datosCliente),
         metodoPago: venta.medio_pago,
         profileId: payload.perfilFacturacion,

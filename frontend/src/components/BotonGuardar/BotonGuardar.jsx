@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { useVentas } from "../../context/VentasContext";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
-import { debeFacturarVenta } from "../../utils/facturacion";
 import styles from "./BotonGuardar.module.css";
 
-export default function BotonGuardar({ venta, metodoPago }) {
+export default function BotonGuardar({ venta, pagos }) {
   const {
     agregarVenta,
     confirmarVentaRepetida,
     descuentoPct,
     datosCliente,
-    facturarVenta,
-    perfilFacturacion,
+    perfilFacturacion, total, totalPagos, incluirEfectivoFactura,
   } = useVentas();
   const [modal, setModal] = useState(null);
 
   const handleGuardar = () => {
     if (venta.length === 0) return;
-    if (!metodoPago) {
+    const pagosVenta = pagos.length === 1
+      ? [{ ...pagos[0], monto: total }]
+      : pagos.map((pago) => ({ ...pago, monto: Number(pago.monto) }));
+    if (pagosVenta.some((pago) => !pago.medio_pago || !(Number(pago.monto) > 0)) || totalPagos !== total) {
       setModal("sinMetodo");
       return;
     }
@@ -26,6 +27,9 @@ export default function BotonGuardar({ venta, metodoPago }) {
 
   const handleConfirmar = async () => {
     setModal(null);
+    const pagosVenta = pagos.length === 1
+      ? [{ ...pagos[0], monto: total }]
+      : pagos.map((pago) => ({ ...pago, monto: Number(pago.monto) }));
 
     const body = {
       items: venta.map((p) => ({
@@ -33,10 +37,10 @@ export default function BotonGuardar({ venta, metodoPago }) {
         cantidad: p.cantidad,
         precio_unitario: p.precio,
       })),
-      metodo_pago: metodoPago,
+      pagos: pagosVenta,
       descuento_porcentaje: descuentoPct,
       datosCliente: datosCliente || {},
-      facturar_venta: debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion),
+      incluir_efectivo_factura: incluirEfectivoFactura,
       perfil_facturacion: perfilFacturacion,
     };
     try {

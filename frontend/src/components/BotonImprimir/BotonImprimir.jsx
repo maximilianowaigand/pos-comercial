@@ -1,6 +1,5 @@
 import { useVentas } from "../../context/VentasContext";
 import { restoreFocusAfterNativeDialog, restoreKeyboardFocus } from "../../utils/keyboardFocus";
-import { debeFacturarVenta } from "../../utils/facturacion";
 import styles from "./BotonImprimir.module.css";
 import API from "../../config/api"
 
@@ -32,10 +31,9 @@ export default function BotonImprimir() {
     total,
     descuentoPct,
     descuentoMonto,
-    metodoPago,
+    pagos,
     datosCliente,
-    facturarVenta,
-    perfilFacturacion,
+    perfilFacturacion, totalPagos, incluirEfectivoFactura,
     confirmarVentaRepetida,
     limpiarVenta,
     obtenerTotales,
@@ -44,7 +42,10 @@ export default function BotonImprimir() {
 
   const imprimir = async () => {
     if (venta.length === 0) return;
-    if (!metodoPago) {
+    const pagosVenta = pagos.length === 1
+      ? [{ ...pagos[0], monto: total }]
+      : pagos.map((pago) => ({ ...pago, monto: Number(pago.monto) }));
+    if (pagosVenta.some((pago) => !pago.medio_pago || !(Number(pago.monto) > 0)) || totalPagos !== total) {
       alert("Seleccioná un método de pago");
       restoreFocusAfterNativeDialog("[data-keyboard-primary]");
       return;
@@ -60,10 +61,10 @@ export default function BotonImprimir() {
         cantidad: p.cantidad,
         precio_unitario: p.precio,
       })),
-      metodo_pago: metodoPago,
+      pagos: pagosVenta,
       descuento_porcentaje: descuentoPct,
       datosCliente: datosCliente || {},
-      facturar_venta: debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion),
+      incluir_efectivo_factura: incluirEfectivoFactura,
       perfil_facturacion: perfilFacturacion,
     };
 
@@ -113,7 +114,8 @@ export default function BotonImprimir() {
           total,
           descuentoPorcentaje: descuentoPct,
           descuentoMonto,
-          metodoPago,
+          metodoPago: pagosVenta.length === 1 ? pagosVenta[0].medio_pago : "mixto",
+          pagos: pagosVenta,
           datosCliente: datosCliente || {},
           id_venta: data.id_venta,
           facturacion: {

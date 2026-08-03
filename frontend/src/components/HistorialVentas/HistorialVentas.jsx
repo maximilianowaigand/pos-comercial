@@ -79,6 +79,17 @@ export default function HistorialVentas() {
     return estado;
   };
 
+  const getTotalFacturado = (venta) => {
+    if (venta.medio_pago !== "mixto" || !venta.factura_respuesta) return null;
+    try {
+      const respuesta = JSON.parse(venta.factura_respuesta);
+      const total = Number(respuesta.total);
+      return Number.isFinite(total) ? total : null;
+    } catch {
+      return null;
+    }
+  };
+
   const reintentarFacturacion = async (venta) => {
     const confirmar = window.confirm(
       `Reintentar facturacion de la venta #${venta.id_venta}?`
@@ -138,7 +149,8 @@ export default function HistorialVentas() {
         total: data.total,
         descuentoPorcentaje: data.descuento_porcentaje || 0,
         descuentoMonto: data.descuento_monto || 0,
-        metodoPago: data.medio_pago,
+          metodoPago: data.medio_pago,
+          pagos: data.pagos,
         id_venta: data.id_venta,
       }),
     });
@@ -178,6 +190,7 @@ export default function HistorialVentas() {
           <option value="efectivo">Efectivo</option>
           <option value="tarjeta">Tarjeta</option>
           <option value="transferencia">Transferencia</option>
+          <option value="mixto">Mixto</option>
         </select>
 
         <select
@@ -320,6 +333,12 @@ export default function HistorialVentas() {
                       >
                         {getFacturacionLabel(v)}
                       </span>
+
+                      {getTotalFacturado(v) !== null && (
+                        <small className={styles.billingTotal}>
+                          Total facturado: ${getTotalFacturado(v).toFixed(2)}
+                        </small>
+                      )}
 
                       {v.facturacion_estado === "ERROR" && (
                         <>

@@ -5,6 +5,7 @@ const links = [
   { to: "/", label: "POS" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/historial", label: "Historial" },
+  { to: "/caja", label: "Caja" },
   { to: "/crear-producto", label: "Crear producto" },
 ];
 

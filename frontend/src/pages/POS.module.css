@@ -126,6 +126,17 @@
   background: #fff;
 }
 
+.paymentList { display: grid; gap: 8px; }
+.paymentRow { display: grid; grid-template-columns: minmax(0, 1fr) 100px 32px; gap: 8px; align-items: center; }
+.paymentAmount { width: 100%; box-sizing: border-box; padding: 12px 8px; border: 1px solid #d9c7b1; border-radius: 12px; }
+.paymentAmount:read-only { background: #f4eadf; color: #6b4329; }
+.removePayment, .addPayment { border: 0; border-radius: 10px; cursor: pointer; font-weight: 700; }
+.removePayment { height: 32px; background: #f1d8d1; color: #8e2e18; font-size: 1.3rem; }
+.addPayment { margin-top: 10px; padding: 9px 12px; background: #f4eadf; color: #6b4329; }
+.paymentOk, .paymentPending { margin: 10px 0 0; font-weight: 700; font-size: .9rem; }
+.paymentOk { color: #287143; }
+.paymentPending { color: #9a5424; }
+
 .invoiceToggle {
   display: flex;
   align-items: center;

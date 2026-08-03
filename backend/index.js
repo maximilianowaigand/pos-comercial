@@ -19,6 +19,7 @@ const facturaRoutes = require("./routes/facturaRoutes");
 const productosRoutes = require("./routes/productosRoutes");
 const climaRoutes = require("./routes/clima");
 const statsRoutes = require("./routes/statsRoute");
+const movimientosRoutes = require("./routes/movimientosRoutes");
 const { startFacturacionWorker } = require("./services/facturacionQueueService");
 const { startClimateSync } = require("./services/climaService");
 
@@ -29,6 +30,7 @@ app.use("/api", facturaRoutes);
 app.use("/api/productos", productosRoutes);
 app.use("/api/clima", climaRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/movimientos", movimientosRoutes);
 
 app.use(express.static(frontendDistPath));
 app.get(/.*/, (req, res) => {

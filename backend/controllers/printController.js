@@ -251,7 +251,8 @@ exports.printTicket = async (req, res) => {
       facturacion,
       datosCliente = {},
       descuentoPorcentaje = 0,
-      descuentoMonto = 0
+      descuentoMonto = 0,
+      pagos = []
     } = req.body;
 
     if (!items || items.length === 0 || !metodoPago) {
@@ -278,7 +279,13 @@ exports.printTicket = async (req, res) => {
     text += separator();
     text += `Ticket interno: ${id_venta.toString().padStart(5, "0")}\r\n`;
     text += `Fecha: ${formatLocalDateTime()}\r\n`;
-    text += `Pago: ${metodoPago.toUpperCase()}\r\n`;
+    const pagosTicket = Array.isArray(pagos) && pagos.length
+      ? pagos
+      : [{ medio_pago: metodoPago, monto: total }];
+    text += "Pago:\r\n";
+    pagosTicket.forEach((pago) => {
+      text += `${String(pago.medio_pago || "").toUpperCase()}: $${formatMoney(pago.monto)}\r\n`;
+    });
     text += separator();
 
 
@@ -288,7 +295,8 @@ exports.printTicket = async (req, res) => {
       const tipoComprobante = facturaRespuesta.tipo_comprobante || process.env.ARCA_COMPROBANTE_TIPO || 11;
       const emisor = getEmisorFiscal(facturaRespuesta);
       const receptor = getReceptorFiscal(facturaRespuesta, datosCliente);
-      const qrUrl = buildArcaQrUrl(facturaRespuesta, datosFiscales, total);
+      const totalFacturado = Number(facturaRespuesta.total || total);
+      const qrUrl = buildArcaQrUrl(facturaRespuesta, datosFiscales, totalFacturado);
 
       text += center(getComprobanteLabel(tipoComprobante)) + "\r\n";
       text += center("ORIGINAL") + "\r\n";
@@ -312,6 +320,7 @@ exports.printTicket = async (req, res) => {
       text += separator();
       text += `CAE: ${datosFiscales.factura_cae}\r\n`;
       text += `Vto CAE: ${formatArcaDate(datosFiscales.factura_vencimiento)}\r\n`;
+      text += `TOTAL FACTURADO: $${formatMoney(totalFacturado)}\r\n`;
       if (qrUrl) {
         text += "QR ARCA:\r\n";
         flushText();

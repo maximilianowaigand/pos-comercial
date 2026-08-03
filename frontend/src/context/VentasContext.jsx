@@ -2,13 +2,17 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { addItem, decreaseItem, removeItem, calcularTotal } from "../utils/cartFuncions";
 import { fetchTotales } from "../utils/api";
-import { requiereFacturacionAutomatica } from "../utils/facturacion";
+import { pagosRequierenFacturacion } from "../utils/facturacion";
 import API from "../config/api";
 
 const VentasContext = createContext();
 
 function normalizarNumero(value) {
   return Number(Number(value || 0).toFixed(2));
+}
+
+function montoPago(value) {
+  return Number(String(value ?? "").replace(",", ".")) || 0;
 }
 
 function normalizarItems(items = []) {
@@ -25,7 +29,10 @@ function ventasSonIguales(actual, anterior) {
   const itemsActuales = normalizarItems(actual.items);
   const itemsAnteriores = normalizarItems(anterior.items);
 
-  if (actual.metodo_pago !== anterior.medio_pago) return false;
+  const pagosActuales = (actual.pagos || []).map((pago) => `${pago.medio_pago}:${normalizarNumero(pago.monto)}`).sort();
+  const pagosAnteriores = (anterior.pagos || [{ medio_pago: anterior.medio_pago, monto: anterior.total }])
+    .map((pago) => `${pago.medio_pago}:${normalizarNumero(pago.monto)}`).sort();
+  if (pagosActuales.join("|") !== pagosAnteriores.join("|")) return false;
   if (
     normalizarNumero(actual.descuento_porcentaje) !==
     normalizarNumero(anterior.descuento_porcentaje)
@@ -69,10 +76,10 @@ async function fetchConTimeout(url, options = {}, timeoutMs = 10000) {
 export function VentasProvider({ children }) {
   const [venta, setVenta] = useState([]);
   const [ventas, setVentas] = useState([]);
-  const [metodoPago, setMetodoPago] = useState("");
+  const [pagos, setPagos] = useState([{ medio_pago: "", monto: "" }]);
   const [mostrarCliente, setMostrarCliente] = useState(false);
+  const [incluirEfectivoFactura, setIncluirEfectivoFactura] = useState(false);
   const [datosCliente, setDatosCliente] = useState(null);
-  const [facturarVenta, setFacturarVenta] = useState(false);
   const [perfilesFacturacion, setPerfilesFacturacion] = useState([]);
   const [perfilFacturacion, setPerfilFacturacion] = useState("");
   const [descuentoPct, setDescuentoPct] = useState(0);
@@ -184,7 +191,7 @@ export function VentasProvider({ children }) {
 
   async function agregarVenta(body) {
     try {
-      const res = await fetch("/api/ventas", {
+      const res = await fetch(`${API}/api/ventas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -195,6 +202,7 @@ export function VentasProvider({ children }) {
       }
 
       const data = await res.json();
+      if (!data.success) throw new Error(data.error || "Error al guardar venta");
       await obtenerVentas();
       await obtenerTotales();
       limpiarVenta();
@@ -244,9 +252,9 @@ export function VentasProvider({ children }) {
   function limpiarVenta() {
     setVenta([]);
     setDatosCliente(null);
-    setMetodoPago("");
+    setPagos([{ medio_pago: "", monto: "" }]);
     setMostrarCliente(false);
-    setFacturarVenta(false);
+    setIncluirEfectivoFactura(false);
     setDescuentoPct(0);
   }
 
@@ -256,16 +264,53 @@ export function VentasProvider({ children }) {
     );
   }
 
-  function handleMetodoPagoChange(value) {
-    setMetodoPago(value);
-    const requiereFactura = requiereFacturacionAutomatica(value);
-    setMostrarCliente(requiereFactura);
-    setFacturarVenta(requiereFactura);
+  function actualizarPago(index, field, value) {
+    setPagos((prev) => {
+      let siguientes = prev.map((pago, pagoIndex) => pagoIndex === index ? { ...pago, [field]: value } : pago);
+
+      if (field === "monto" && index > 0) {
+        const otrosPagos = siguientes.reduce(
+          (acumulado, pago, pagoIndex) => pagoIndex > 0 && pagoIndex !== index
+            ? acumulado + montoPago(pago.monto)
+            : acumulado,
+          0
+        );
+        const montoIngresado = Math.min(Math.max(0, montoPago(value)), Math.max(0, total - otrosPagos));
+        siguientes = siguientes.map((pago, pagoIndex) => {
+          if (pagoIndex === index) return { ...pago, monto: value === "" ? "" : montoIngresado };
+          if (pagoIndex === 0) return { ...pago, monto: Number((total - otrosPagos - montoIngresado).toFixed(2)) };
+          return pago;
+        });
+      }
+
+      const requiereFactura = pagosRequierenFacturacion(siguientes);
+      setMostrarCliente(requiereFactura);
+      return siguientes;
+    });
   }
 
-  function handleFacturarVentaChange(value) {
-    setFacturarVenta(value);
-    setMostrarCliente(value || requiereFacturacionAutomatica(metodoPago));
+  function agregarPago() {
+    setPagos((prev) => {
+      if (prev.length >= 3) return prev;
+      const pagosActuales = prev.map((pago) => ({
+        ...pago,
+        monto: pago.monto === "" ? total.toFixed(2) : pago.monto,
+      }));
+      return [...pagosActuales, { medio_pago: "", monto: "" }];
+    });
+  }
+
+  function eliminarPago(index) {
+    setPagos((prev) => {
+      const siguientes = prev.length === 1 ? [{ medio_pago: "", monto: "" }] : prev.filter((_, pagoIndex) => pagoIndex !== index);
+      setMostrarCliente(pagosRequierenFacturacion(siguientes));
+      return siguientes;
+    });
+  }
+
+  function actualizarIncluirEfectivoFactura(value) {
+    setIncluirEfectivoFactura(value);
+    setMostrarCliente(value || pagosRequierenFacturacion(pagos));
   }
 
   function seleccionarPerfilFacturacion(profileId) {
@@ -289,6 +334,20 @@ export function VentasProvider({ children }) {
   const subtotal = calcularTotal(venta);
   const descuentoMonto = Number((subtotal * (descuentoPct / 100)).toFixed(2));
   const total = Number((subtotal - descuentoMonto).toFixed(2));
+  const totalPagos = pagos.length === 1 && pagos[0].medio_pago
+    ? total
+    : Number(pagos.reduce((acc, pago) => acc + montoPago(pago.monto), 0).toFixed(2));
+
+  useEffect(() => {
+    if (pagos.length <= 1) return;
+
+    setPagos((prev) => {
+      const pagosSecundarios = prev.slice(1).reduce((acc, pago) => acc + montoPago(pago.monto), 0);
+      const saldo = Number(Math.max(0, total - pagosSecundarios).toFixed(2));
+      if (montoPago(prev[0].monto) === saldo) return prev;
+      return prev.map((pago, index) => index === 0 ? { ...pago, monto: saldo } : pago);
+    });
+  }, [total, pagos.length]);
 
   return (
     <VentasContext.Provider
@@ -310,16 +369,19 @@ export function VentasProvider({ children }) {
         borrar,
         limpiarVenta,
         actualizarPrecio,
-        metodoPago,
+        pagos,
+        totalPagos,
+        actualizarPago,
+        agregarPago,
+        eliminarPago,
         mostrarCliente,
-        facturarVenta,
+        incluirEfectivoFactura,
+        actualizarIncluirEfectivoFactura,
         perfilesFacturacion,
         perfilFacturacion,
         seleccionarPerfilFacturacion,
         datosCliente,
         setDatosCliente,
-        handleMetodoPagoChange,
-        handleFacturarVentaChange,
         actualizarDescuentoPct,
         obtenerVentas,
         obtenerTotales,

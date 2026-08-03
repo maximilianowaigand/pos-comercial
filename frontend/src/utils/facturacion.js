@@ -17,3 +17,7 @@ export function debeFacturarVenta(metodoPago, facturarVenta, perfilFacturacion) 
 
   return requiereFacturacionAutomatica(metodoPago) || facturarVenta;
 }
+
+export function pagosRequierenFacturacion(pagos = []) {
+  return pagos.some((pago) => requiereFacturacionAutomatica(pago.medio_pago));
+}
