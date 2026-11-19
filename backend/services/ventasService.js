@@ -13,7 +13,10 @@ function registrarVenta(data) {
     const placeholders = ids.map(() => "?").join(", ");
 
     db.all(
-      `SELECT id_producto, precio_base, costo_base FROM productos WHERE id_producto IN (${placeholders})`,
+      `SELECT id_producto, precio_base, costo_base, promocion_precio,
+              promocion_hasta, promocion_unidades_limite,
+              promocion_unidades_vendidas, promocion_motivo
+       FROM productos WHERE id_producto IN (${placeholders})`,
       ids,
       (err, productos) => {
         if (err) {
@@ -22,14 +25,23 @@ function registrarVenta(data) {
 
         const precios = {};
         const costos = {};
+        const productosPorId = {};
         productos.forEach((p) => {
           precios[p.id_producto] = p.precio_base;
           costos[p.id_producto] = Number(p.costo_base || 0);
+          productosPorId[p.id_producto] = p;
         });
 
         for (const item of items) {
           if (precios[item.producto_id] === undefined) {
             return reject(new Error(`Producto ${item.producto_id} no encontrado`));
+          }
+          if (item.es_promocion) {
+            const precioPromo = Number(productosPorId[item.producto_id].promocion_precio);
+            const precioEnviado = Number(item.precio_unitario);
+            if (!Number.isFinite(precioPromo) || Math.round(precioPromo * 100) !== Math.round(precioEnviado * 100)) {
+              return reject(new Error("El precio promocional cambió. Actualizá los productos y volvé a intentar."));
+            }
           }
         }
 
@@ -74,7 +86,8 @@ function registrarVenta(data) {
                   const descuentoMonto = Number(
                     (subtotal * (descuentoPorcentaje / 100)).toFixed(2)
                   );
-                  const totalFinal = Number((subtotal - descuentoMonto).toFixed(2));
+                  const totalBase = Number((subtotal - descuentoMonto).toFixed(2));
+                  const recargoPct = Math.min(100, Math.max(0, Number(data.recargo_credito_porcentaje) || 0));
 
                   const pagos = Array.isArray(data.pagos) && data.pagos.length
                     ? data.pagos
@@ -83,15 +96,18 @@ function registrarVenta(data) {
                     medio_pago: String(pago.medio_pago || "").trim().toLowerCase(),
                     monto: Number(pago.monto),
                   }));
-                  const metodosValidos = new Set(["efectivo", "tarjeta", "transferencia"]);
+                  const metodosValidos = new Set(["efectivo", "tarjeta", "tarjeta_debito", "tarjeta_credito", "transferencia"]);
                   const pagosInvalidos = pagosNormalizados.some(
                     (pago) => !metodosValidos.has(pago.medio_pago) || !Number.isFinite(pago.monto) || pago.monto <= 0
                   );
                   const totalPagos = Number(pagosNormalizados.reduce((acc, pago) => acc + pago.monto, 0).toFixed(2));
+                  const basePagos = Number(pagosNormalizados.reduce((acc, pago) => acc + (pago.medio_pago === "tarjeta_credito" ? pago.monto / (1 + recargoPct / 100) : pago.monto), 0).toFixed(2));
 
-                  if (pagosInvalidos || totalPagos !== totalFinal) {
+                  if (pagosInvalidos || basePagos !== totalBase) {
                     return db.run("ROLLBACK", () => reject(new Error("Los pagos deben ser positivos y sumar el total de la venta")));
                   }
+                  const totalFinal = totalPagos;
+                  const recargoMonto = Number((totalFinal - totalBase).toFixed(2));
 
                   const medioPago = pagosNormalizados.length === 1
                     ? pagosNormalizados[0].medio_pago
@@ -99,9 +115,9 @@ function registrarVenta(data) {
 
                   return db.run(
                     `UPDATE ventas
-                     SET total = ?, descuento_porcentaje = ?, descuento_monto = ?, medio_pago = ?
+                     SET total = ?, descuento_porcentaje = ?, descuento_monto = ?, medio_pago = ?, recargo_credito = ?
                      WHERE id_venta = ?`,
-                    [totalFinal, descuentoPorcentaje, descuentoMonto, medioPago, id_venta],
+                    [totalFinal, descuentoPorcentaje, descuentoMonto, medioPago, recargoMonto, id_venta],
                     (updateErr) => {
                       if (updateErr) {
                         return db.run("ROLLBACK", () => reject(updateErr));
@@ -118,6 +134,7 @@ function registrarVenta(data) {
                           id_venta,
                           subtotal,
                           total: totalFinal,
+                          recargo_credito: recargoMonto,
                           descuento_porcentaje: descuentoPorcentaje,
                           descuento_monto: descuentoMonto,
                           precios,
@@ -176,15 +193,38 @@ function registrarVenta(data) {
 
                 subtotal += precioUnitario * cantidad;
 
-                db.run(
-                  `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario, costo_unitario)
-                   VALUES (?, ?, ?, ?, ?)`,
-                  [id_venta, item.producto_id, cantidad, precioUnitario, costos[item.producto_id]],
+                const insertarDetalle = () => db.run(
+                  `INSERT INTO detalle_venta
+                   (id_venta, id_producto, cantidad, precio_unitario, costo_unitario, es_promocion, motivo_promocion)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                  [id_venta, item.producto_id, cantidad, precioUnitario, costos[item.producto_id],
+                    item.es_promocion ? 1 : 0,
+                    item.es_promocion ? (productosPorId[item.producto_id].promocion_motivo || item.motivo_promocion || "Promoción") : null],
                   (itemErr) => {
-                    if (itemErr) {
-                      return db.run("ROLLBACK", () => reject(itemErr));
-                    }
+                    if (itemErr) return db.run("ROLLBACK", () => reject(itemErr));
                     insertarItems(index + 1);
+                  }
+                );
+
+                if (!item.es_promocion) return insertarDetalle();
+
+                const producto = productosPorId[item.producto_id];
+                db.run(
+                  `UPDATE productos
+                   SET promocion_unidades_vendidas = promocion_unidades_vendidas + ?
+                   WHERE id_producto = ?
+                     AND promocion_precio = ?
+                     AND promocion_precio < precio_base
+                     AND (promocion_hasta IS NULL OR promocion_hasta >= DATE('now','localtime'))
+                     AND (promocion_unidades_limite IS NULL
+                       OR promocion_unidades_vendidas + ? <= promocion_unidades_limite)`,
+                  [cantidad, item.producto_id, producto.promocion_precio, cantidad],
+                  function (promoErr) {
+                    if (promoErr) return db.run("ROLLBACK", () => reject(promoErr));
+                    if (this.changes !== 1) {
+                      return db.run("ROLLBACK", () => reject(new Error("Se agotó el cupo promocional o venció la promoción. Actualizá los productos y volvé a intentar.")));
+                    }
+                    insertarDetalle();
                   }
                 );
               };
@@ -227,7 +267,7 @@ function getTotales() {
         rows.forEach((r) => {
           if (r.medio_pago === "efectivo") efectivo = r.totalDia;
           if (r.medio_pago === "transferencia") transferencia = r.totalDia;
-          if (r.medio_pago === "tarjeta") tarjeta = r.totalDia;
+          if (r.medio_pago === "tarjeta" || r.medio_pago === "tarjeta_debito" || r.medio_pago === "tarjeta_credito") tarjeta += r.totalDia;
         });
 
         resolve({

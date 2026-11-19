@@ -83,6 +83,7 @@ export function VentasProvider({ children }) {
   const [perfilesFacturacion, setPerfilesFacturacion] = useState([]);
   const [perfilFacturacion, setPerfilFacturacion] = useState("");
   const [descuentoPct, setDescuentoPct] = useState(0);
+  const [recargoCreditoPct, setRecargoCreditoPct] = useState(() => Number(localStorage.getItem("recargoCreditoPct") || 0));
   const [totales, setTotales] = useState({
     efectivo: 0,
     transferencia: 0,
@@ -197,15 +198,13 @@ export function VentasProvider({ children }) {
         body: JSON.stringify(body),
       });
 
-      if (!res.ok) {
-        throw new Error("Error al guardar venta");
-      }
-
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Error al guardar venta");
       if (!data.success) throw new Error(data.error || "Error al guardar venta");
       await obtenerVentas();
       await obtenerTotales();
       limpiarVenta();
+      window.dispatchEvent(new Event("pos:refresh-products"));
       return data;
     } catch (err) {
       console.error("Error en agregarVenta:", err);
@@ -260,7 +259,7 @@ export function VentasProvider({ children }) {
 
   function actualizarPrecio(id, nuevoPrecio) {
     setVenta((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, precio: nuevoPrecio } : item))
+      prev.map((item) => ((item.lineKey || item.id) === id ? { ...item, precio: nuevoPrecio } : item))
     );
   }
 
@@ -275,10 +274,10 @@ export function VentasProvider({ children }) {
             : acumulado,
           0
         );
-        const montoIngresado = Math.min(Math.max(0, montoPago(value)), Math.max(0, total - otrosPagos));
+        const montoIngresado = Math.min(Math.max(0, montoPago(value)), Math.max(0, totalBase - otrosPagos));
         siguientes = siguientes.map((pago, pagoIndex) => {
           if (pagoIndex === index) return { ...pago, monto: value === "" ? "" : montoIngresado };
-          if (pagoIndex === 0) return { ...pago, monto: Number((total - otrosPagos - montoIngresado).toFixed(2)) };
+          if (pagoIndex === 0) return { ...pago, monto: Number((totalBase - otrosPagos - montoIngresado).toFixed(2)) };
           return pago;
         });
       }
@@ -294,7 +293,7 @@ export function VentasProvider({ children }) {
       if (prev.length >= 3) return prev;
       const pagosActuales = prev.map((pago) => ({
         ...pago,
-        monto: pago.monto === "" ? total.toFixed(2) : pago.monto,
+        monto: pago.monto === "" ? totalBase.toFixed(2) : pago.monto,
       }));
       return [...pagosActuales, { medio_pago: "", monto: "" }];
     });
@@ -331,23 +330,36 @@ export function VentasProvider({ children }) {
     setDescuentoPct(Math.min(100, Math.max(0, numero)));
   }
 
+  function actualizarRecargoCreditoPct(value) {
+    const numero = Number(value);
+    const porcentaje = Number.isFinite(numero) ? Math.min(100, Math.max(0, numero)) : 0;
+    setRecargoCreditoPct(porcentaje);
+    localStorage.setItem("recargoCreditoPct", String(porcentaje));
+  }
+
   const subtotal = calcularTotal(venta);
   const descuentoMonto = Number((subtotal * (descuentoPct / 100)).toFixed(2));
-  const total = Number((subtotal - descuentoMonto).toFixed(2));
-  const totalPagos = pagos.length === 1 && pagos[0].medio_pago
-    ? total
-    : Number(pagos.reduce((acc, pago) => acc + montoPago(pago.monto), 0).toFixed(2));
+  const totalBase = Number((subtotal - descuentoMonto).toFixed(2));
+  const creditoBase = pagos.reduce((acc, pago) => {
+    if (pago.medio_pago !== "tarjeta_credito") return acc;
+    const importeBase = pagos.length === 1 && pago.monto === "" ? totalBase : montoPago(pago.monto);
+    return acc + importeBase;
+  }, 0);
+  const recargoCredito = Number((creditoBase * recargoCreditoPct / 100).toFixed(2));
+  const total = Number((totalBase + recargoCredito).toFixed(2));
+  const totalPagosBase = pagos.length === 1 && pagos[0].medio_pago ? totalBase : Number(pagos.reduce((acc, pago) => acc + montoPago(pago.monto), 0).toFixed(2));
+  const totalPagos = Number((totalPagosBase + recargoCredito).toFixed(2));
 
   useEffect(() => {
     if (pagos.length <= 1) return;
 
     setPagos((prev) => {
       const pagosSecundarios = prev.slice(1).reduce((acc, pago) => acc + montoPago(pago.monto), 0);
-      const saldo = Number(Math.max(0, total - pagosSecundarios).toFixed(2));
+      const saldo = Number(Math.max(0, totalBase - pagosSecundarios).toFixed(2));
       if (montoPago(prev[0].monto) === saldo) return prev;
       return prev.map((pago, index) => index === 0 ? { ...pago, monto: saldo } : pago);
     });
-  }, [total, pagos.length]);
+  }, [totalBase, pagos.length]);
 
   return (
     <VentasContext.Provider
@@ -360,6 +372,10 @@ export function VentasProvider({ children }) {
         subtotal,
         descuentoPct,
         descuentoMonto,
+        totalBase,
+        recargoCreditoPct,
+        recargoCredito,
+        actualizarRecargoCreditoPct,
         total,
         ventas,
         agregarVenta,

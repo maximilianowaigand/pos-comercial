@@ -16,9 +16,10 @@ export default function ProdDetalles() {
 
       <ul className={styles.list}>
         {venta.map((v) => (
-          <li key={v.id} className={styles.item}>
+          <li key={v.lineKey || v.id} className={`${styles.item} ${v.es_promocion ? styles.promoItem : ""}`}>
             <div className={styles.info}>
-              <strong>{v.nombre}</strong>
+              <strong>{v.nombre} {v.es_promocion && <span className={styles.promoBadge}>PROMO</span>}</strong>
+              {v.es_promocion && <small className={styles.promoReason}>{v.motivo_promocion} · habitual ${Number(v.precio_habitual).toFixed(2)}</small>}
               <div className={styles.priceRow}>
                 <span>Precio:</span>
                 <input
@@ -26,13 +27,15 @@ export default function ProdDetalles() {
                   value={v.precio === 0 ? "" : v.precio}
                   placeholder="Precio"
                   className={styles.priceInput}
+                  readOnly={Boolean(v.es_promocion)}
+                  title={v.es_promocion ? "El precio promocional se aplica automáticamente" : undefined}
                   onChange={(e) => {
                     const valor = e.target.value;
                     if (valor === "") {
-                      actualizarPrecio(v.id, 0);
+                      actualizarPrecio(v.lineKey || v.id, 0);
                       return;
                     }
-                    actualizarPrecio(v.id, Number(valor));
+                    actualizarPrecio(v.lineKey || v.id, Number(valor));
                   }}
                 />
               </div>
@@ -41,13 +44,13 @@ export default function ProdDetalles() {
             </div>
 
             <div className={styles.actions}>
-              <button type="button" onClick={() => disminuir(v.id)}>
+              <button type="button" onClick={() => disminuir(v.lineKey || v.id)}>
                 -
               </button>
               <button type="button" onClick={() => agregar(v)}>
                 +
               </button>
-              <button type="button" onClick={() => borrar(v.id)}>
+              <button type="button" onClick={() => borrar(v.lineKey || v.id)}>
                 Eliminar
               </button>
             </div>

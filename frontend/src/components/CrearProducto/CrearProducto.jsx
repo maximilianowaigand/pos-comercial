@@ -3,13 +3,19 @@ import BackButton from "../BackButton/BackButton";
 import styles from "./CrearProducto.module.css";
 import ListaProductos from "../ListaProductos/ListaProductos";
 import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
+import { useProductos } from "../../context/ProductosContext";
+import PromocionFields from "../PromocionFields";
 
 
 const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc","Cereales","Yerba"];
 
-const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
+const FORM_VACIO = {
+  nombre: "", precio: "", costo: "", categoria: "",
+  precio_promocional: "", promocion_hasta: "", promocion_unidades_limite: "", promocion_motivo: "",
+};
 
 export default function CrearProducto() {
+  const { setProductos } = useProductos();
   const [form, setForm] = useState(FORM_VACIO);
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,6 +45,9 @@ export default function CrearProducto() {
   const precioNum = Number(form.precio);
   const costoNum = Number(form.costo || 0);
   if (precioNum <= 0) return setMensaje("Precio inválido");
+  if (form.precio_promocional && (Number(form.precio_promocional) <= 0 || Number(form.precio_promocional) >= precioNum)) return setMensaje("El precio promocional debe ser menor al habitual");
+  if (form.promocion_unidades_limite && Number(form.promocion_unidades_limite) < 1) return setMensaje("El límite de unidades debe ser mayor a cero");
+  if (form.precio_promocional && !form.promocion_hasta && !form.promocion_unidades_limite) return setMensaje("Definí una fecha de fin o un límite de unidades para la promoción");
   if (costoNum < 0) return setMensaje("Costo inválido");
   if (!form.categoria) return setMensaje("Selecciona una categoría");
 
@@ -59,7 +68,16 @@ export default function CrearProducto() {
     const res = await fetch(`/api/productos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre: nombreLimpio, precio: precioNum, costo: costoNum, categoria: form.categoria }),
+      body: JSON.stringify({
+        nombre: nombreLimpio,
+        precio: precioNum,
+        costo: costoNum,
+        categoria: form.categoria,
+        precio_promocional: form.precio_promocional || null,
+        promocion_hasta: form.promocion_hasta || null,
+        promocion_unidades_limite: form.promocion_unidades_limite || null,
+        promocion_motivo: form.promocion_motivo || null,
+      }),
     });
 
     const data = await res.json();
@@ -67,6 +85,10 @@ export default function CrearProducto() {
     if (res.ok) {
       setMensaje("✓ Producto creado");
       setForm(FORM_VACIO);
+      try {
+        const listaRes = await fetch(`/api/productos`);
+        if (listaRes.ok) setProductos(await listaRes.json());
+      } catch { /* La recarga visual puede hacerse al volver a abrir la pantalla. */ }
       restoreKeyboardFocus();
     } else {
       setMensaje(data.error || "Error al guardar");
@@ -122,6 +144,8 @@ export default function CrearProducto() {
             <option key={c} value={c}>{c}</option>
           ))}
         </select>
+
+        <PromocionFields form={form} onChange={handleChange} />
 
         <button className={styles.btn} disabled={loading}>
           {loading ? "Guardando..." : "Crear"}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import API from "../config/api";
 import styles from "./Caja.module.css";
 
@@ -127,6 +127,10 @@ export default function Caja() {
   const [cajaDiaria, setCajaDiaria] = useState(null);
   const [montoApertura, setMontoApertura] = useState("0");
   const [montoContado, setMontoContado] = useState("");
+  const [busquedaMovimiento, setBusquedaMovimiento] = useState("");
+  const [filtroTipo, setFiltroTipo] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState("");
 
   const cargar = async () => {
     try {
@@ -244,7 +248,19 @@ export default function Caja() {
     } catch (error) { setMensaje(error.message || "No se pudo cerrar la caja"); }
   };
 
-  const { resumen = {}, movimientos = [], proveedores = [], categorias = [], reporteMensual } = datos;
+  const { resumen = {}, movimientos: todosLosMovimientos = [], proveedores = [], categorias = [], reporteMensual } = datos;
+  const movimientosFiltrados = useMemo(() => {
+    const busqueda = busquedaMovimiento.trim().toLocaleLowerCase("es-AR");
+    return todosLosMovimientos.filter((movimiento) => {
+      const texto = [movimiento.categoria, movimiento.proveedor, movimiento.descripcion, movimiento.medio_pago, movimiento.fecha, movimiento.fecha_vencimiento]
+        .filter(Boolean).join(" ").toLocaleLowerCase("es-AR");
+      return (!busqueda || texto.includes(busqueda))
+        && (!filtroTipo || movimiento.tipo === filtroTipo)
+        && (!filtroEstado || movimiento.estado === filtroEstado)
+        && (!filtroCategoria || movimiento.categoria === filtroCategoria);
+    });
+  }, [todosLosMovimientos, busquedaMovimiento, filtroTipo, filtroEstado, filtroCategoria]);
+  const movimientos = movimientosFiltrados;
   return <div className={styles.page}>
     <section className={styles.card}>
       <div className={styles.titleRow}>
@@ -255,8 +271,9 @@ export default function Caja() {
         <article><span>Ventas desde POS</span><strong>{dinero(resumen.ventasPos)}</strong><small>{resumen.ticketsPos || 0} tickets</small></article>
         <article><span>Otros ingresos confirmados</span><strong>{dinero(resumen.ingresosExternos)}</strong><small>{dinero(resumen.ingresosPendientes)} pendiente</small></article>
         <article><span>Costos de productos</span><strong>{dinero(resumen.costosProductos)}</strong><small>Según los productos vendidos</small></article>
-        <article><span>Egresos pagados</span><strong>{dinero(resumen.egresos)}</strong><small>{dinero(resumen.egresosPendientes)} pendiente</small></article>
-        <article className={resumen.balance >= 0 ? styles.positive : styles.negative}><span>Resultado neto</span><strong>{dinero(resumen.balance)}</strong><small>Ingresos confirmados − costos − gastos pagados</small></article>
+        <article><span>Egresos operativos pagados</span><strong>{dinero(resumen.egresos)}</strong><small>{dinero(resumen.egresosPendientes)} pendiente</small></article>
+        <article><span>Pagos a proveedores</span><strong>{dinero(resumen.pagosProveedores)}</strong><small>{dinero(resumen.pagosProveedoresPendientes)} pendiente · no descuenta el resultado</small></article>
+        <article className={resumen.balance >= 0 ? styles.positive : styles.negative}><span>Resultado neto</span><strong>{dinero(resumen.balance)}</strong><small>Ingresos confirmados − costos − gastos operativos</small></article>
       </div>
     </section>
     <ArqueoDiario fecha={fechaCaja} onFechaChange={setFechaCaja} caja={cajaDiaria} montoApertura={montoApertura} setMontoApertura={setMontoApertura} montoContado={montoContado} setMontoContado={setMontoContado} onGuardarApertura={guardarApertura} onCerrar={cerrarCaja} />
@@ -283,6 +300,13 @@ export default function Caja() {
 
     <section className={styles.card}>
       <h2>Movimientos de {mes}</h2>
+      <div className={styles.filters}>
+        <input placeholder="Buscar por proveedor, categoría, descripción o fecha" value={busquedaMovimiento} onChange={(e) => setBusquedaMovimiento(e.target.value)} />
+        <select aria-label="Filtrar por tipo" value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}><option value="">Todos los tipos</option><option value="INGRESO">Ingresos</option><option value="EGRESO">Egresos</option></select>
+        <select aria-label="Filtrar por estado" value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}><option value="">Todos los estados</option><option value="PENDIENTE">Pendientes</option><option value="PAGADO">Pagados</option><option value="INGRESADO">Ingresados</option></select>
+        <select aria-label="Filtrar por categoría" value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)}><option value="">Todas las categorías</option>{categorias.map((categoria) => <option key={categoria} value={categoria}>{categoria}</option>)}</select>
+        {(busquedaMovimiento || filtroTipo || filtroEstado || filtroCategoria) && <button type="button" className={styles.clearFilters} onClick={() => { setBusquedaMovimiento(""); setFiltroTipo(""); setFiltroEstado(""); setFiltroCategoria(""); }}>Limpiar filtros</button>}
+      </div>
       {cargando ? <p>Cargando movimientos...</p> : movimientos.length === 0 ? <p>No hay movimientos para este mes.</p> : <div className={styles.tableWrap}><table><thead><tr><th>Vencimiento</th><th>Tipo</th><th>Categoría / proveedor</th><th>Medio</th><th>Estado</th><th>Importe</th><th /></tr></thead><tbody>{movimientos.map((m) => <tr key={m.id_movimiento}><td>{m.fecha_vencimiento || m.fecha}</td><td className={m.tipo === "INGRESO" ? styles.income : styles.expense}>{m.tipo}</td><td>{m.categoria}{m.proveedor && <><br /><small>Proveedor: {m.proveedor}</small></>}{m.descripcion ? ` — ${m.descripcion}` : ""}{m.origen === "RECURRENTE" && <small className={styles.recurringBadge}>Mensual</small>}</td><td>{m.pagos.length ? m.pagos.map((pago) => `${pago.medio_pago} ${dinero(pago.monto)}`).join(" + ") : m.medio_pago}</td><td><span className={m.estado === "PENDIENTE" ? styles.pending : styles.done}>{m.estado_visible}</span></td><td>{dinero(m.monto)}</td><td className={styles.rowActions}>{m.id_recurrencia && <button className={styles.editButton} onClick={() => setRecurrenteAEditar(m)}>Modificar mensual</button>}{m.estado === "PENDIENTE" && <button className={styles.confirmButton} onClick={() => setMovimientoAPagar(m)}>{m.tipo === "INGRESO" ? "Marcar ingresado" : "Marcar pagado"}</button>}</td></tr>)}</tbody></table></div>}
     </section>
     {movimientoAPagar && <PagoModal movimiento={movimientoAPagar} onClose={() => setMovimientoAPagar(null)} onConfirmar={(pagos) => confirmarMovimiento(movimientoAPagar, pagos)} />}

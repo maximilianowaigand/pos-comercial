@@ -1,4 +1,4 @@
-const METODOS_FACTURACION_AUTOMATICA = new Set(["transferencia", "tarjeta"]);
+const METODOS_FACTURACION_AUTOMATICA = new Set(["transferencia", "tarjeta", "tarjeta_debito", "tarjeta_credito"]);
 
 export function requiereFacturacionAutomatica(metodoPago) {
   return METODOS_FACTURACION_AUTOMATICA.has(

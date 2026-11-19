@@ -108,6 +108,43 @@
   font-weight: 600;
 }
 
+.productLabel {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.promoBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #fae6d5;
+  color: #934218;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.promoNote {
+  color: #806b58;
+  font-size: .72rem;
+  font-weight: 500;
+}
+
+.priceStack {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.oldProductPrice {
+  color: #988e83;
+  font-size: .78rem;
+  text-decoration: line-through;
+}
+
 .productPrice {
   color: #c4571d;
   font-weight: 700;

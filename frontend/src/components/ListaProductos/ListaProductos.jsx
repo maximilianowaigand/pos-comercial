@@ -3,9 +3,13 @@ import { useProductos } from "../../context/ProductosContext";
 import { restoreKeyboardFocus } from "../../utils/keyboardFocus";
 import styles from "./ListaProductos.module.css";
 import API from "../../config/api";
+import PromocionFields from "../PromocionFields";
 
 const CATEGORIAS = ["Panaderia", "Gondola", "Lacteos", "Bebidas", "Otros", "Sin Tacc","Cereales","Yerba"];
-const FORM_VACIO = { nombre: "", precio: "", costo: "", categoria: "" };
+const FORM_VACIO = {
+  nombre: "", precio: "", costo: "", categoria: "",
+  precio_promocional: "", promocion_hasta: "", promocion_unidades_limite: "", promocion_motivo: "",
+};
 
 export default function ListaProductos() {
   const { productosFiltrados, busqueda, setBusqueda, setProductos } = useProductos();
@@ -13,11 +17,26 @@ export default function ListaProductos() {
   const [form, setForm] = useState(FORM_VACIO);
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
+  const [impresionId, setImpresionId] = useState(null);
   const [modal, setModal] = useState(null); // { tipo: "eliminar"|"guardar", id }
 
   const mostrarMensaje = (msg) => {
     setMensaje(msg);
     setTimeout(() => setMensaje(""), 3000);
+  };
+
+  const imprimirCartelPromocion = async (producto) => {
+    setImpresionId(producto.id);
+    try {
+      const res = await fetch(`${API}/api/print-promo/${producto.id}`, { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "No se pudo imprimir el cartel");
+      mostrarMensaje("✓ Cartel enviado a la impresora");
+    } catch (error) {
+      mostrarMensaje(error.message || "Error al imprimir el cartel");
+    } finally {
+      setImpresionId(null);
+    }
   };
 
   // ---- ELIMINAR ----
@@ -50,6 +69,9 @@ export default function ListaProductos() {
     const precioNum = Number(form.precio);
     const costoNum = Number(form.costo || 0);
     if (precioNum <= 0) return mostrarMensaje("Precio inválido");
+    if (form.precio_promocional && (Number(form.precio_promocional) <= 0 || Number(form.precio_promocional) >= precioNum)) return mostrarMensaje("El precio promocional debe ser menor al habitual");
+    if (form.promocion_unidades_limite && Number(form.promocion_unidades_limite) < 1) return mostrarMensaje("El límite de unidades debe ser mayor a cero");
+    if (form.precio_promocional && !form.promocion_hasta && !form.promocion_unidades_limite) return mostrarMensaje("Definí una fecha de fin o un límite de unidades para la promoción");
     if (costoNum < 0) return mostrarMensaje("Costo inválido");
     if (!form.categoria) return mostrarMensaje("Selecciona una categoría");
     setModal({ tipo: "guardar", id });
@@ -66,17 +88,23 @@ export default function ListaProductos() {
       const res = await fetch(`${API}/api/productos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre: nombreLimpio, precio: precioNum, costo: costoNum, categoria: form.categoria }),
+        body: JSON.stringify({
+          nombre: nombreLimpio,
+          precio: precioNum,
+          costo: costoNum,
+          categoria: form.categoria,
+          precio_promocional: form.precio_promocional || null,
+          promocion_hasta: form.promocion_hasta || null,
+          promocion_unidades_limite: form.promocion_unidades_limite || null,
+          promocion_motivo: form.promocion_motivo || null,
+        }),
       });
       const data = await res.json();
       if (res.ok) {
-        setProductos((prev) =>
-          prev.map((p) =>
-            p.id === id
-              ? { ...p, nombre: nombreLimpio, precio: precioNum, costo: costoNum, categoria: form.categoria }
-              : p
-          )
-        );
+        try {
+          const listaRes = await fetch(`${API}/api/productos`);
+          if (listaRes.ok) setProductos(await listaRes.json());
+        } catch { /* Se conserva la lista actual si falla solo la recarga. */ }
         setExpandido(null);
         setForm(FORM_VACIO);
         mostrarMensaje("✓ Producto actualizado");
@@ -108,6 +136,10 @@ export default function ListaProductos() {
         precio: producto.precio,
         costo: producto.costo || "",
         categoria: producto.categoria || "",
+        precio_promocional: producto.precio_promocional ?? "",
+        promocion_hasta: producto.promocion_hasta || "",
+        promocion_unidades_limite: producto.promocion_unidades_limite ?? "",
+        promocion_motivo: producto.promocion_motivo || "",
       });
     }
   };
@@ -137,11 +169,28 @@ export default function ListaProductos() {
               onClick={() => handleExpandir(producto)}
             >
               <span>{producto.nombre}</span>
-              <span className={styles.precio}>${producto.precio}</span>
+              {producto.promocion_activa ? (
+                <span className={styles.priceGroup}>
+                  <span className={styles.oldPrice}>${producto.precio}</span>
+                  <span className={styles.promoPrice}>${producto.precio_promocional}</span>
+                  <span className={styles.promoBadge}>PROMO</span>
+                </span>
+              ) : <span className={styles.precio}>${producto.precio}</span>}
               <span className={styles.flecha}>
                 {expandido === producto.id ? "▲" : "▼"}
               </span>
             </button>
+
+            {producto.promocion_activa && (
+              <button
+                type="button"
+                className={styles.btnCartel}
+                onClick={() => imprimirCartelPromocion(producto)}
+                disabled={impresionId === producto.id}
+              >
+                {impresionId === producto.id ? "Enviando a impresora…" : "▤ Imprimir cartel de oferta"}
+              </button>
+            )}
 
             {expandido === producto.id && (
               <div className={styles.editorForm}>
@@ -154,6 +203,8 @@ export default function ListaProductos() {
                     <option key={c} value={c}>{c}</option>
                   ))}
                 </select>
+
+                <PromocionFields form={form} onChange={handleChange} />
 
                 <div className={styles.acciones}>
                   <button className={styles.btnGuardar} onClick={() => handleGuardar(producto.id)} disabled={loading}>

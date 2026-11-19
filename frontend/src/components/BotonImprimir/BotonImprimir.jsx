@@ -29,11 +29,12 @@ export default function BotonImprimir() {
   const {
     venta,
     total,
+    totalBase,
     descuentoPct,
     descuentoMonto,
     pagos,
     datosCliente,
-    perfilFacturacion, totalPagos, incluirEfectivoFactura,
+    perfilFacturacion, totalPagos, incluirEfectivoFactura, recargoCreditoPct,
     confirmarVentaRepetida,
     limpiarVenta,
     obtenerTotales,
@@ -42,9 +43,7 @@ export default function BotonImprimir() {
 
   const imprimir = async () => {
     if (venta.length === 0) return;
-    const pagosVenta = pagos.length === 1
-      ? [{ ...pagos[0], monto: total }]
-      : pagos.map((pago) => ({ ...pago, monto: Number(pago.monto) }));
+    const pagosVenta = (pagos.length === 1 ? [{ ...pagos[0], monto: totalBase }] : pagos).map((pago) => ({ ...pago, monto: Number((Number(pago.monto) * (pago.medio_pago === "tarjeta_credito" ? 1 + recargoCreditoPct / 100 : 1)).toFixed(2)) }));
     if (pagosVenta.some((pago) => !pago.medio_pago || !(Number(pago.monto) > 0)) || totalPagos !== total) {
       alert("Seleccioná un método de pago");
       restoreFocusAfterNativeDialog("[data-keyboard-primary]");
@@ -60,9 +59,12 @@ export default function BotonImprimir() {
         producto_id: p.id,
         cantidad: p.cantidad,
         precio_unitario: p.precio,
+        es_promocion: Boolean(p.es_promocion),
+        motivo_promocion: p.motivo_promocion || null,
       })),
       pagos: pagosVenta,
       descuento_porcentaje: descuentoPct,
+      recargo_credito_porcentaje: recargoCreditoPct,
       datosCliente: datosCliente || {},
       incluir_efectivo_factura: incluirEfectivoFactura,
       perfil_facturacion: perfilFacturacion,
@@ -136,6 +138,7 @@ export default function BotonImprimir() {
       alert("Venta guardada e impresa");
       limpiarVenta();
       obtenerTotales();
+      window.dispatchEvent(new Event("pos:refresh-products"));
       window.dispatchEvent(new Event("pos:restore-search-focus"));
       restoreFocusAfterNativeDialog("[data-keyboard-primary]");
       restoreKeyboardFocus("[data-keyboard-primary]");

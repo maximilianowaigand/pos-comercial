@@ -65,8 +65,25 @@ export default function POSContent({
                   window.dispatchEvent(new Event("pos:restore-search-focus"));
                 }}
               >
-                <span className={styles.productName}>{producto.nombre}</span>
-                <span className={styles.productPrice}>${producto.precio}</span>
+                <span className={styles.productLabel}>
+                  <span className={styles.productName}>{producto.nombre}</span>
+                  {producto.promocion_activa ? <span className={styles.promoBadge}>PROMO</span> : null}
+                  {producto.promocion_activa && producto.promocion_motivo
+                    ? <small className={styles.promoNote}>{producto.promocion_motivo}</small>
+                    : null}
+                  {producto.promocion_activa && producto.promocion_hasta
+                    ? <small className={styles.promoNote}>Hasta {producto.promocion_hasta.split("-").reverse().join("/")}</small>
+                    : null}
+                  {producto.promocion_activa && producto.promocion_unidades_restantes != null
+                    ? <small className={styles.promoNote}>Quedan {producto.promocion_unidades_restantes} al precio promo</small>
+                    : null}
+                </span>
+                {producto.promocion_activa ? (
+                  <span className={styles.priceStack}>
+                    <span className={styles.oldProductPrice}>${producto.precio}</span>
+                    <span className={styles.productPrice}>${producto.precio_promocional}</span>
+                  </span>
+                ) : <span className={styles.productPrice}>${producto.precio}</span>}
               </button>
             ))}
             
@@ -112,7 +129,7 @@ export default function POSContent({
             </button>
             {pagos.length > 1 && <p className={totalPagos === total ? styles.paymentOk : styles.paymentPending}>Pagado: ${totalPagos.toFixed(2)} de ${total.toFixed(2)}</p>}
 
-            {pagos.some((pago) => pago.medio_pago === "transferencia" || pago.medio_pago === "tarjeta") && (
+            {pagos.some((pago) => pago.medio_pago === "transferencia" || pago.medio_pago.startsWith("tarjeta_")) && (
               <p className={styles.invoiceNotice}>Se factura solo la parte abonada con tarjeta o transferencia</p>
             )}
 

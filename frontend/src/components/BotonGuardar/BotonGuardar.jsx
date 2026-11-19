@@ -9,15 +9,14 @@ export default function BotonGuardar({ venta, pagos }) {
     confirmarVentaRepetida,
     descuentoPct,
     datosCliente,
-    perfilFacturacion, total, totalPagos, incluirEfectivoFactura,
+    perfilFacturacion, total, totalBase, totalPagos, incluirEfectivoFactura, recargoCreditoPct,
   } = useVentas();
   const [modal, setModal] = useState(null);
+  const [errorMensaje, setErrorMensaje] = useState("");
 
   const handleGuardar = () => {
     if (venta.length === 0) return;
-    const pagosVenta = pagos.length === 1
-      ? [{ ...pagos[0], monto: total }]
-      : pagos.map((pago) => ({ ...pago, monto: Number(pago.monto) }));
+    const pagosVenta = (pagos.length === 1 ? [{ ...pagos[0], monto: totalBase }] : pagos).map((pago) => ({ ...pago, monto: Number((Number(pago.monto) * (pago.medio_pago === "tarjeta_credito" ? 1 + recargoCreditoPct / 100 : 1)).toFixed(2)) }));
     if (pagosVenta.some((pago) => !pago.medio_pago || !(Number(pago.monto) > 0)) || totalPagos !== total) {
       setModal("sinMetodo");
       return;
@@ -27,18 +26,19 @@ export default function BotonGuardar({ venta, pagos }) {
 
   const handleConfirmar = async () => {
     setModal(null);
-    const pagosVenta = pagos.length === 1
-      ? [{ ...pagos[0], monto: total }]
-      : pagos.map((pago) => ({ ...pago, monto: Number(pago.monto) }));
+    const pagosVenta = (pagos.length === 1 ? [{ ...pagos[0], monto: totalBase }] : pagos).map((pago) => ({ ...pago, monto: Number((Number(pago.monto) * (pago.medio_pago === "tarjeta_credito" ? 1 + recargoCreditoPct / 100 : 1)).toFixed(2)) }));
 
     const body = {
       items: venta.map((p) => ({
         producto_id: p.id,
         cantidad: p.cantidad,
         precio_unitario: p.precio,
+        es_promocion: Boolean(p.es_promocion),
+        motivo_promocion: p.motivo_promocion || null,
       })),
       pagos: pagosVenta,
       descuento_porcentaje: descuentoPct,
+      recargo_credito_porcentaje: recargoCreditoPct,
       datosCliente: datosCliente || {},
       incluir_efectivo_factura: incluirEfectivoFactura,
       perfil_facturacion: perfilFacturacion,
@@ -58,6 +58,7 @@ export default function BotonGuardar({ venta, pagos }) {
       }, 1200);
     } catch (e) {
       console.error(e);
+      setErrorMensaje(e.message || "No se pudo guardar la venta");
       setModal("error");
     }
   };
@@ -125,7 +126,7 @@ export default function BotonGuardar({ venta, pagos }) {
 
             {modal === "error" && (
               <>
-                <p className={styles.modalText}>Error al guardar la venta</p>
+                <p className={styles.modalText}>{errorMensaje || "Error al guardar la venta"}</p>
                 <button
                   type="button"
                   className={`${styles.button} ${styles.secondary}`}

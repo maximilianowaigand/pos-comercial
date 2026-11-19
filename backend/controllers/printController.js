@@ -263,7 +263,9 @@ exports.printTicket = async (req, res) => {
       producto_id: i.producto_id ?? i.id,
       nombre: i.nombre,
       cantidad: i.cantidad,
-      precio: i.precio
+      precio: i.precio,
+      es_promocion: Boolean(i.es_promocion),
+      motivo_promocion: i.motivo_promocion || "Promoción",
     }));
     const datosFiscales = await getVentaFiscal(id_venta);
 
@@ -340,6 +342,7 @@ exports.printTicket = async (req, res) => {
 
     itemsNormalizados.forEach((i) => {
       text += `${i.nombre}\r\n`;
+      if (i.es_promocion) text += `PROMOCION: ${i.motivo_promocion}\r\n`;
       text += `${i.cantidad} x $${formatMoney(i.precio)} = $${formatMoney(Number(i.cantidad) * Number(i.precio))}\r\n`;
     });
 
@@ -372,5 +375,99 @@ exports.printTicket = async (req, res) => {
   } catch (err) {
     console.error("Error printTicket:", err);
     res.status(500).json({ error: err.message || "Error interno" });
+  }
+};
+
+function wrapSignName(value, maxLength = TICKET_WIDTH) {
+  const words = String(value || "Producto")
+    .replace(/[\r\n\t]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ");
+  const lines = [];
+  let line = "";
+
+  words.forEach((word) => {
+    while (word.length > maxLength) {
+      if (line) {
+        lines.push(line);
+        line = "";
+      }
+      lines.push(word.slice(0, maxLength));
+      word = word.slice(maxLength);
+    }
+    if (!word) return;
+    if (!line) line = word;
+    else if (`${line} ${word}`.length <= maxLength) line += ` ${word}`;
+    else {
+      lines.push(line);
+      line = word;
+    }
+  });
+
+  if (line) lines.push(line);
+  return lines;
+}
+
+exports.printPromoSign = async (req, res) => {
+  try {
+    const productId = Number(req.params.productId);
+    if (!Number.isInteger(productId) || productId <= 0) {
+      return res.status(400).json({ error: "Producto inválido" });
+    }
+
+    const product = await new Promise((resolve, reject) => {
+      db.get(
+        `SELECT nombre_producto AS nombre, precio_base AS precio,
+                promocion_precio AS precio_promocional,
+                CASE
+                  WHEN promocion_precio IS NOT NULL
+                    AND promocion_precio > 0
+                    AND promocion_precio < precio_base
+                    AND (promocion_hasta IS NULL OR promocion_hasta >= DATE('now','localtime'))
+                    AND (promocion_unidades_limite IS NULL OR promocion_unidades_vendidas < promocion_unidades_limite)
+                  THEN 1 ELSE 0
+                END AS promocion_activa
+         FROM productos WHERE id_producto = ?`,
+        [productId],
+        (error, row) => error ? reject(error) : resolve(row)
+      );
+    });
+
+    if (!product) return res.status(404).json({ error: "Producto no encontrado" });
+    if (!product.promocion_activa) {
+      return res.status(409).json({ error: "Este producto no tiene una promoción activa" });
+    }
+
+    const chunks = [
+      Buffer.from([0x1b, 0x40, 0x1b, 0x61, 0x01]), // initialize, center
+      Buffer.from([0x1b, 0x45, 0x01, 0x1d, 0x21, 0x11]), // bold, double size
+      Buffer.from("OFERTA\r\n", "latin1"),
+      Buffer.from([0x1d, 0x21, 0x01]), // double height for product name
+      ...wrapSignName(product.nombre).map((line) => Buffer.from(`${line}\r\n`, "latin1")),
+      Buffer.from([0x1d, 0x21, 0x00, 0x1b, 0x45, 0x00]),
+      Buffer.from("------------------------------\r\n", "latin1"),
+      Buffer.from("PRECIO NORMAL\r\n", "latin1"),
+      Buffer.from(`$ ${formatMoney(product.precio)}\r\n`, "latin1"),
+      Buffer.from("\r\nPROMOCION\r\n", "latin1"),
+      Buffer.from([0x1b, 0x45, 0x01, 0x1d, 0x21, 0x11]),
+      Buffer.from(`$ ${formatMoney(product.precio_promocional)}\r\n`, "latin1"),
+      Buffer.from([0x1d, 0x21, 0x00, 0x1b, 0x45, 0x00, 0x1b, 0x61, 0x00]),
+      Buffer.from("\r\n\r\n\r\n", "latin1"),
+      Buffer.from([0x1d, 0x56, 0x42, 0x00]), // partial cut
+    ];
+
+    const printDir = process.env.APP_DATA_DIR
+      ? path.resolve(process.env.APP_DATA_DIR)
+      : path.join(__dirname, "..");
+    fs.mkdirSync(printDir, { recursive: true });
+    const filePath = path.join(printDir, `cartel-promocion-${productId}.bin`);
+    fs.writeFileSync(filePath, Buffer.concat(chunks));
+
+    const printResult = await sendToPrinter(filePath);
+    res.json({ ok: true, printer: printResult.printerShare });
+  } catch (err) {
+    console.error("Error printPromoSign:", err);
+    res.status(500).json({ error: err.message || "No se pudo imprimir el cartel" });
   }
 };

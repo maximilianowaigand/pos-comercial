@@ -188,7 +188,9 @@ export default function HistorialVentas() {
         >
           <option value="">Todos</option>
           <option value="efectivo">Efectivo</option>
-          <option value="tarjeta">Tarjeta</option>
+          <option value="tarjeta">Tarjeta (anteriores)</option>
+          <option value="tarjeta_debito">Tarjeta de débito</option>
+          <option value="tarjeta_credito">Tarjeta de crédito</option>
           <option value="transferencia">Transferencia</option>
           <option value="mixto">Mixto</option>
         </select>

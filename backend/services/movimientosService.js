@@ -3,6 +3,11 @@ const db = require("../db");
 const TIPOS = new Set(["INGRESO", "EGRESO"]);
 const MEDIOS = new Set(["efectivo", "transferencia", "tarjeta"]);
 const ESTADOS = new Set(["PAGADO", "PENDIENTE", "INGRESADO"]);
+const CATEGORIAS_PROVEEDOR = new Set(["proveedor", "proveedores"]);
+
+function esPagoAProveedor(movimiento) {
+  return movimiento.tipo === "EGRESO" && CATEGORIAS_PROVEEDOR.has(String(movimiento.categoria || "").trim().toLowerCase());
+}
 
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
@@ -155,13 +160,17 @@ async function listarMovimientos(mes) {
     if (movimiento.tipo === "INGRESO") {
       if (confirmado) acc.ingresosExternos += Number(movimiento.monto);
       else acc.ingresosPendientes += Number(movimiento.monto);
+    } else if (esPagoAProveedor(movimiento) && confirmado) {
+      acc.pagosProveedores += Number(movimiento.monto);
+    } else if (esPagoAProveedor(movimiento)) {
+      acc.pagosProveedoresPendientes += Number(movimiento.monto);
     } else if (confirmado) {
       acc.egresos += Number(movimiento.monto);
     } else {
       acc.egresosPendientes += Number(movimiento.monto);
     }
     return acc;
-  }, { ingresosExternos: 0, ingresosPendientes: 0, egresos: 0, egresosPendientes: 0 });
+  }, { ingresosExternos: 0, ingresosPendientes: 0, egresos: 0, egresosPendientes: 0, pagosProveedores: 0, pagosProveedoresPendientes: 0 });
 
   resumen.ventasPos = Number(ventas[0]?.total || 0);
   resumen.ticketsPos = Number(ventas[0]?.cantidad || 0);
@@ -209,10 +218,12 @@ async function getReporteMensual(mesSeleccionado) {
       [`${year}-12`]
     ),
     all(
-      `SELECT substr(fecha, 1, 7) AS mes, tipo, COALESCE(SUM(monto), 0) AS total
+      `SELECT substr(fecha, 1, 7) AS mes, tipo,
+              CASE WHEN lower(trim(categoria)) IN ('proveedor', 'proveedores') THEN 1 ELSE 0 END AS es_proveedor,
+              COALESCE(SUM(monto), 0) AS total
        FROM movimientos_caja
        WHERE estado = 'PAGADO' AND substr(fecha, 1, 7) <= ?
-       GROUP BY substr(fecha, 1, 7), tipo`,
+       GROUP BY substr(fecha, 1, 7), tipo, es_proveedor`,
       [`${year}-12`]
     ),
     all(
@@ -238,7 +249,7 @@ async function getReporteMensual(mesSeleccionado) {
     const item = porMes.get(movimiento.mes);
     if (!item) return;
     if (movimiento.tipo === "INGRESO") item.ingresosExternos = Number(movimiento.total);
-    else item.egresos = Number(movimiento.total);
+    else if (!movimiento.es_proveedor) item.egresos += Number(movimiento.total);
   });
   todosLosMeses.forEach((mes) => {
     const item = porMes.get(mes);

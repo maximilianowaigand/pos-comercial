@@ -10,7 +10,7 @@ process.env.APP_DATA_DIR = testDataDir;
 process.env.SKIP_LEGACY_DATA_BOOTSTRAP = "true";
 
 const db = require("../db");
-const { crearProducto } = require("../services/productosService");
+const { crearProducto, listarProductos } = require("../services/productosService");
 const { registrarVenta } = require("../services/ventasService");
 const { crearMovimiento, listarMovimientos, actualizarEstado, getAlertasCaja, cerrarBalanceMensual, actualizarMontoRecurrente, getCajaDiaria, guardarAperturaCaja, cerrarCajaDiaria } = require("../services/movimientosService");
 
@@ -26,6 +26,20 @@ test.after(() => new Promise((resolve) => {
     resolve();
   });
 }));
+
+test("incluye el costo al listar un producto recién creado", async () => {
+  const producto = await crearProducto({
+    nombre: "Producto con costo",
+    precio: 250,
+    costo: 120,
+    categoria: "Panificados",
+  });
+
+  const productos = await listarProductos();
+  const creado = productos.find((item) => item.id === producto.id);
+
+  assert.equal(creado.costo, 120);
+});
 
 test("guarda una venta en efectivo y calcula el descuento", async () => {
   const producto = await crearProducto({

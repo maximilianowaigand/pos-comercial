@@ -7,8 +7,12 @@ export default function VentaResumen() {
     descuentoPct,
     descuentoMonto,
     total,
+    recargoCreditoPct,
+    recargoCredito,
+    pagos,
     limpiarVenta,
     actualizarDescuentoPct,
+    actualizarRecargoCreditoPct,
   } = useVentas();
 
   return (
@@ -36,6 +40,16 @@ export default function VentaResumen() {
         <span>Descuento</span>
         <strong>-${descuentoMonto.toFixed(2)}</strong>
       </div>
+
+      {pagos.some((pago) => pago.medio_pago === "tarjeta_credito") && (
+        <>
+          <label className={styles.discountBlock}>
+            <span>Recargo tarjeta de crédito %</span>
+            <input type="number" min="0" max="100" step="0.01" value={recargoCreditoPct} className={styles.input} onChange={(e) => actualizarRecargoCreditoPct(e.target.value)} />
+          </label>
+          {recargoCredito > 0 && <div className={styles.row}><span>Recargo crédito</span><strong>+${recargoCredito.toFixed(2)}</strong></div>}
+        </>
+      )}
 
       <div className={`${styles.row} ${styles.totalRow}`}>
         <span>Total</span>

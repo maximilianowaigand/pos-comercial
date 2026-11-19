@@ -31,6 +31,23 @@ export function ProductosProvider({ children }) {
     };
 
     fetchProductos();
+    let midnightTimer;
+    const scheduleMidnightRefresh = () => {
+      const now = new Date();
+      const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+      midnightTimer = window.setTimeout(() => {
+        fetchProductos();
+        scheduleMidnightRefresh();
+      }, Math.max(1000, midnight.getTime() - now.getTime()));
+    };
+    scheduleMidnightRefresh();
+    window.addEventListener("pos:refresh-products", fetchProductos);
+    window.addEventListener("focus", fetchProductos);
+    return () => {
+      window.clearTimeout(midnightTimer);
+      window.removeEventListener("pos:refresh-products", fetchProductos);
+      window.removeEventListener("focus", fetchProductos);
+    };
   }, []);
 
   // Categorías siempre como array.

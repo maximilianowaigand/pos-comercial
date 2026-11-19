@@ -5,6 +5,8 @@ const METODOS_FACTURABLES = new Set([
   "transferencia",
   "transferencia bancaria",
   "tarjeta",
+  "tarjeta_debito",
+  "tarjeta_credito",
   "debito",
   "credito",
   "tarjeta de debito",

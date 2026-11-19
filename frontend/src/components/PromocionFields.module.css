@@ -1,0 +1,50 @@
+.fieldset {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e1cfbb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.fieldset legend {
+  padding: 0 6px;
+  font-weight: 700;
+  color: #68472f;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  color: #594b3d;
+  font-size: .9rem;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid #d9c7b1;
+  border-radius: 8px;
+  background: #fff;
+  color: #2a2118;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hint {
+  margin: 0;
+  color: #887560;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .row { grid-template-columns: 1fr; }
+}

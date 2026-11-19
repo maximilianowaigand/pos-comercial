@@ -64,6 +64,58 @@
   margin-left: auto;
 }
 
+.priceGroup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-left: auto;
+}
+
+.oldPrice {
+  color: #988e83;
+  font-size: .8rem;
+  text-decoration: line-through;
+}
+
+.promoPrice {
+  color: #b33f30;
+  font-weight: 800;
+}
+
+.promoBadge {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #fae6d5;
+  color: #934218;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.btnCartel {
+  align-self: flex-end;
+  margin: 7px 10px 9px;
+  padding: 7px 10px;
+  border: 1px solid #d9b89c;
+  border-radius: 7px;
+  background: #fff5ec;
+  color: #8e451e;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btnCartel:hover:not(:disabled) {
+  background: #fae6d5;
+}
+
+.btnCartel:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
 .flecha {
   font-size: 0.75rem;
   color: #999;

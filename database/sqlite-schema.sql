@@ -12,7 +12,12 @@ CREATE TABLE IF NOT EXISTS productos (
   nombre_producto TEXT NOT NULL,                 -- Nombre del producto
   precio_base REAL NOT NULL,                     -- Precio de venta base
   costo_base REAL,                              -- Costo del producto (para cálculo de ganancias)
-  categoria TEXT                                -- Categoría (ej: panificados, bebidas, etc.)
+  categoria TEXT,                               -- Categoría (ej: panificados, bebidas, etc.)
+  promocion_precio REAL,                        -- Precio reducido temporal o por unidades
+  promocion_hasta TEXT,                         -- Último día de vigencia (YYYY-MM-DD)
+  promocion_unidades_limite INTEGER,            -- Máximo de unidades con precio promo
+  promocion_unidades_vendidas INTEGER NOT NULL DEFAULT 0,
+  promocion_motivo TEXT                         -- Motivo visible de la promoción
 );
 
 -- =====================================================
@@ -27,6 +32,7 @@ CREATE TABLE IF NOT EXISTS ventas (
   total REAL DEFAULT 0,                       -- Total de la venta (calculado automáticamente)
   descuento_porcentaje REAL DEFAULT 0,
   descuento_monto REAL DEFAULT 0,
+  recargo_credito REAL DEFAULT 0,
   facturacion_requerida INTEGER DEFAULT 0,
   facturacion_estado TEXT DEFAULT 'NO_REQUIERE',
   factura_cae TEXT,
@@ -48,6 +54,8 @@ CREATE TABLE IF NOT EXISTS detalle_venta (
   cantidad INTEGER NOT NULL,                    -- Cantidad vendida
   precio_unitario REAL,                         -- Precio al momento de la venta
   costo_unitario REAL,                          -- Costo al momento de la venta
+  es_promocion INTEGER NOT NULL DEFAULT 0,      -- Si se cobró con precio promocional
+  motivo_promocion TEXT,                        -- Motivo guardado al momento de la venta
 
   -- Relaciones (integridad referencial)
   FOREIGN KEY (id_venta) REFERENCES ventas(id_venta),

@@ -49,7 +49,9 @@ exports.getVentaById = (req, res) => {
             d.id_producto,
             p.nombre_producto AS nombre,
             d.cantidad,
-            d.precio_unitario AS precio
+            d.precio_unitario AS precio,
+            d.es_promocion,
+            d.motivo_promocion
           FROM detalle_venta d
           JOIN productos p ON p.id_producto = d.id_producto
           WHERE d.id_venta = ?`,

@@ -88,7 +88,11 @@ function bootstrapLegacyDataIfNeeded() {
                 }
 
                 db.run("BEGIN TRANSACTION");
-                db.run("INSERT INTO productos SELECT * FROM legacy.productos");
+                db.run(`
+                  INSERT INTO productos (id_producto, nombre_producto, precio_base, costo_base, categoria)
+                  SELECT id_producto, nombre_producto, precio_base, costo_base, categoria
+                  FROM legacy.productos
+                `);
                 db.run(`
                   INSERT INTO ventas (
                     id_venta,
@@ -107,7 +111,12 @@ function bootstrapLegacyDataIfNeeded() {
                     estado
                   FROM legacy.ventas
                 `);
-                db.run("INSERT INTO detalle_venta SELECT * FROM legacy.detalle_venta");
+                db.run(`
+                  INSERT INTO detalle_venta
+                    (id_detalle, id_venta, id_producto, cantidad, precio_unitario, costo_unitario)
+                  SELECT id_detalle, id_venta, id_producto, cantidad, precio_unitario, costo_unitario
+                  FROM legacy.detalle_venta
+                `);
                 db.run("INSERT INTO clima_diario SELECT * FROM legacy.clima_diario");
                 db.run("COMMIT", (commitErr) => {
                   if (commitErr) {
@@ -151,6 +160,20 @@ db.serialize(() => {
     }
   );
 
+  [
+    "ALTER TABLE productos ADD COLUMN promocion_precio REAL",
+    "ALTER TABLE productos ADD COLUMN promocion_hasta TEXT",
+    "ALTER TABLE productos ADD COLUMN promocion_unidades_limite INTEGER",
+    "ALTER TABLE productos ADD COLUMN promocion_unidades_vendidas INTEGER NOT NULL DEFAULT 0",
+    "ALTER TABLE productos ADD COLUMN promocion_motivo TEXT",
+  ].forEach((sql) => {
+    db.run(sql, (err) => {
+      if (err && !err.message.includes("duplicate column")) {
+        console.error("Error agregando campos de promocion:", err.message);
+      }
+    });
+  });
+
   db.run(`
     CREATE TABLE IF NOT EXISTS ventas (
       id_venta INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -187,6 +210,7 @@ db.serialize(() => {
   );
 
   [
+    "ALTER TABLE ventas ADD COLUMN recargo_credito REAL DEFAULT 0",
     "ALTER TABLE ventas ADD COLUMN facturacion_requerida INTEGER DEFAULT 0",
     "ALTER TABLE ventas ADD COLUMN facturacion_estado TEXT DEFAULT 'NO_REQUIERE'",
     "ALTER TABLE ventas ADD COLUMN factura_cae TEXT",
@@ -215,6 +239,17 @@ db.serialize(() => {
       FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
     )
   `);
+
+  [
+    "ALTER TABLE detalle_venta ADD COLUMN es_promocion INTEGER NOT NULL DEFAULT 0",
+    "ALTER TABLE detalle_venta ADD COLUMN motivo_promocion TEXT",
+  ].forEach((sql) => {
+    db.run(sql, (err) => {
+      if (err && !err.message.includes("duplicate column")) {
+        console.error("Error agregando datos de promocion a ventas:", err.message);
+      }
+    });
+  });
 
   db.run(`
     CREATE TABLE IF NOT EXISTS pagos_venta (
