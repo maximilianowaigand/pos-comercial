@@ -440,15 +440,20 @@ exports.printPromoSign = async (req, res) => {
     }
 
     const chunks = [
-      Buffer.from([0x1b, 0x40, 0x1b, 0x61, 0x01]), // initialize, center
-      Buffer.from([0x1b, 0x45, 0x01, 0x1d, 0x21, 0x11]), // bold, double size
-      Buffer.from("OFERTA\r\n", "latin1"),
+      Buffer.from([0x1b, 0x40, 0x1b, 0x61, 0x00, 0x1b, 0x45, 0x01]), // initialize, left, bold
+      Buffer.from([0x1d, 0x21, 0x10]), // double-width frame top
+      Buffer.from("----------------\r\n", "latin1"),
+      Buffer.from([0x1d, 0x21, 0x33]), // four-times size, including side borders
+      Buffer.from("|OFERTA|\r\n", "latin1"),
+      Buffer.from([0x1d, 0x21, 0x10]), // double-width frame bottom
+      Buffer.from("----------------\r\n", "latin1"),
+      Buffer.from([0x1d, 0x21, 0x00, 0x1b, 0x61, 0x01]), // normal size, center
       Buffer.from([0x1d, 0x21, 0x01]), // double height for product name
       ...wrapSignName(product.nombre).map((line) => Buffer.from(`${line}\r\n`, "latin1")),
       Buffer.from([0x1d, 0x21, 0x00, 0x1b, 0x45, 0x00]),
       Buffer.from("------------------------------\r\n", "latin1"),
       Buffer.from("PRECIO NORMAL\r\n", "latin1"),
-      Buffer.from(`$ ${formatMoney(product.precio)}\r\n`, "latin1"),
+      Buffer.from(`X  $ ${formatMoney(product.precio)}  X\r\n`, "latin1"),
       Buffer.from("\r\nPROMOCION\r\n", "latin1"),
       Buffer.from([0x1b, 0x45, 0x01, 0x1d, 0x21, 0x11]),
       Buffer.from(`$ ${formatMoney(product.precio_promocional)}\r\n`, "latin1"),
